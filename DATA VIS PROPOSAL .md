@@ -26,24 +26,25 @@ value in elegantly identifying discrepancies that would not have been
 easily distilled, as well as predicting the best and worst property
 regions to invest in the near future.
 
-Proposed Scope: \* County-level and state-level data on year-over-year
-median property values before 2019 (to exclude the pandemic) \*
-County-level data and state-level mapping climate-change incidents like
-natural disasters (tornadoes, hurricanes), flooding, wildfires, drought
-\* Generate a metric \* Data by year for the past 10 years (potentially
-excluding the pandemic, which would mean data from 2009 - 2019) \* Focus
-on one US state or a few states (selection currently unfinalized; will
-depend on data availability)
+Proposed Scope: 
+-   County-level and state-level data on year-over-year
+    median property values before 2019 (to exclude the pandemic) 
+-   County-level data and state-level mapping climate-change incidents like
+    natural disasters (tornadoes, hurricanes), flooding, wildfires, drought
+-   Generate a metric 
+-   Data by year for the past 10 years (potentially
+    excluding the pandemic, which would mean data from 2009 - 2019) 
+-   Focus on one US state or a few states (selection currently unfinalized; will
+    depend on data availability)
 
 LINKS TO DATA SOURCES/ API:
 
 REAL ESTATE VALUE / SALE PRICE The real estate data will provide metrics
 for property value in the form of median sale price and price indices.
-\* Data on most recent median and average list price and price
-increases. While there is no historical data, we can use the
-county-level data to compare current county-level real estate metrics
-against themselves. https://www.realtor.com/research/data/
-
+-   Data on most recent median and average list price and price
+    increases. While there is no historical data, we can use the
+    county-level data to compare current county-level real estate metrics
+    against themselves. https://www.realtor.com/research/data/
 -   The FHFA government database has the following relevant information:
     state-level quarterly average and median home prices from 2000 to
     2010, and annual house price indices at various levels of
