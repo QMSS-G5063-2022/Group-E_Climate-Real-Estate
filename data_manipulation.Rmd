@@ -1,0 +1,60 @@
+---
+title: "Data Manipulation"
+author: "Rory Butler"
+date: "4/14/2022"
+output: 
+  html_document:
+    keep_md: true
+    toc: true
+---
+
+```{r global options, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(include=TRUE, warning=FALSE, message=FALSE, echo=FALSE)
+```
+```{r libraries and csvs}
+library(tidyverse)
+library(sf)
+library(rgdal)
+library(spdplyr)
+
+cali_rent <- read.csv("data/coffey_park.csv")
+cali_shape <- readOGR("./data/shape files", "California_Zip_Codes")
+
+cali_rent <- cali_rent %>%
+  select(region_id, date, value)
+
+colnames(cali_rent) <- c("zip_code", "date", "mean_rent")
+
+cali_rent
+
+cali_shape <- cali_shape[,-c(1,4,5,6,7,8,9)]
+
+cali_shape <- cali_shape %>%
+  rename(zip_code = ZIP_CODE, po_name = PO_NAME)
+
+head(cali_shape)
+
+new_cali_shape <- spTransform(cali_shape, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+
+cali_data <- merge(new_cali_shape, cali_rent, by = "zip_code", duplicateGeoms = T)
+
+cali_data
+```
+```{r test}
+library(leaflet)
+
+
+cali_data <- cali_data %>%
+  filter(zip_code %in% c(95401, 95402, 95403, 95404, 95405, 95406, 95407, 95409))
+
+
+#new_cali_data <- spTransform(cali_data, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+
+new_cali_data_2 <- st_as_sf(cali_data)
+
+new_cali_data_2
+
+leaflet(new_cali_data_2) %>%
+  addTiles() %>%
+  addPolygons(color="blue")
+```
