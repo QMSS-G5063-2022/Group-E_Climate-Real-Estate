@@ -58,3 +58,38 @@ leaflet(new_cali_data_2) %>%
   addTiles() %>%
   addPolygons(color="blue")
 ```
+```{r data verification}
+cali_data_sep_2016 <- new_cali_data_2 %>%
+  filter(date == '2016-09-30')
+
+cali_data_sep_2016
+```
+```{r choropleth map}
+library(htmltools)
+bins <-c(100000, 200000, 300000, 400000, 500000)
+pal <-colorBin("YlOrRd", domain=cali_data_sep_2016$mean_rent, bins=bins)
+
+labels <- sprintf(
+  "<strong>%s</strong><br/>Mean Rent: %g",
+  cali_data_sep_2016$zip_code, cali_data_sep_2016$mean_rent
+) %>% lapply(htmltools::HTML)
+
+
+leaflet(cali_data_sep_2016) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~pal(mean_rent),
+    weight = 2,
+    opacity = 1,
+    color = "gray",
+    fillOpacity = 0.8,
+    highlightOptions = highlightOptions(
+    weight = 5,
+    color = "#666",
+    fillOpacity = 0.8),
+    label = labels,
+    labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                          textsize = "15px",
+                                          direction = "auto")) %>%
+  addLegend(pal=pal, values = ~mean_rent, opacity = 0.8, title = "Mean Rent")
+```
