@@ -36,31 +36,80 @@ navbarPage("Real Estate & Natural Disasters", id="nav",
            
            ### NEW ORLEANS ###
            tabPanel("New Orleans, LA - Hurricane",
-                    plotOutput("plot")),
+                    town <- merge(dataset1, dataset2, by='zipcode',duplicateGeoms=TRUE)
+                    bins <- bins <- c(0, 10, 20, 50, 100, 200, 500, 1000, Inf) 
+                    pal1 <- colorBin("YlOrRd",domain = town$id, bins=bins)
+                    color_id1 <- pal1(town$id)
+                    content1 <- paste("Neighborhood:", town$neighbourhood,"<br/>") #Popup content to annotate the neighborhoods. 
+                    townmap <- leaflet(town) %>% setView(-0, 0, zoom = 10) %>% 
+                      addPolygons(stroke=TRUE, smoothFactor = 0.5, weight=1, color=color_id1,popup=content1, opacity=1, fillColor=~colorQuantile('YlOrRd', town$id)(town$id),fillOpacity=1) %>% 
+                      addProviderTiles("Stamen.TonerLite") %>% 
+                      addLegend(pal=pal1, values= ~town$id, title = "Zipcode Mean of Real Estate Price"))
+          ,
            
            ### COFFEY PARK ###
            tabPanel("Coffey Park, CA - Wildfires",
-                    )
+                    town <- merge(dataset1, dataset2, by='zipcode',duplicateGeoms=TRUE)
+                    bins <- bins <- c(0, 10, 20, 50, 100, 200, 500, 1000, Inf) 
+                    pal1 <- colorBin("YlOrRd",domain = town$id, bins=bins)
+                    color_id1 <- pal1(town$id)
+                    content1 <- paste("Neighborhood:", town$neighbourhood,"<br/>") #Popup content to annotate the neighborhoods. 
+                    townmap <- leaflet(town) %>% setView(-0, 0, zoom = 10) %>% 
+                      addPolygons(stroke=TRUE, smoothFactor = 0.5, weight=1, color=color_id1,popup=content1, opacity=1, fillColor=~colorQuantile('YlOrRd', town$id)(town$id),fillOpacity=1) %>% 
+                      addProviderTiles("Stamen.TonerLite") %>% 
+                      addLegend(pal=pal1, values= ~town$id, title = "Zipcode Mean of Real Estate Price"))
            ,
            
            ### DENVER ###
            tabPanel("Boulder, CO - Floods", plotOutput("plot")
-           )
+                    town <- merge(dataset1, dataset2, by='zipcode',duplicateGeoms=TRUE)
+                    bins <- bins <- c(0, 10, 20, 50, 100, 200, 500, 1000, Inf) 
+                    pal1 <- colorBin("YlOrRd",domain = town$id, bins=bins)
+                    color_id1 <- pal1(town$id)
+                    content1 <- paste("Neighborhood:", town$neighbourhood,"<br/>") #Popup content to annotate the neighborhoods. 
+                    townmap <- leaflet(town) %>% setView(-0, 0, zoom = 10) %>% 
+                      addPolygons(stroke=TRUE, smoothFactor = 0.5, weight=1, color=color_id1,popup=content1, opacity=1, fillColor=~colorQuantile('YlOrRd', town$id)(town$id),fillOpacity=1) %>% 
+                      addProviderTiles("Stamen.TonerLite") %>% 
+                      addLegend(pal=pal1, values= ~town$id, title = "Zipcode Mean of Real Estate Price"))
            ,
            
            ### BUFFALO ###
            tabPanel("Buffalo, NY - Snowstorm", plotOutput("plot")
-           )
+                    town <- merge(dataset1, dataset2, by='zipcode',duplicateGeoms=TRUE)
+                    bins <- bins <- c(0, 10, 20, 50, 100, 200, 500, 1000, Inf) 
+                    pal1 <- colorBin("YlOrRd",domain = town$id, bins=bins)
+                    color_id1 <- pal1(town$id)
+                    content1 <- paste("Neighborhood:", town$neighbourhood,"<br/>") #Popup content to annotate the neighborhoods. 
+                    townmap <- leaflet(town) %>% setView(-0, 0, zoom = 10) %>% 
+                      addPolygons(stroke=TRUE, smoothFactor = 0.5, weight=1, color=color_id1,popup=content1, opacity=1, fillColor=~colorQuantile('YlOrRd', town$id)(town$id),fillOpacity=1) %>% 
+                      addProviderTiles("Stamen.TonerLite") %>% 
+                      addLegend(pal=pal1, values= ~town$id, title = "Zipcode Mean of Real Estate Price"))
            ,
            
            ### MOORE, OK ###
            tabPanel("Moore, OK - Tornado", plotOutput("plot")
-           )
+                    town <- merge(dataset1, dataset2, by='zipcode',duplicateGeoms=TRUE)
+                    bins <- bins <- c(0, 10, 20, 50, 100, 200, 500, 1000, Inf) 
+                    pal1 <- colorBin("YlOrRd",domain = town$id, bins=bins)
+                    color_id1 <- pal1(town$id)
+                    content1 <- paste("Neighborhood:", town$neighbourhood,"<br/>") #Popup content to annotate the neighborhoods. 
+                    townmap <- leaflet(town) %>% setView(-0, 0, zoom = 10) %>% 
+                      addPolygons(stroke=TRUE, smoothFactor = 0.5, weight=1, color=color_id1,popup=content1, opacity=1, fillColor=~colorQuantile('YlOrRd', town$id)(town$id),fillOpacity=1) %>% 
+                      addProviderTiles("Stamen.TonerLite") %>% 
+                      addLegend(pal=pal1, values= ~town$id, title = "Zipcode Mean of Real Estate Price"))
            ,
            
            ### BP OIL SPILL ###
            tabPanel("Grand Isle, LA - BP Oil Spill", plotOutput("plot")
-           )
+                    town <- merge(dataset1, dataset2, by='zipcode',duplicateGeoms=TRUE)
+                    bins <- bins <- c(0, 10, 20, 50, 100, 200, 500, 1000, Inf) 
+                    pal1 <- colorBin("YlOrRd",domain = town$id, bins=bins)
+                    color_id1 <- pal1(town$id)
+                    content1 <- paste("Neighborhood:", town$neighbourhood,"<br/>") #Popup content to annotate the neighborhoods. 
+                    townmap <- leaflet(town) %>% setView(-0, 0, zoom = 10) %>% 
+                      addPolygons(stroke=TRUE, smoothFactor = 0.5, weight=1, color=color_id1,popup=content1, opacity=1, fillColor=~colorQuantile('YlOrRd', town$id)(town$id),fillOpacity=1) %>% 
+                      addProviderTiles("Stamen.TonerLite") %>% 
+                      addLegend(pal=pal1, values= ~town$id, title = "Zipcode Mean of Real Estate Price"))
            ,
            
            conditionalPanel("false", icon("crosshair")))
