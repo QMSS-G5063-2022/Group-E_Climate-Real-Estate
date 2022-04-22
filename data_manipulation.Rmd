@@ -37,8 +37,6 @@ head(cali_shape)
 new_cali_shape <- spTransform(cali_shape, CRS("+proj=longlat +datum=WGS84 +no_defs"))
 
 cali_data <- merge(new_cali_shape, cali_rent, by = "zip_code", duplicateGeoms = T)
-
-cali_data
 ```
 ```{r test}
 library(leaflet)
@@ -92,4 +90,102 @@ leaflet(cali_data_sep_2016) %>%
                                           textsize = "15px",
                                           direction = "auto")) %>%
   addLegend(pal=pal, values = ~mean_rent, opacity = 0.8, title = "Mean Rent")
+```
+```{r grand isle}
+grand_isle_rent <- read.csv("data/grand_isle.csv")
+grand_isle_shape <- readOGR("./data/shape files", "Grand_Isla_LA")
+
+grand_isle_rent <- grand_isle_rent %>%
+  select(region_id, date, value)
+
+colnames(grand_isle_rent) <- c("zip_code", "date", "mean_rent")
+
+grand_isle_rent
+
+grand_isle_shape <- grand_isle_shape[,-c(2,3,4,5,6,7,8,9)]
+
+grand_isle_shape <- grand_isle_shape %>%
+  rename(zip_code = ZCTA5CE10)
+
+head(grand_isle_shape)
+
+new_grand_isle_shape <- spTransform(grand_isle_shape, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+
+grand_isle_data <- merge(new_grand_isle_shape, grand_isle_rent, by = "zip_code", duplicateGeoms = T)
+```
+```{r vis grand isle}
+library(leaflet)
+new_grand_isle_data <- st_as_sf(grand_isle_data)
+
+new_grand_isle_data
+
+leaflet(new_grand_isle_data) %>%
+  addTiles() %>%
+  addPolygons(color="blue")
+```
+```{r buffalo}
+buffalo_homes <- read.csv("data/buffalo.csv")
+buffalo_shape <- readOGR("./data/shape files", "Buffalo")
+
+buffalo_homes <- buffalo_homes %>%
+  select(region_id, date, value)
+
+colnames(buffalo_homes) <- c("zip_code", "date", "mean_home_value")
+
+buffalo_homes
+
+buffalo_shape <- buffalo_shape[,-c(2,3,4,5,6,7,8,9)]
+
+buffalo_shape <- buffalo_shape %>%
+  rename(zip_code = ZCTA5CE10)
+
+head(buffalo_shape)
+
+new_buffalo_shape <- spTransform(buffalo_shape, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+```
+```{r buffalo viz}
+buffalo_data <- merge(new_buffalo_shape, buffalo_homes, by = "zip_code", duplicateGeoms = T)
+
+new_buffalo_data <- st_as_sf(buffalo_data)
+
+new_buffalo_data
+
+leaflet(new_buffalo_data) %>%
+  addTiles() %>%
+  addPolygons(color="blue")
+```
+```{r NO}
+new_orleans_homes <- read.csv("data/new_orleans.csv")
+new_orleans_shape <- readOGR("./data/shape files", "New_Orleans")
+
+new_orleans_homes <- new_orleans_homes %>%
+  select(region_id, date, value)
+
+colnames(new_orleans_homes) <- c("zip_code", "date", "mean_home_value")
+
+new_orleans_homes
+
+new_orleans_shape <- new_orleans_shape[,-c(2,3,4,5,6,7,8,9)]
+
+new_orleans_shape <- new_orleans_shape %>%
+  rename(zip_code = ZCTA5CE10)
+
+head(new_orleans_shape)
+
+new_new_orleans_shape <- spTransform(new_orleans_shape, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+
+```
+```{r new orleans viz}
+new_orleans_data <- merge(new_new_orleans_shape, new_orleans_homes, by = "zip_code", duplicateGeoms = T)
+
+new_orleans_data
+
+new_orleans_data2 <- st_as_sf(new_orleans_data)
+
+new_orleans_data2
+
+leaflet(new_orleans_data2) %>%
+  addTiles() %>%
+  addPolygons(color="blue")
+
 ```
