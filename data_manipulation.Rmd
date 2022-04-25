@@ -336,5 +336,5 @@ moore_ok_data2 <- st_as_sf(moore_ok_data)
 
 moore_ok_data2
 
-
+st_write(moore_ok_data2, './data/shape files/Moore_Tornado.shp')
 ```
