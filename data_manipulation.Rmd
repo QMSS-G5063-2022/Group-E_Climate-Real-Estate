@@ -23,7 +23,7 @@ cali_shape <- readOGR("./data/shape files", "California_Zip_Codes")
 cali_rent <- cali_rent %>%
   select(region_id, date, value)
 
-colnames(cali_rent) <- c("zip_code", "date", "mean_rent")
+colnames(cali_rent) <- c("zip_code", "date", "median_sale_price")
 
 cali_rent
 
@@ -65,18 +65,18 @@ cali_data_sep_2016
 ```{r choropleth map}
 library(htmltools)
 bins <-c(100000, 200000, 300000, 400000, 500000)
-pal <-colorBin("YlOrRd", domain=cali_data_sep_2016$mean_rent, bins=bins)
+pal <-colorBin("YlOrRd", domain=cali_data_sep_2016$median_sale_price, bins=bins)
 
 labels <- sprintf(
   "<strong>%s</strong><br/>Mean Rent: %g",
-  cali_data_sep_2016$zip_code, cali_data_sep_2016$mean_rent
+  cali_data_sep_2016$zip_code, cali_data_sep_2016$median_salce_price
 ) %>% lapply(htmltools::HTML)
 
 
 leaflet(cali_data_sep_2016) %>%
   addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(
-    fillColor = ~pal(mean_rent),
+    fillColor = ~pal(median_sale_price),
     weight = 2,
     opacity = 1,
     color = "gray",
@@ -89,7 +89,7 @@ leaflet(cali_data_sep_2016) %>%
     labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
                                           textsize = "15px",
                                           direction = "auto")) %>%
-  addLegend(pal=pal, values = ~mean_rent, opacity = 0.8, title = "Mean Rent")
+  addLegend(pal=pal, values = ~median_sale_price, opacity = 0.8, title = "Mean Rent")
 ```
 ```{r grand isle}
 grand_isle_rent <- read.csv("data/grand_isle.csv")
@@ -98,7 +98,7 @@ grand_isle_shape <- readOGR("./data/shape files", "Grand_Isla_LA")
 grand_isle_rent <- grand_isle_rent %>%
   select(region_id, date, value)
 
-colnames(grand_isle_rent) <- c("zip_code", "date", "mean_rent")
+colnames(grand_isle_rent) <- c("zip_code", "date", "median_sale_price")
 
 grand_isle_rent
 
@@ -130,7 +130,7 @@ buffalo_shape <- readOGR("./data/shape files", "Buffalo")
 buffalo_homes <- buffalo_homes %>%
   select(region_id, date, value)
 
-colnames(buffalo_homes) <- c("zip_code", "date", "mean_home_value")
+colnames(buffalo_homes) <- c("zip_code", "date", "median_sale_price")
 
 buffalo_homes
 
@@ -161,7 +161,7 @@ new_orleans_shape <- readOGR("./data/shape files", "New_Orleans")
 new_orleans_homes <- new_orleans_homes %>%
   select(region_id, date, value)
 
-colnames(new_orleans_homes) <- c("zip_code", "date", "mean_home_value")
+colnames(new_orleans_homes) <- c("zip_code", "date", "median_sale_price")
 
 new_orleans_homes
 
@@ -188,4 +188,111 @@ leaflet(new_orleans_data2) %>%
   addTiles() %>%
   addPolygons(color="blue")
 
+```
+```{r HPI Data}
+library(tidyverse)
+library(dplyr)
+HPI = read.csv('data/HPI_data.csv')
+
+ZCTA_list <- c('70112',
+'70113',
+'70114',
+'70115',
+'70116',
+'70117',
+'70118',
+'70119',
+'70121',
+'70122',
+'70123',
+'70124',
+'70125',
+'70126',
+'70127',
+'70128',
+'70129',
+'70130',
+'70131',
+'70139',
+'70163',
+'95401',
+'95403',
+'95404',
+'95405',
+'95407',
+'95409',
+'14201',
+'14202',
+'14203',
+'14204',
+'14206',
+'14207',
+'14208',
+'14209',
+'14210',
+'14211',
+'14212',
+'14213',
+'14214',
+'14215',
+'14216',
+'14217',
+'14218',
+'14219',
+'14220',
+'14221',
+'14222',
+'14223',
+'14224',
+'14225',
+'14226',
+'14227',
+'14228',
+'14261',
+'73160',
+'73165',
+'73170',
+'70358')
+
+
+HPI <- HPI %>%
+  filter(zip_code %in% ZCTA_list) %>%
+  filter(year > 2002)
+```
+```{r HPI dates}
+months = expand.grid(year = unique(HPI$year), month = 1:12)
+months
+
+HPI_updated <- left_join(HPI, months, by = "year")
+HPI_updated 
+```
+```{r all csv combine}
+sfhome <- read.csv('data/single_family_homes_time_series.csv')
+sfhome <- sfhome %>%
+  select(region_id, date, value)
+
+colnames(sfhome) <- c("zip_code", "date", "single_family_home_price")
+
+rent <- read.csv('data/rental_prices.csv')
+rent <- rent %>%
+  select(region_id, date, value)
+
+colnames(rent) <- c("zip_code", "date", "rental_price")
+
+sale_price <- read.csv('data/median_sale_prices.csv')
+sale_price <- sale_price %>%
+  select(region_id, date, value)
+
+colnames(sale_price) <- c("zip_code", "date", "median_sale_price")
+
+base <- merge(x=sfhome, y=sale_price, by=c("zip_code", "date"), all.x=TRUE)
+
+base2 <- merge(x=base, y=rent, by=c("zip_code", "date"), all.x=TRUE)
+
+base2 <- separate(base2, "date", c("year", "month", "day"), sep='-')
+
+base_real_estate <- merge(x=HPI_updated, y=base2, by=c("zip_code", "year", "month"), all.x=TRUE)
+base_real_estate
+
+base_real_estate$date <- as.yearmon
 ```
