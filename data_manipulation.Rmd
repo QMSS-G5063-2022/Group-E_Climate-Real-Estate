@@ -260,13 +260,14 @@ HPI <- HPI %>%
   filter(year > 2002)
 ```
 ```{r HPI dates}
-months = expand.grid(year = unique(HPI$year), month = 1:12)
+months = expand.grid(year = unique(HPI$year), month = c("01","02","03","04","05","06","07", "08", "09", "10", "11", "12"))
 months
 
 HPI_updated <- left_join(HPI, months, by = "year")
 HPI_updated 
 ```
 ```{r all csv combine}
+library(zoo)
 sfhome <- read.csv('data/single_family_homes_time_series.csv')
 sfhome <- sfhome %>%
   select(region_id, date, value)
@@ -292,7 +293,46 @@ base2 <- merge(x=base, y=rent, by=c("zip_code", "date"), all.x=TRUE)
 base2 <- separate(base2, "date", c("year", "month", "day"), sep='-')
 
 base_real_estate <- merge(x=HPI_updated, y=base2, by=c("zip_code", "year", "month"), all.x=TRUE)
-base_real_estate
+```
 
-base_real_estate$date <- as.yearmon
+```{r more testing}
+base_real_estate$date <- zoo::as.yearmon(paste(base_real_estate$year, base_real_estate$month), "%Y %m")
+
+base_real_estate <- transform(base_real_estate, date2 = as.Date(date, frac = 1))
+
+
+base_real_estate <- base_real_estate %>%
+  select(zip_code, date2, year, month, annual_change, HPI, HPI_1990, HPI_2000, single_family_home_price, median_sale_price, rental_price)
+```
+```{r specific disaster files}
+library(sf)
+library(rgdal)
+library(spdplyr)
+
+moore_ok <- base_real_estate %>%
+  filter(zip_code %in% c(73160, 73165, 73170),  year %in% c(2011, 2012, 2013, 2014, 2015))
+
+moore_ok
+
+moore_ok_shape <- readOGR(dsn="./data/shape files", layer="Moore_OK")
+
+moore_ok_shape <- moore_ok_shape[,-c(2,3,4,5,6,7,8,9)]
+
+moore_ok_shape <- moore_ok_shape %>%
+  rename(zip_code = ZCTA5CE10)
+
+head(moore_ok_shape)
+
+moore_ok_shape2 <- spTransform(moore_ok_shape, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+
+moore_ok_data <- merge(moore_ok_shape2, moore_ok, by = "zip_code", duplicateGeoms = T)
+```
+```{r location testing}
+list.files('./data/shape files')
+```
+```{r vis moore_ok}
+library(leaflet)
+moore_ok_data2 <- st_as_sf(moore_ok_data)
+
+moore_ok_data2
 ```
