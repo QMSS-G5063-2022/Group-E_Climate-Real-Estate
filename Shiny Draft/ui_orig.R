@@ -1,3 +1,6 @@
+library(leaflet)
+library(shiny)
+
 # Choices for drop-downs
 vars <- c(
   "Annual Home Price Index" = "hpi",
@@ -33,7 +36,7 @@ navbarPage(h4("Real Estate & Natural Disasters"), id="nav",
            
            ### NEW ORLEANS ###
            tabPanel(h6("New Orleans, LA - Hurricane"),
-                    
+
                     leafletOutput("new_orleans_map", width = "100%", height = "100%"),
                     
                     absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
@@ -43,7 +46,7 @@ navbarPage(h4("Real Estate & Natural Disasters"), id="nav",
                                   h4("Hurricane"),
                                   h4("New Orleans"),
                                   h6("Aug 2005"),
-                                  
+                      
                                   sliderInput(
                                     inputId = "choose_month_neworleans", 
                                     label = "Choose the month/year",
@@ -51,13 +54,13 @@ navbarPage(h4("Real Estate & Natural Disasters"), id="nav",
                                     max = as.Date("2008-01-01"),
                                     value= as.Date("2005-08-01"),
                                     timeFormat="%b %Y"),
-                                  
+                    
                                   selectInput("choose_metric_neworleans", "Choose Real Estate Metric", vars, selected = "hpi"),
-                                  
-                                  plotly::plotlyOutput("bar_chart_neworleans"),
-                                  plotly::plotlyOutput("line_chart_neworleans")
-                    )),
-           
+                                              
+                      plotly::plotlyOutput("bar_chart_neworleans"),
+                      plotly::plotlyOutput("line_chart_neworleans")
+                      )),
+                    
            ### COFFEY PARK ###
            tabPanel(h6("Coffey Park, CA - Wildfires"),
                     

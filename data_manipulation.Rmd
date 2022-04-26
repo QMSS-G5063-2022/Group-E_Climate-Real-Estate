@@ -17,8 +17,8 @@ library(sf)
 library(rgdal)
 library(spdplyr)
 
-cali_rent <- read.csv("data/coffey_park.csv")
-cali_shape <- readOGR("./data/shape files", "California_Zip_Codes")
+cali_rent <- read.csv("../data/coffey_park.csv")
+cali_shape <- readOGR("../data/shape files", "California_Zip_Codes")
 
 cali_rent <- cali_rent %>%
   select(region_id, date, value)
@@ -69,7 +69,7 @@ pal <-colorBin("YlOrRd", domain=cali_data_sep_2016$median_sale_price, bins=bins)
 
 labels <- sprintf(
   "<strong>%s</strong><br/>Mean Rent: %g",
-  cali_data_sep_2016$zip_code, cali_data_sep_2016$median_salce_price
+  cali_data_sep_2016$zip_code, cali_data_sep_2016$median_sale_price
 ) %>% lapply(htmltools::HTML)
 
 
@@ -91,6 +91,7 @@ leaflet(cali_data_sep_2016) %>%
                                           direction = "auto")) %>%
   addLegend(pal=pal, values = ~median_sale_price, opacity = 0.8, title = "Mean Rent")
 ```
+
 ```{r grand isle}
 grand_isle_rent <- read.csv("data/grand_isle.csv")
 grand_isle_shape <- readOGR("./data/shape files", "Grand_Isla_LA")

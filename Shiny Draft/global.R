@@ -6,3 +6,7 @@ library(rgdal)
 library(dplyr)
 library(spdplyr)
 library(htmltools)
+library(shiny)
+library(plotly)
+
+set.seed(100)
