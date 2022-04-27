@@ -5,7 +5,6 @@ vars <- c(
 
 locations <- c("New Orleans - Hurricane" = "neworleans",
                "Coffey Park - Wildfires" = "coffeypark",
-               "Boulder, CO - Floods" = "boulder",
                "Buffalo, NY - Snowstorm" = "buffalo",
                "Moore, OK - Tornado" = "moore",
                "Grand Isle, LA - BP Oil Spill" = "grandisle")
@@ -29,7 +28,6 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                     h1(" "),
                     img(src = "hurricane-katrina.jpg", align = "center", height = "15%", width = "15%"),
                     img(src = 'coffey-park-fire.jpg', align = "center", height = "15%", width = "15%"),
-                    img(src = 'boulder-floods.jpg', align = "center", height = "15%", width = "15%"),
                     img(src = 'buffalo-snow.jpg', align = "center", height = "15%", width = "15%"),
                     img(src = 'moore-ok-tornado.jpg', align = "center", height = "15%", width = "15%"),
                     img(src = 'grand-isle-oil.jpg', align = "center", height = "15%", width = "15%")

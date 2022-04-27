@@ -5,10 +5,56 @@ function(input, output){
   chosen_location <- reactive({input$choose_disaster})
   chosen_metric <- reactive({input$choose_metric})
   
+  ### update sliders ###
+  ### THIS IS FAKE CODE 
+  ### https://stackoverflow.com/questions/68342780/shiny-if-else-statement
+  
+ # observeEvent(input$x, 
+   #            {updateSelectInput(session,
+   #                               inputId = "y",
+    #                              label = "Variable 2",
+    #                              choices = names(df)[names(df) != input$x])
+   #            })
+  
   ### load data sources ###
   single_family_homes <- read.csv("../data/single_family_homes_time_series.csv")
   HPI <- read.csv("../data/HPI_data.csv")
   bottom_tier <- read.csv("../data/all_homes_bottom_tier.csv")
+  
+  # change values based on selections
+  observe({
+    
+    if (input$choose_disaster == "neworleans") {
+      output$disaster_name <- renderText({"<b>Hurricane</b>"})
+      output$disaster_date <- renderText({"Aug 2005"})
+      output$city_name <- renderText({"<b>New Orleans</b>"})
+    }
+    
+    if (input$choose_disaster == "coffeypark") {
+      output$disaster_name <- renderText({"<b>Wildfires</b>"})
+      output$disaster_date <- renderText({"Oct 2017"})
+      output$city_name <- renderText({"<b>Coffey Park, CA</b>"})
+    }
+    
+    if (input$choose_disaster == "buffalo") {
+      output$disaster_name <- renderText({"<b>Snowstorm</b>"})
+      output$disaster_date <- renderText({"Nov 2014"})
+      output$city_name <- renderText({"<b>Buffalo, NY</b>"})
+    }
+    
+    if (input$choose_disaster == "grandisle") {
+      output$disaster_name <- renderText({"<b>BP Oil Spill</b>"})
+      output$disaster_date <- renderText({"Apr 2010"})
+      output$city_name <- renderText({"<b>Grand Isle, LA</b>"})
+    }
+    
+    if (input$choose_disaster == "moore") {
+      output$disaster_name <- renderText({"<b>Tornado</b>"})
+      output$disaster_date <- renderText({"May 2013"})
+      output$city_name <- renderText({"<b>Moore, OK</b>"})
+    }
+  })
+  
   
   ### data manipulation ###
   
@@ -67,6 +113,21 @@ function(input, output){
   
   rm(bottom_tier, single_family_homes, months, HPI)
   
+  new_long <- reactive({
+    
+    if(input$choose_disaster == "neworleans") {-90.0715}
+    else if(input$choose_disaster == "grandisle") {-89.987294}
+    else if(input$choose_disaster == "buffalo") {-78.878738}
+    else if(input$choose_disaster == "moore") {new_long <- -97.486703}
+    else {-122.748}})
+  
+  new_lat <- reactive({
+    
+    if(input$choose_disaster == "neworleans") {29.95}
+    else if(input$choose_disaster == "grandisle") {29.236617}
+    else if(input$choose_disaster == "buffalo") {42.880230}
+    else if(input$choose_disaster == "moore") {35.339508}
+    else {38.4777}})
   
   ### load shape files ###
   
@@ -78,8 +139,8 @@ function(input, output){
     rename(zip_code = ZCTA5CE10) %>%
     spTransform(CRS("+proj=longlat +datum=WGS84 +no_defs")) %>%
     merge(filter(base_data, zip_code %in% new_orleans_zips),
-                             by = "zip_code",
-                             duplicateGeoms = T) %>% st_as_sf()
+          by = "zip_code",
+          duplicateGeoms = T) %>% st_as_sf()
   
   # MOORE OK #
   moore_ok_shape <- readOGR(dsn="../data/shape files", layer="Moore_OK")
@@ -125,93 +186,30 @@ function(input, output){
   
   rm(buffalo_shape, grand_isle_shape, cali_shape, moore_ok_shape, new_orleans_shape)
   
-  # change values based on selections
-  observe({
-    
-    if (input$choose_disaster == "neworleans") {
-      output$disaster_name <- renderText({"<b>Hurricane</b>"})
-      output$disaster_date <- renderText({"Aug 2005"})
-      output$city_name <- renderText({"<b>New Orleans</b>"})
-      new_long <- -90.0715
-      new_lat <- 29.95
-      current_zips <- new_orleans_zips
-    }
-    
-    if (input$choose_disaster == "coffeypark") {
-      output$disaster_name <- renderText({"<b>Wildfires</b>"})
-      output$disaster_date <- renderText({"Oct 2017"})
-      output$city_name <- renderText({"<b>Coffey Park, CA</b>"})
-      new_long <- -122.748
-      new_lat <- 38.4777
-      current_zips <- coffey_zips_zips
-      }
-    
-    if (input$choose_disaster == "buffalo") {
-      output$disaster_name <- renderText({"<b>Snowstorm</b>"})
-      output$disaster_date <- renderText({"Nov 2014"})
-      output$city_name <- renderText({"<b>Buffalo, NY</b>"})
-      new_long <- -78.878738
-      new_lat <- 42.880230
-      current_zips <- buffalo_zips
-      }
-    
-    if (input$choose_disaster == "grandisle") {
-      output$disaster_name <- renderText({"<b>BP Oil Spill</b>"})
-      output$disaster_date <- renderText({"Apr 2010"})
-      output$city_name <- renderText({"<b>Grand Isle, LA</b>"})
-      new_long <- -89.987294
-      new_lat <- 29.236617
-      current_zips <- grand_isle_zips
-        }
-    
-    if (input$choose_disaster == "moore") {
-      output$disaster_name <- renderText({"<b>Tornado</b>"})
-      output$disaster_date <- renderText({"May 2013"})
-      output$city_name <- renderText({"<b>Moore, OK</b>"})
-      new_long <- -97.486703
-      new_lat <- 35.339508
-      current_zips <- moore_zips
-        }
-  })
-
-  
-  observe({
-    if(input$choose_metric == "hpi"){}
-    if(input$choose_metric == "bottom_tier"){}
-    if(input$choose_metric == "sfhv"){}
-  })
+  #  observe({
+  #   if(input$choose_metric == "hpi"){1}
+  #  if(input$choose_metric == "bottom_tier"){1}
+  # if(input$choose_metric == "sfhv"){1}
+  #})
   
   interactive_map <- reactive({
     base_data %>%
-      filter(date == chosen_month(),
-             zip_code %in% current_zips)})
-  
-  ## load the default map ##
-  output$disaster_map <- leaflet::renderLeaflet({
-    interactive_map() %>%
-    leaflet() %>%
-      setView(lng = -97.486703, lat = 35.339508, zoom = 10) %>%
-      addProviderTiles(providers$CartoDB.Positron) %>%
-      addPolygons(
-        #  fillColor = pal(),
-        weight = 2,
-        opacity = 1,
-        color = "gray",
-        fillOpacity = 0.8,
-        highlightOptions = highlightOptions(weight = 5, color = "#666",
-                                        fillOpacity = 0.8)) #%>%
-      #label = labels,
-      #labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
-      #                           textsize = "15px",
-      #                          direction = "auto")) #%>%
-      #addLegend(pal=pal, values = ~median_sale_price, opacity = 0.8, title = "Mean Rent")
+      filter(date == chosen_month())
   })
+  
   
   # set up map
   bins <- c(100000, 200000, 300000, 400000, 500000)
-  #pal <- reactive({colorBin("YlOrRd", domain=interactive_map()$median_sale_price, bins=bins)})
   
-  #labels <- reactive({
-   # sprintf("<strong>%s</strong><br/>Mean Rent: %g",
-    #interactive_map()$zip_code, interactive_map()$median_sale_price)})
+  ## load the default map ##
+  output$disaster_map <- renderLeaflet({
+    
+    interactive_map() %>%
+      leaflet()  %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      setView(lng = new_long(), lat = new_lat(), zoom = 10)
+  })
+
+
 }
+  
