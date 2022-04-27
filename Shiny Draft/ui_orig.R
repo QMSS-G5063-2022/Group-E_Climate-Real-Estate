@@ -43,9 +43,9 @@ navbarPage(h4("Real Estate & Natural Disasters"), id="nav",
                                   draggable = TRUE, top = 170, left = "auto", right = 20, bottom = "auto",
                                   width = 330, height = "auto",
                                   
-                                  h4("Hurricane"),
-                                  h4("New Orleans"),
-                                  h6("Aug 2005"),
+                                  htmlOutput("Hurricane"),
+                                  htmlOutput("New Orleans"),
+                                  htmlOutput("Aug 2005"),
                       
                                   sliderInput(
                                     inputId = "choose_month_neworleans", 

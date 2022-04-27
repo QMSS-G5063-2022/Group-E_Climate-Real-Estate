@@ -10,13 +10,14 @@ locations <- c("New Orleans - Hurricane" = "neworleans",
                "Moore, OK - Tornado" = "moore",
                "Grand Isle, LA - BP Oil Spill" = "grandisle")
 
-navbarPage(h4("Real Estate & Severe Disasters"), id="nav",
+navbarPage(h4("Real Estate & Severe Disasters"),
+           id="nav",
            
-           tabPanel(h6("Home Page"),
+           tabPanel(h6("Introduction"),
                     
                     h2("Real Estate amid Disaster: A Data Visualization Exploration"),
                     h1(" "),
-                    h4("Rory Butler, Cindy Chen, Lizabeth Singh, Jeffray Tsai"),
+                    p("Rory Butler, Cindy Chen, Lizabeth Singh, Jeffray Tsai"),
                     h1(" "),
                     h5("As climate change and ongoing human events increases both the intensity and frequency of severe environmental
                     events, these consequences also have immediate impacts on real estate, be that housing sale prices, rental prices, or home price indices.  In profiling
@@ -39,15 +40,11 @@ navbarPage(h4("Real Estate & Severe Disasters"), id="nav",
                     div(class="outer",
                         tags$head(includeCSS("styles.css")),
                         
-                        leaflet::leafletOutput("new_orleans_map", height = "100%", width = "100%"),
+                        leaflet::leafletOutput("disaster_map", height = "100%", width = "100%"),
          
          absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
                 draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
                 width = 330, height = "auto",
-                
-                h4("Hurricane"),
-                h4("New Orleans"),
-                h6("Aug 2005"),
                 
                 sliderInput(
                   inputId = "choose_month", 
@@ -59,6 +56,12 @@ navbarPage(h4("Real Estate & Severe Disasters"), id="nav",
                 
                 selectInput("choose_metric", "Choose Real Estate Metric", vars, selected = "hpi"),
                 selectInput("choose_disaster", "Choose Disaster", locations, selected = "neworleans"),
+                
+                
+                h5(htmlOutput("disaster_name")),
+                h5(htmlOutput("city_name")),
+                h6(htmlOutput("disaster_date")),
+                
                 plotly::plotlyOutput("bar_chart_neworleans"),
                 plotly::plotlyOutput("line_chart_neworleans")
   ))))
