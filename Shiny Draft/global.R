@@ -8,5 +8,6 @@ library(spdplyr)
 library(htmltools)
 library(shiny)
 library(plotly)
+library(htmlwidgets)
 
 set.seed(100)
