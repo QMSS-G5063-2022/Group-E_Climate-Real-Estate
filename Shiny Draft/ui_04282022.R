@@ -27,14 +27,14 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                        Is the housing market more resilient to certain types of disasters?  How quickly does it take to bounce back?
                        Our project explores these questions in an engaging manner."),
                     h1(" "),
-                    img(src = "hurricane-katrina-png.png", align = "center", height = "15%", width = "15%"),
-                    img(src = 'coffey-park-fire-png.png', align = "center", height = "15%", width = "15%"),
-                    img(src = 'buffalo-snow-png.png', align = "center", height = "15%", width = "15%"),
-                    img(src = 'moore-ok-tornado-png.png', align = "center", height = "15%", width = "15%"),
-                    img(src = 'grand-isle-oil-png.png', align = "center", height = "15%", width = "15%")
+                    img(src = "hurricane-katrina.jpg", align = "center", height = "15%", width = "15%"),
+                    img(src = 'coffey-park-fire.jpg', align = "center", height = "15%", width = "15%"),
+                    img(src = 'buffalo-snow.jpg', align = "center", height = "15%", width = "15%"),
+                    img(src = 'moore-ok-tornado.jpg', align = "center", height = "15%", width = "15%"),
+                    img(src = 'grand-isle-oil.jpg', align = "center", height = "15%", width = "15%")
            ),
            
-           tabPanel(h6("New Orleans, LA"),
+           tabPanel(h6("Deep Dive"),
                     id = "neworleans_tab",
                     
                     div(class="outer",
@@ -47,9 +47,6 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                 draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
                 width = 330, height = "auto",
                 
-                h5("Hurricane"),
-                h5("Aug 2005"),
-                
                 sliderInput(
                   inputId = "choose_month", 
                   label = "Choose the month/year",
@@ -59,7 +56,12 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                   timeFormat="%b %Y"),
                 
                 selectInput("choose_metric", "Choose Real Estate Metric", vars, selected = "hpi"),
- 
+                selectInput("choose_disaster", "Choose Disaster", locations, selected = "neworleans"),
+                
+                h5(htmlOutput("disaster_name")),
+                h5(htmlOutput("city_name")),
+                h6(htmlOutput("disaster_date")),
+                
                 plotly::plotlyOutput("bar_chart_neworleans"),
                 plotly::plotlyOutput("line_chart_neworleans")
   ))),
@@ -71,14 +73,11 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                id = "div2",
                tags$head(includeCSS("styles.css")),
   
-      #leaflet::leafletOutput("disaster_map2", height = "100%", width = "100%"),
+      leaflet::leafletOutput("disaster_map2", height = "100%", width = "100%"),
       
       absolutePanel(id = "controls2", class = "panel panel-default", fixed = TRUE,
                     draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
                     width = 330, height = "auto",
-                    
-                    h5("Wildfires"),
-                    h5("Oct 2017"),
                     
                     sliderInput(
                       inputId = "choose_month2", 
@@ -88,30 +87,12 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                       value= as.Date("2014-11-30"),
                       timeFormat="%b %Y"),
                     
-                    selectInput("choose_metric2", "Choose Real Estate Metric", vars, selected = "hpi")
+                    selectInput("choose_metric2", "Choose Real Estate Metric", vars, selected = "hpi"),
+                    selectInput("choose_disaster2", "Choose Disaster", locations, selected = "neworleans")
                     ))),
       
   tabPanel(h6("Moore, OK"),
-           id = "moore_tab",
-           
-           absolutePanel(id = "controls2", class = "panel panel-default", fixed = TRUE,
-                         draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
-                         width = 330, height = "auto",
-                         
-                        h5("Tornado"),
-                        h5("May 2013"),
-           
-           sliderInput(
-             inputId = "choose_month3", 
-             label = "Choose the month/year",
-             min = as.Date("2002-01-01"),
-             max = as.Date("2021-01-01"),
-             value= as.Date("2014-11-30"),
-             timeFormat="%b %Y"),
-           
-           selectInput("choose_metric3", "Choose Real Estate Metric", vars, selected = "hpi")
-           )),
-  
+           id = "moore_tab"),
   tabPanel(h6("Buffalo, NY"),
            id = "buffalo_tab",
            div(class="outer",
@@ -124,9 +105,6 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                              draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
                              width = 330, height = "auto",
                              
-                             h5("Snowstorm"),
-                             h5("Nov 2014"),
-                             
                              sliderInput(
                                inputId = "choose_month4", 
                                label = "Choose the month/year",
@@ -135,7 +113,8 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                                value= as.Date("2014-11-30"),
                                timeFormat="%b %Y"),
                              
-                             selectInput("choose_metric4", "Choose Real Estate Metric", vars, selected = "hpi")
+                             selectInput("choose_metric4", "Choose Real Estate Metric", vars, selected = "hpi"),
+                             selectInput("choose_disaster4", "Choose Disaster", locations, selected = "neworleans")
                ))),
   tabPanel(h6("Grand Isle, LA"),
            id = "grandisle_tab",
@@ -150,9 +129,6 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                              draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
                              width = 330, height = "auto",
                              
-                             h5("BP Oil Spill"),
-                             h5("Apr 2010"),
-                             
                              sliderInput(
                                inputId = "choose_month5", 
                                label = "Choose the month/year",
@@ -161,6 +137,6 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                                value= as.Date("2014-11-30"),
                                timeFormat="%b %Y"),
                           
-                             selectInput("choose_metric5", "Choose Real Estate Metric", vars, selected = "hpi")
+                             selectInput("choose_metric5", "Choose Real Estate Metric", vars, selected = "hpi"),
+                             selectInput("choose_disaster5", "Choose Disaster", locations, selected = "neworleans")
                ))))
-                                

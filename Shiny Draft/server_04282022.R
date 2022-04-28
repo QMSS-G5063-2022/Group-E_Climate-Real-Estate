@@ -1,21 +1,13 @@
 function(input, output){
   
   ### input sliders and drop downs ###
+  chosen_month <- reactive({input$choose_month})
+  chosen_location <- reactive({input$choose_disaster})
+  chosen_metric <- reactive({input$choose_metric})
   
-  chosen_month_neworleans <- reactive({input$choose_month_neworleans})
-  chosen_metric_neworleans <- reactive({input$choose_metric_neworleans})
-  
-  chosen_month_coffeypark <- reactive({input$choose_month_coffeypark})
-  chosen_metric_coffeypark <- reactive({input$choose_metric_coffeypark})
-  
-  chosen_month_moore <- reactive({input$choose_month_moore})
-  chosen_metric_moore <- reactive({input$choose_metric_moore})
-  
-  chosen_month_buffalo <- reactive({input$choose_month_buffalo})
-  chosen_metric_buffalo <- reactive({input$choose_metric_buffalo})
-  
-  chosen_month_grandisle <- reactive({input$choose_month_grandisle})
-  chosen_metric_grandisle <- reactive({input$choose_metric_grandisle})
+  chosen_month2 <- reactive({input$choose_month2})
+  chosen_location2 <- reactive({input$choose_disaster2})
+  chosen_metric2 <- reactive({input$choose_metric2})
   
   ### update sliders ###
   ### THIS IS FAKE CODE 
@@ -32,6 +24,41 @@ function(input, output){
   single_family_homes <- read.csv("../data/single_family_homes_time_series.csv")
   HPI <- read.csv("../data/HPI_data.csv")
   bottom_tier <- read.csv("../data/all_homes_bottom_tier.csv")
+  
+  # change values based on selections
+  observe({
+    
+    if (input$choose_disaster == "neworleans") {
+      output$disaster_name <- renderText({"<b>Hurricane</b>"})
+      output$disaster_date <- renderText({"Aug 2005"})
+      output$city_name <- renderText({"<b>New Orleans</b>"})
+    }
+    
+    if (input$choose_disaster == "coffeypark") {
+      output$disaster_name <- renderText({"<b>Wildfires</b>"})
+      output$disaster_date <- renderText({"Oct 2017"})
+      output$city_name <- renderText({"<b>Coffey Park, CA</b>"})
+    }
+    
+    if (input$choose_disaster == "buffalo") {
+      output$disaster_name <- renderText({"<b>Snowstorm</b>"})
+      output$disaster_date <- renderText({"Nov 2014"})
+      output$city_name <- renderText({"<b>Buffalo, NY</b>"})
+    }
+    
+    if (input$choose_disaster == "grandisle") {
+      output$disaster_name <- renderText({"<b>BP Oil Spill</b>"})
+      output$disaster_date <- renderText({"Apr 2010"})
+      output$city_name <- renderText({"<b>Grand Isle, LA</b>"})
+    }
+    
+    if (input$choose_disaster == "moore") {
+      output$disaster_name <- renderText({"<b>Tornado</b>"})
+      output$disaster_date <- renderText({"May 2013"})
+      output$city_name <- renderText({"<b>Moore, OK</b>"})
+    }
+  })
+  
   
   ### data manipulation ###
   
@@ -171,7 +198,7 @@ function(input, output){
   
   interactive_map <- reactive({
     base_data %>%
-      filter(date == chosen_month_neworleans())
+      filter(date == chosen_month())
   })
   
   
@@ -180,6 +207,14 @@ function(input, output){
   
   ## load the default map ##
   output$disaster_map <- renderLeaflet({
+    
+    interactive_map() %>%
+      leaflet()  %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      setView(lng = new_long(), lat = new_lat(), zoom = 10)
+  })
+  
+  output$disaster_map2 <- renderLeaflet({
     
     interactive_map() %>%
       leaflet()  %>%
