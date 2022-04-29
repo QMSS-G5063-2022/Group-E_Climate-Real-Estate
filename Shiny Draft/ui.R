@@ -9,7 +9,7 @@ locations <- c("New Orleans - Hurricane" = "neworleans",
                "Moore, OK - Tornado" = "moore",
                "Grand Isle, LA - BP Oil Spill" = "grandisle")
 
-navbarPage(h4("Real Estate & Severe Disasters"),
+navbarPage(h4("Major Disasters' Real Estate Effects"),
            id="nav",
            
            tabPanel(h6("Introduction"),
@@ -27,11 +27,12 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                        Is the housing market more resilient to certain types of disasters?  How quickly does it take to bounce back?
                        Our project explores these questions in an engaging manner."),
                     h1(" "),
-                    img(src = "hurricane-katrina-png.png", align = "center", height = "15%", width = "15%"),
-                    img(src = 'coffey-park-fire-png.png', align = "center", height = "15%", width = "15%"),
-                    img(src = 'buffalo-snow-png.png', align = "center", height = "15%", width = "15%"),
-                    img(src = 'moore-ok-tornado-png.png', align = "center", height = "15%", width = "15%"),
-                    img(src = 'grand-isle-oil-png.png', align = "center", height = "15%", width = "15%")
+                    img(id = "neworleanspic", src = "hurricane-katrina-png.png", align = "center", height = "15%", width = "15%"),
+                    img(id = "coffeypic", src = 'coffey-park-fire-png.png', align = "center", height = "15%", width = "15%"),
+                    img(id = "moorepic", src = 'moore-ok-tornado-png.png', align = "center", height = "15%", width = "15%"),
+                    img(id = "buffalopic", src = 'buffalo-snow-png.png', align = "center", height = "15%", width = "15%"),
+                    img(id = "grandislepic", src = 'grand-isle-oil-png.png', align = "center", height = "15%", width = "15%"),
+                    useShinyjs(),
            ),
            
            tabPanel(h6("New Orleans, LA"),
@@ -41,9 +42,10 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                         id = "div1",
                         tags$head(includeCSS("styles.css")),
                         
-                        leaflet::leafletOutput("disaster_map", height = "100%", width = "100%"),
+                        leaflet::leafletOutput("disaster_map_neworleans", height = "100%", width = "100%"),
          
-         absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
+         absolutePanel(id = "controls",
+                       class = "panel panel-default", fixed = TRUE,
                 draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
                 width = 330, height = "auto",
                 
@@ -51,18 +53,21 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                 h5("Aug 2005"),
                 
                 sliderInput(
-                  inputId = "choose_month", 
+                  inputId = "choose_month_neworleans", 
                   label = "Choose the month/year",
-                  min = as.Date("2002-01-01"),
-                  max = as.Date("2021-01-01"),
-                  value= as.Date("2014-11-30"),
+                  min = as.Date("2002-08-01"),
+                  max = as.Date("2008-08-01"),
+                  value= as.Date("2005-08-01"),
                   timeFormat="%b %Y"),
                 
-                selectInput("choose_metric", "Choose Real Estate Metric", vars, selected = "hpi"),
+                selectInput("choose_metric_neworleans", "Choose Real Estate Metric", vars, selected = "hpi"),
  
                 plotly::plotlyOutput("bar_chart_neworleans"),
-                plotly::plotlyOutput("line_chart_neworleans")
-  ))),
+                plotly::plotlyOutput("line_chart_neworleans")),
+         
+         tags$div(id="cite",
+                  'Data compiled from', tags$em('lala'), ' FHFA and Zillow')
+  )),
   
   tabPanel(h6("Coffey Park, CA"),
            id = "coffeypark_tab",
@@ -71,9 +76,10 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                id = "div2",
                tags$head(includeCSS("styles.css")),
   
-      #leaflet::leafletOutput("disaster_map2", height = "100%", width = "100%"),
+      leaflet::leafletOutput("disaster_map_coffeypark", height = "100%", width = "100%"),
       
-      absolutePanel(id = "controls2", class = "panel panel-default", fixed = TRUE,
+      absolutePanel(id = "controls2",
+                    class = "panel panel-default", fixed = TRUE,
                     draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
                     width = 330, height = "auto",
                     
@@ -81,20 +87,34 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                     h5("Oct 2017"),
                     
                     sliderInput(
-                      inputId = "choose_month2", 
+                      inputId = "choose_month_coffeypark", 
                       label = "Choose the month/year",
-                      min = as.Date("2002-01-01"),
-                      max = as.Date("2021-01-01"),
-                      value= as.Date("2014-11-30"),
+                      min = as.Date("2004-10-01"),
+                      max = as.Date("2020-10-01"),
+                      value= as.Date("2017-10-01"),
                       timeFormat="%b %Y"),
                     
-                    selectInput("choose_metric2", "Choose Real Estate Metric", vars, selected = "hpi")
-                    ))),
+                    selectInput("choose_metric_coffeypark", "Choose Real Estate Metric", vars, selected = "hpi"),
+                    
+                    plotly::plotlyOutput("bar_chart_coffeypark"),
+                    plotly::plotlyOutput("line_chart_coffeypark"),
+                    
+                    tags$div(id="cite2",
+                             'Data compiled from', tags$em('lala2'), ' FHFA and Zillow')
+                    )
+      )),
       
   tabPanel(h6("Moore, OK"),
            id = "moore_tab",
            
-           absolutePanel(id = "controls2", class = "panel panel-default", fixed = TRUE,
+           div(class="outer",
+               id = "div3",
+               
+               tags$head(includeCSS("styles.css")),
+           
+           leaflet::leafletOutput("disaster_map_moore", height = "100%", width = "100%"),
+           
+           absolutePanel(id = "controls3", class = "panel panel-default", fixed = TRUE,
                          draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
                          width = 330, height = "auto",
                          
@@ -102,23 +122,27 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                         h5("May 2013"),
            
            sliderInput(
-             inputId = "choose_month3", 
+             inputId = "choose_month_moore", 
              label = "Choose the month/year",
-             min = as.Date("2002-01-01"),
-             max = as.Date("2021-01-01"),
-             value= as.Date("2014-11-30"),
+             min = as.Date("2010-05-01"),
+             max = as.Date("2016-05-01"),
+             value= as.Date("2013-05-01"),
              timeFormat="%b %Y"),
            
-           selectInput("choose_metric3", "Choose Real Estate Metric", vars, selected = "hpi")
-           )),
+           selectInput("choose_metric_moore", "Choose Real Estate Metric", vars, selected = "hpi"),
+           
+           plotly::plotlyOutput("bar_chart_moore"),
+           plotly::plotlyOutput("line_chart_moore")
+           
+           ))),
   
   tabPanel(h6("Buffalo, NY"),
            id = "buffalo_tab",
            div(class="outer",
-               id = "div2",
+               id = "div4",
                tags$head(includeCSS("styles.css")),
                
-               #leaflet::leafletOutput("disaster_map2", height = "100%", width = "100%"),
+               leaflet::leafletOutput("disaster_map_buffalo", height = "100%", width = "100%"),
                
                absolutePanel(id = "controls4", class = "panel panel-default", fixed = TRUE,
                              draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
@@ -128,15 +152,21 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                              h5("Nov 2014"),
                              
                              sliderInput(
-                               inputId = "choose_month4", 
+                               inputId = "choose_month_buffalo", 
                                label = "Choose the month/year",
-                               min = as.Date("2002-01-01"),
-                               max = as.Date("2021-01-01"),
-                               value= as.Date("2014-11-30"),
+                               min = as.Date("2011-11-01"),
+                               max = as.Date("2017-11-01"),
+                               value= as.Date("2014-11-01"),
                                timeFormat="%b %Y"),
                              
-                             selectInput("choose_metric4", "Choose Real Estate Metric", vars, selected = "hpi")
-               ))),
+                             selectInput("choose_metric_buffalo", "Choose Real Estate Metric", vars, selected = "hpi"),
+                             
+                             plotly::plotlyOutput("bar_chart_buffalo"),
+                             plotly::plotlyOutput("line_chart_buffalo")),
+               
+               tags$div(id="cite3",
+                        'Data compiled from', tags$em('lala3'), ' FHFA and Zillow')
+           )),
   tabPanel(h6("Grand Isle, LA"),
            id = "grandisle_tab",
 
@@ -144,7 +174,7 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                id = "div5",
                tags$head(includeCSS("styles.css")),
                
-               #leaflet::leafletOutput("disaster_map2", height = "100%", width = "100%"),
+               leaflet::leafletOutput("disaster_map_grandisle", height = "100%", width = "100%"),
                
                absolutePanel(id = "controls5", class = "panel panel-default", fixed = TRUE,
                              draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
@@ -154,13 +184,17 @@ navbarPage(h4("Real Estate & Severe Disasters"),
                              h5("Apr 2010"),
                              
                              sliderInput(
-                               inputId = "choose_month5", 
+                               inputId = "choose_month_grandisle", 
                                label = "Choose the month/year",
-                               min = as.Date("2002-01-01"),
-                               max = as.Date("2021-01-01"),
-                               value= as.Date("2014-11-30"),
+                               min = as.Date("2007-04-01"),
+                               max = as.Date("2013-04-01"),
+                               value= as.Date("2010-04-01"),
                                timeFormat="%b %Y"),
                           
-                             selectInput("choose_metric5", "Choose Real Estate Metric", vars, selected = "hpi")
+                             selectInput("choose_metric_grandisle", "Choose Real Estate Metric", vars, selected = "hpi"),
+                             
+                             plotly::plotlyOutput("bar_chart_grandisle"),
+                             plotly::plotlyOutput("line_chart_grandisle")
+                             
                ))))
                                 

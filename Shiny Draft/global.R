@@ -9,5 +9,5 @@ library(htmltools)
 library(shiny)
 library(plotly)
 library(htmlwidgets)
-
+library(shinyjs)
 set.seed(100)

@@ -1,4 +1,4 @@
-function(input, output){
+function(input, output, session){
   
   ### input sliders and drop downs ###
   
@@ -90,22 +90,6 @@ function(input, output){
   
   rm(bottom_tier, single_family_homes, months, HPI)
   
-  new_long <- reactive({
-    
-    if(input$choose_disaster == "neworleans") {-90.0715}
-    else if(input$choose_disaster == "grandisle") {-89.987294}
-    else if(input$choose_disaster == "buffalo") {-78.878738}
-    else if(input$choose_disaster == "moore") {new_long <- -97.486703}
-    else {-122.748}})
-  
-  new_lat <- reactive({
-    
-    if(input$choose_disaster == "neworleans") {29.95}
-    else if(input$choose_disaster == "grandisle") {29.236617}
-    else if(input$choose_disaster == "buffalo") {42.880230}
-    else if(input$choose_disaster == "moore") {35.339508}
-    else {38.4777}})
-  
   #  observe({
   #   if(input$choose_metric == "hpi"){1}
   #  if(input$choose_metric == "bottom_tier"){1}
@@ -118,7 +102,7 @@ function(input, output){
   new_orleans_shape <- readOGR("../data/shape files", "New_Orleans")
   new_orleans_shape <- new_orleans_shape[,-c(2,3,4,5,6,7,8,9)]
   
-  refined_orleans_shape <- new_orleans_shape %>%
+  refined_orleans_data <- new_orleans_shape %>%
     rename(zip_code = ZCTA5CE10) %>%
     spTransform(CRS("+proj=longlat +datum=WGS84 +no_defs")) %>%
     merge(filter(base_data, zip_code %in% new_orleans_zips),
@@ -169,24 +153,105 @@ function(input, output){
   
   rm(buffalo_shape, grand_isle_shape, cali_shape, moore_ok_shape, new_orleans_shape)
   
-  interactive_map <- reactive({
-    base_data %>%
-      filter(date == chosen_month_neworleans())
-  })
+  interactive_map_neworleans <- reactive({
+    refined_orleans_data %>%
+      filter(date == chosen_month_neworleans())})
   
+  interactive_map_coffeypark <- reactive({
+    refined_cali_data %>%
+      filter(date == chosen_month_coffeypark())})
+  
+  interactive_map_moore <- reactive({
+    refined_moore_data %>%
+      filter(date == chosen_month_moore())})
+  
+  interactive_map_buffalo <- reactive({
+    refined_buffalo_data %>%
+      filter(date == chosen_month_buffalo())})
+  
+  interactive_map_grandisle <- reactive({
+    refined_grandisle_data %>%
+      filter(date == chosen_month_grandisle())})
   
   # set up map
   bins <- c(100000, 200000, 300000, 400000, 500000)
   
   ## load the default map ##
-  output$disaster_map <- renderLeaflet({
-    
-    interactive_map() %>%
+  output$disaster_map_neworleans <- renderLeaflet({
+    interactive_map_neworleans() %>%
       leaflet()  %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = new_long(), lat = new_lat(), zoom = 10)
+      setView(lng = -90.0715, lat = 29.95, zoom = 11) %>%
+      addPolygons(
+       # fillColor = ~pal(median_sale_price),
+        weight = 2,
+        opacity = 1,
+        color = "gray",
+        fillOpacity = 0.8,
+        highlightOptions = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.8))
+  })
+  
+  output$disaster_map_coffeypark <- renderLeaflet({
+    interactive_map_coffeypark() %>%
+      leaflet()  %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      setView(lng = -122.748, lat = 38.4777, zoom = 11) %>%
+      addPolygons(
+       # fillColor = ~pal(median_sale_price),
+        weight = 2,
+        opacity = 1,
+        color = "gray",
+        fillOpacity = 0.8,
+        highlightOptions = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.8))
   })
 
-
+  ##FIX MOORE!
+  output$disaster_map_moore <- renderLeaflet({
+    base_data %>%
+      leaflet()  %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      setView(lng = -78.87873, lat = 42.880230, zoom = 11)
+  })
+  
+  output$disaster_map_buffalo <- renderLeaflet({
+    interactive_map_buffalo() %>%
+      leaflet()  %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      setView(lng = -78.878738, lat = 42.880230, zoom = 11) %>%
+      addPolygons(
+        #fillColor = ~pal(median_sale_price),
+        weight = 2,
+        opacity = 1,
+        color = "gray",
+        fillOpacity = 0.8,
+        highlightOptions = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.8))
+  })
+  
+  output$disaster_map_grandisle <- renderLeaflet({
+    interactive_map_grandisle() %>%
+      leaflet()  %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      setView(lng = -89.987294, lat = 29.236617, zoom = 11) %>%
+      addPolygons(
+        #fillColor = ~pal(median_sale_price),
+        weight = 2,
+        opacity = 1,
+        color = "gray",
+        fillOpacity = 0.8,
+        highlightOptions = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.8))
+  })
+  
 }
   
