@@ -1,7 +1,8 @@
 vars <- c(
   "Annual Home Price Index" = "hpi",
   "Bottom Tier Home Value " = "bottom_tier",
-  "Single Family Home Value" = "sfhv")
+  "Single Family Home Value" = "sfhv",
+  "Annual Change" = "annual_delta")
 
 locations <- c("New Orleans - Hurricane" = "neworleans",
                "Coffey Park - Wildfires" = "coffeypark",
@@ -66,7 +67,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                 plotly::plotlyOutput("line_chart_neworleans")),
          
          tags$div(id="cite",
-                  'Data compiled from', tags$em('lala'), ' FHFA and Zillow')
+                  'Data compiled from FHFA and Zillow')
   )),
   
   tabPanel(h6("Coffey Park, CA"),
@@ -89,7 +90,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                     sliderInput(
                       inputId = "choose_month_coffeypark", 
                       label = "Choose the month/year",
-                      min = as.Date("2004-10-01"),
+                      min = as.Date("2014-10-01"),
                       max = as.Date("2020-10-01"),
                       value= as.Date("2017-10-01"),
                       timeFormat="%b %Y"),
@@ -100,7 +101,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                     plotly::plotlyOutput("line_chart_coffeypark"),
                     
                     tags$div(id="cite2",
-                             'Data compiled from', tags$em('lala2'), ' FHFA and Zillow')
+                             'Data compiled from FHFA and Zillow')
                     )
       )),
       
@@ -132,8 +133,10 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
            selectInput("choose_metric_moore", "Choose Real Estate Metric", vars, selected = "hpi"),
            
            plotly::plotlyOutput("bar_chart_moore"),
-           plotly::plotlyOutput("line_chart_moore")
+           plotly::plotlyOutput("line_chart_moore"),
            
+           tags$div(id="cite3",
+                    'Data compiled from FHFA and Zillow')
            ))),
   
   tabPanel(h6("Buffalo, NY"),
@@ -164,8 +167,8 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                              plotly::plotlyOutput("bar_chart_buffalo"),
                              plotly::plotlyOutput("line_chart_buffalo")),
                
-               tags$div(id="cite3",
-                        'Data compiled from', tags$em('lala3'), ' FHFA and Zillow')
+               tags$div(id="cite4",
+                        'Data compiled from FHFA and Zillow')
            )),
   tabPanel(h6("Grand Isle, LA"),
            id = "grandisle_tab",
@@ -194,7 +197,10 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                              selectInput("choose_metric_grandisle", "Choose Real Estate Metric", vars, selected = "hpi"),
                              
                              plotly::plotlyOutput("bar_chart_grandisle"),
-                             plotly::plotlyOutput("line_chart_grandisle")
+                             plotly::plotlyOutput("line_chart_grandisle"),
+                             
+                             tags$div(id="cite5",
+                                      'Data compiled from FHFA and Zillow')
                              
                ))))
                                 

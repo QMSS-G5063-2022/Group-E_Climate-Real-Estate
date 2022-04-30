@@ -75,6 +75,17 @@ function(input, output, session){
            HPI = as.numeric(HPI),
            annual_change = as.numeric(annual_change))
   
+  # a curated list of zip codes missing from our data
+  missing_zips <- c('70112', '14203', '14204') %>%
+    as.data.frame() %>%
+    rename(zip_code = '.') %>%
+    mutate(date = NA,
+           single_fam_val = NA,
+           bottom_tier = NA,
+           HPI_2000 = NA,
+           HPI = NA,
+           annual_change = NA)
+  
   # join all the real estate data #
   base_data <- single_family_homes %>%
     left_join(bottom_tier, by = c("region_id", "date")) %>%
@@ -86,14 +97,18 @@ function(input, output, session){
            "bottom_tier" = "value.y") %>%
     mutate(zip_code = as.character(zip_code)) %>%
     filter(zip_code %in% ZCTA_list) %>% # refine the list so the data is smaller
-    left_join(HPI, by=c("zip_code", "date"))
+    full_join(HPI, by = c("zip_code", "date")) %>%
+    filter(date > as.Date('2000-01-01', "%Y-%m-%d")) %>%
+    rbind(missing_zips) %>%
+    tidyr::complete(date, zip_code) # create months for zip codes missing from our data set
   
   rm(bottom_tier, single_family_homes, months, HPI)
   
   #  observe({
   #   if(input$choose_metric == "hpi"){1}
-  #  if(input$choose_metric == "bottom_tier"){1}
-  # if(input$choose_metric == "sfhv"){1}
+  # else if(input$choose_metric == "bottom_tier"){1}
+  # else if(input$choose_metric == "sfhv"){1}
+  # else{1}
   #})
   
   ### load shape files ###
@@ -213,10 +228,20 @@ function(input, output, session){
 
   ##FIX MOORE!
   output$disaster_map_moore <- renderLeaflet({
-    base_data %>%
+    interactive_map_moore() %>%
       leaflet()  %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -78.87873, lat = 42.880230, zoom = 11)
+      setView(lng = -97.4867, lat = 35.3395, zoom = 11) %>%
+      addPolygons(
+        #fillColor = ~pal(median_sale_price),
+        weight = 2,
+        opacity = 1,
+        color = "gray",
+        fillOpacity = 0.8,
+        highlightOptions = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.8))
   })
   
   output$disaster_map_buffalo <- renderLeaflet({
