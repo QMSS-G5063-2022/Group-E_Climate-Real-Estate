@@ -68,7 +68,7 @@ function(input, output, session){
                                   "07", "08", "09", "10", "11", "12"))
   
   HPI <- left_join(HPI, months, by = "year") %>%
-    mutate(date = as.Date(paste0(month, "/01/", year), "%m/%d/%y")) %>%
+    mutate(date = as.Date(paste0(month, "/01/", year), "%m/%d/%Y")) %>%
     select(zip_code, date, HPI_2000, HPI, annual_change) %>%
     mutate(zip_code = as.character(zip_code),
            HPI_2000 = as.numeric(HPI_2000),
@@ -76,7 +76,7 @@ function(input, output, session){
            annual_change = as.numeric(annual_change))
   
   # a curated list of zip codes missing from our data
-  missing_zips <- c('70112', '14203', '14204') %>%
+  missing_zips <- c('70112', '14203', '14204', '14208') %>%
     as.data.frame() %>%
     rename(zip_code = '.') %>%
     mutate(date = NA,
@@ -100,7 +100,8 @@ function(input, output, session){
     full_join(HPI, by = c("zip_code", "date")) %>%
     filter(date > as.Date('2000-01-01', "%Y-%m-%d")) %>%
     rbind(missing_zips) %>%
-    tidyr::complete(date, zip_code) # create months for zip codes missing from our data set
+    tidyr::complete(date, zip_code) %>% 
+    arrange(zip_code, date)# create months for zip codes missing from our data set
   
   rm(bottom_tier, single_family_homes, months, HPI)
   
@@ -226,7 +227,6 @@ function(input, output, session){
           fillOpacity = 0.8))
   })
 
-  ##FIX MOORE!
   output$disaster_map_moore <- renderLeaflet({
     interactive_map_moore() %>%
       leaflet()  %>%
