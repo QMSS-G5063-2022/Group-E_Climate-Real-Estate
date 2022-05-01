@@ -18,15 +18,6 @@ function(input, output, session){
   chosen_metric_grandisle <- reactive({input$choose_metric_grandisle})
   
   ### update sliders ###
-  ### THIS IS FAKE CODE 
-  ### https://stackoverflow.com/questions/68342780/shiny-if-else-statement
-  
- # observeEvent(input$x, 
-   #            {updateSelectInput(session,
-   #                               inputId = "y",
-    #                              label = "Variable 2",
-    #                              choices = names(df)[names(df) != input$x])
-   #            })
   
   ### load data sources ###
   single_family_homes <- read.csv("../data/single_family_homes_time_series.csv")
@@ -98,11 +89,47 @@ function(input, output, session){
     mutate(zip_code = as.character(zip_code)) %>%
     filter(zip_code %in% ZCTA_list) %>% # refine the list so the data is smaller
     full_join(HPI, by = c("zip_code", "date")) %>%
-    filter(date > as.Date('2000-01-01', "%Y-%m-%d")) %>%
+    filter(date > as.Date('2000-01-01', "%Y-%m-%d") & date < as.Date('2022-01-01', "%Y-%m-%d")) %>%
     rbind(missing_zips) %>%
     tidyr::complete(date, zip_code) %>% 
-    arrange(zip_code, date)# create months for zip codes missing from our data set
+    arrange(zip_code, date) %>%
+    filter(is.na(date) == FALSE) %>%
+    mutate(city = case_when(zip_code %in% c('70112', '70113', '70114', '70115', '70116', '70117',
+                                            '70118', '70119', '70121', '70122', '70123', '70124',
+                                            '70125', '70126', '70127', '70128', '70129', '70130',
+                                            '70131', '70139', '70163') ~ "New Orleans",
+                            zip_code %in% c("73160", "73165", "73170") ~ "Moore",
+                            zip_code %in% c("95401", "95402", "95403", "95404", "95405", "95406",
+                                            "95407", "95409") ~ "Coffey Park",
+                            zip_code %in% c('14201', '14202', '14203','14204', '14206', '14207', '14208',
+                                            '14209', '14210', '14211', '14212', '14213', '14214', '14215', 
+                                            '14216', '14217', '14218', '14219', '14220', '14221','14222', 
+                                            '14223', '14224', '14225', '14226', '14227', '14228', '14261') ~ "Buffalo",
+                            zip_code == '70358' ~ "Grand Isle"))# create months for zip codes missing from our data set
   
+  impute_data_zip <- base_data %>%
+    group_by(city, date) %>%
+    summarize(avg_single_fam_val = mean(single_fam_val, na.rm = TRUE),
+              avg_bottom_tier = mean(bottom_tier, na.rm = TRUE),
+              avg_HPI_2000 = mean(HPI_2000, na.rm = TRUE),
+              avg_HPI = mean(HPI, na.rm = TRUE),
+              avg_annual_change = mean(annual_change, na.rm = TRUE))
+
+    # impute the missing zip codes' numbers using the average for the city
+  base_data_2 <- base_data %>%
+    left_join(impute_data_zip, by = c("city", "date")) %>%
+    mutate(single_fam_val = case_when(is.na(zip_code) == TRUE ~ avg_single_fam_val,
+                                      TRUE ~ as.numeric(single_fam_val)),
+           bottom_tier = case_when(is.na(zip_code) == TRUE ~ avg_bottom_tier,
+                                   TRUE ~ as.numeric(bottom_tier)),
+           HPI_2000 = case_when(is.na(zip_code) == TRUE ~ avg_HPI_2000,
+                                TRUE ~ as.numeric(HPI_2000)),
+           HPI = case_when(is.na(zip_code) == TRUE ~ avg_HPI,
+                                TRUE ~ as.numeric(HPI)),
+           annual_change = case_when(is.na(zip_code) == TRUE ~ avg_annual_change,
+                           TRUE ~ as.numeric(annual_change))) %>%
+    select(date, zip_code, single_fam_val, bottom_tier, HPI_2000, HPI, annual_change, city)
+    
   rm(bottom_tier, single_family_homes, months, HPI)
   
   #  observe({
@@ -111,6 +138,16 @@ function(input, output, session){
   # else if(input$choose_metric == "sfhv"){1}
   # else{1}
   #})
+  
+  ### https://stackoverflow.com/questions/68342780/shiny-if-else-statement
+  
+  # observeEvent(input$x, 
+  #            {updateSelectInput(session,
+  #                               inputId = "y",
+  #                              label = "Variable 2",
+  #                              choices = names(df)[names(df) != input$x])
+  #            })
+  
   
   ### load shape files ###
   
