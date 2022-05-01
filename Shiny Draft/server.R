@@ -118,17 +118,18 @@ function(input, output, session){
     # impute the missing zip codes' numbers using the average for the city
   base_data <- base_data %>%
     left_join(impute_data_zip, by = c("city", "date")) %>%
-    mutate(single_fam_val = case_when(is.na(zip_code) == TRUE ~ avg_single_fam_val,
+    mutate(single_fam_val = case_when(is.na(single_fam_val) == TRUE ~ avg_single_fam_val,
                                       TRUE ~ as.numeric(single_fam_val)),
-           bottom_tier = case_when(is.na(zip_code) == TRUE ~ avg_bottom_tier,
+           bottom_tier = case_when(is.na(bottom_tier) == TRUE ~ avg_bottom_tier,
                                    TRUE ~ as.numeric(bottom_tier)),
-           HPI_2000 = case_when(is.na(zip_code) == TRUE ~ avg_HPI_2000,
+           HPI_2000 = case_when(is.na(HPI_2000) == TRUE ~ avg_HPI_2000,
                                 TRUE ~ as.numeric(HPI_2000)),
-           HPI = case_when(is.na(zip_code) == TRUE ~ avg_HPI,
-                                TRUE ~ as.numeric(HPI)),
-           annual_change = case_when(is.na(zip_code) == TRUE ~ avg_annual_change,
-                           TRUE ~ as.numeric(annual_change))) %>%
+           HPI = case_when(is.na(HPI) == TRUE ~ avg_HPI,
+                           TRUE ~ as.numeric(HPI)),
+           annual_change = case_when(is.na(annual_change) == TRUE ~ avg_annual_change,
+                                     TRUE ~ as.numeric(annual_change))) %>%
     select(date, zip_code, single_fam_val, bottom_tier, HPI_2000, HPI, annual_change, city)
+  
     
   rm(bottom_tier, single_family_homes, months, HPI)
   
