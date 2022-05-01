@@ -1,8 +1,8 @@
 vars <- c(
-  "Annual Home Price Index" = "HPI",
+  "Annual Home Price Index (HPI)" = "HPI",
   "Bottom Tier Home Value " = "bottom_tier",
   "Single Family Home Value" = "single_fam_val",
-  "Annual Change" = "annual_change")
+  "Annual Change in HPI (%)" = "annual_change")
 
 locations <- c("New Orleans - Hurricane" = "neworleans",
                "Coffey Park - Wildfires" = "coffeypark",
@@ -61,7 +61,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                   value= as.Date("2005-08-01"),
                   timeFormat="%b %Y"),
                 
-                selectInput("choose_metric_neworleans", "Choose Real Estate Metric", vars, selected = "hpi"),
+                selectInput("choose_metric_neworleans", "Choose Real Estate Metric", vars, selected = "HPI"),
  
                 plotly::plotlyOutput("bar_chart_neworleans"),
                 plotly::plotlyOutput("line_chart_neworleans")),
