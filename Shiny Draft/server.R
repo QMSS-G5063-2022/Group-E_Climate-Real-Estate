@@ -340,5 +340,10 @@ function(input, output, session){
           fillOpacity = 0.8))
   })
   
+  output$line_chart_neworleans <- plot_ly(new_orleans_homes, x = ~date, y =~value, type = 'line', name = 'New Orleans Median Prices')
+  output$line_chart_moore <- plot_ly(moore_moore, x = ~date, y =~value, type = 'line', name = 'New Orleans Median Prices')
+  output$line_chart_buffalo <- plot_ly(buffalo_homes, x = ~date, y =~value, type = 'line', name = 'New Orleans Median Prices')
+  output$line_chart_coffeypark <- plot_ly(cali_data, x = ~date, y =~value, type = 'line', name = 'New Orleans Median Prices')
+  output$line_chart_grandisle <- plot_ly(grand_isle_rent, x = ~date, y =~value, type = 'line', name = 'New Orleans Median Prices')
 }
   
