@@ -116,7 +116,7 @@ function(input, output, session){
               avg_annual_change = mean(annual_change, na.rm = TRUE))
 
     # impute the missing zip codes' numbers using the average for the city
-  base_data <- base_data %>%
+  base_data_2 <- base_data %>%
     left_join(impute_data_zip, by = c("city", "date")) %>%
     mutate(single_fam_val = case_when(is.na(zip_code) == TRUE ~ avg_single_fam_val,
                                       TRUE ~ as.numeric(single_fam_val)),
@@ -209,8 +209,13 @@ function(input, output, session){
   interactive_map_neworleans <- reactive({
     refined_orleans_data$date2 <- format(refined_orleans_data$date, format="%Y %m")
     chosen_month_neworleans2 <- format(chosen_month_neworleans(), format="%Y %m")
+    
+    chosen_metric <- chosen_metric_neworleans()
+    
     refined_orleans_data %>%
-      filter(date2 == chosen_month_neworleans2)
+      filter(date2 == chosen_month_neworleans2) %>% 
+      select(date2, zip_code, chosen_metric) %>% 
+      rename(selected_metric = chosen_metric)
     })
   
   interactive_map_coffeypark <- reactive({
@@ -221,24 +226,29 @@ function(input, output, session){
     })
   
   interactive_map_moore <- reactive({
+    refined_moore_data$date2 <- format(refined_moore_data$date, format="%Y %m")
+    chosen_month_moore2 <- format(chosen_month_moore(), format="%Y %m")
     refined_moore_data %>%
-      filter(date == chosen_month_moore())})
+      filter(date2 == chosen_month_moore2)
+    })
   
   interactive_map_buffalo <- reactive({
+    refined_buffalo_data$date2 <- format(refined_buffalo_data$date, format="%Y %m")
+    chosen_month_buffalo2 <- format(chosen_month_buffalo(), format="%Y %m")
     refined_buffalo_data %>%
-      filter(date == chosen_month_buffalo())})
+      filter(date2 == chosen_month_buffalo2)
+    })
   
   interactive_map_grandisle <- reactive({
+    refined_grandisle_data$date2 <- format(refined_grandisle_data$date, format="%Y %m")
+    chosen_month_grandisle2 <- format(chosen_month_grandisle(), format="%Y %m")
     refined_grandisle_data %>%
-      filter(date == chosen_month_grandisle())})
+      filter(date2 == chosen_month_grandisle2)
+    })
   
   
   # set up map
-  bins_no <- c(50000, 100000, 150000, 200000, 300000)
-  
-#  colorData_no <- reactive({
-#      interactive_map_neworleans()[chosen_metric_neworleans()]
-#  })
+  #bins_no <- c(50000, 100000, 150000, 200000, 300000)
   
   
   # reactive using interactive_map_neworleans()
@@ -255,26 +265,25 @@ function(input, output, session){
       pal = "PuRd"
     }
     
-    colorBin(pal, domain=interactive_map_neworleans()$selected_metric, bins=5) # customize bins?
+    colorBin(pal, domain=interactive_map_neworleans()$selected_metric, bins=5)
   }) 
-
-#  pal_no <- reactive ({
-#    colorBin("YlOrRed", colorData_no(), bins=bins_no)
-#  })
-  
-  #    pal <- colorBin("YlOrRd", colorData, bins = bins_no)
-  #  })
-  
-  
-  
-  pal_no <- colorBin("YlOrRd", domain=refined_orleans_data$single_fam_val, bins=bins_no)
-
   
   
   labels_no <- reactive({ 
+    
+    if(chosen_metric_neworleans() == 'HPI') {
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
+    } else if(chosen_metric_neworleans() == 'bottom_tier') {
+      hover = "Zip Code: <strong>%s</strong><br/>Bottom Tier Home Price: $%g"
+    } else if(chosen_metric_neworleans() == 'single_fam_val') {
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
+    } else {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+    }
+    
     sprintf(
-      "Zip Code: <strong>%s</strong><br/>Home Price: $%g",
-      interactive_map_neworleans()$zip_code, interactive_map_neworleans()$single_fam_val
+      hover,
+      interactive_map_neworleans()$zip_code, interactive_map_neworleans()$selected_metric
     ) %>% lapply(htmltools::HTML)
   })
   
@@ -284,7 +293,7 @@ function(input, output, session){
       addProviderTiles(providers$CartoDB.Positron) %>%
       setView(lng = -90.0715, lat = 29.95, zoom = 11) %>%
       addPolygons(
-        fillColor = ~pal_no(single_fam_val),
+        fillColor = ~pal_no()(selected_metric),
         weight = 2,
         opacity = 1,
         color = "gray",
@@ -296,8 +305,7 @@ function(input, output, session){
         label = labels_no(),
         labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
                                     textsize = "15px",
-                                    direction = "auto")) %>%
-      addLegend(position="bottomright", pal=pal_no(), values = ~selected_metric, opacity = 0.8, title = chosen_metric_neworleans()) 
+                                    direction = "auto"))
   })
   
   
@@ -369,5 +377,10 @@ function(input, output, session){
           fillOpacity = 0.8))
   })
   
+  output$line_chart_neworleans <- plot_ly(new_orleans_homes, x = ~date, y =~value, type = 'line', name = 'New Orleans Median Prices')
+  output$line_chart_moore <- plot_ly(moore_moore, x = ~date, y =~value, type = 'line', name = 'New Orleans Median Prices')
+  output$line_chart_buffalo <- plot_ly(buffalo_homes, x = ~date, y =~value, type = 'line', name = 'New Orleans Median Prices')
+  output$line_chart_coffeypark <- plot_ly(cali_data, x = ~date, y =~value, type = 'line', name = 'New Orleans Median Prices')
+  output$line_chart_grandisle <- plot_ly(grand_isle_rent, x = ~date, y =~value, type = 'line', name = 'New Orleans Median Prices')
 }
   

@@ -193,7 +193,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                                max = as.Date("2013-04-01"),
                                value= as.Date("2010-04-01"),
                                timeFormat="%b %Y"),
-                          
+                             
                              selectInput("choose_metric_grandisle", "Choose Real Estate Metric", vars, selected = "hpi"),
                              
                              plotly::plotlyOutput("bar_chart_grandisle"),
