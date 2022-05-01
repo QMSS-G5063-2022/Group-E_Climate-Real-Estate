@@ -137,11 +137,11 @@ function(input, output, session){
     st_as_sf()
   
   # COFFEY PARK #
-  cali_shape <- readOGR("../data/shape files", "California_Zip_Codes")
-  cali_shape[,-c(1,4,5,6,7,8,9)]
+  coffey_park_shape <- readOGR("../data/shape files", "Coffey_Park")
+  coffey_park_shape <- coffey_park_shape[,-c(2,3,4,5,6,7,8,9)]
   
-  refined_cali_data <- cali_shape %>%
-    rename(zip_code = ZIP_CODE, po_name = PO_NAME) %>%
+  refined_coffey_park_data <- coffey_park_shape %>%
+    rename(zip_code = ZCTA5CE10) %>%
     spTransform(CRS("+proj=longlat +datum=WGS84 +no_defs")) %>%
     merge(filter(base_data, zip_code %in% coffey_zips),
           by = "zip_code", duplicateGeoms = T) %>% st_as_sf()
@@ -167,14 +167,14 @@ function(input, output, session){
           by = "zip_code", duplicateGeoms = T) %>%
     st_as_sf()
   
-  rm(buffalo_shape, grand_isle_shape, cali_shape, moore_ok_shape, new_orleans_shape)
+  rm(buffalo_shape, grand_isle_shape, coffey_park_shape, moore_ok_shape, new_orleans_shape)
   
   interactive_map_neworleans <- reactive({
     refined_orleans_data %>%
       filter(date == chosen_month_neworleans())})
   
   interactive_map_coffeypark <- reactive({
-    refined_cali_data %>%
+    refined_coffey_park_data %>%
       filter(date == chosen_month_coffeypark())})
   
   interactive_map_moore <- reactive({
@@ -190,7 +190,8 @@ function(input, output, session){
       filter(date == chosen_month_grandisle())})
   
   # set up map
-  bins <- c(100000, 200000, 300000, 400000, 500000)
+  bins_no <- c(100000, 200000, 300000, 400000, 500000)
+  #pal_no <-colorBin("YlOrRd", domain=interactive_map_neworleans$single_family_homes, bins=bins)
   
   ## load the default map ##
   output$disaster_map_neworleans <- renderLeaflet({
@@ -199,7 +200,7 @@ function(input, output, session){
       addProviderTiles(providers$CartoDB.Positron) %>%
       setView(lng = -90.0715, lat = 29.95, zoom = 11) %>%
       addPolygons(
-       # fillColor = ~pal(median_sale_price),
+        #fillColor = ~pal(single_family_homes),
         weight = 2,
         opacity = 1,
         color = "gray",
