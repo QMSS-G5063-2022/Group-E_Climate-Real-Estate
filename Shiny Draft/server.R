@@ -228,7 +228,7 @@ function(input, output, session){
       pal = "PuRd"
     }
     
-    colorBin(pal, domain=interactive_map_neworleans()$selected_metric, bins=5)
+    colorBin(pal, domain=interactive_map_neworleans()$selected_metric, bins=5) # customize bins?
   }) 
   
   
@@ -268,7 +268,8 @@ function(input, output, session){
         label = labels_no(),
         labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
                                     textsize = "15px",
-                                    direction = "auto"))
+                                    direction = "auto")) %>%
+      addLegend(position="bottomright", pal=pal_no(), values = ~selected_metric, opacity = 0.8, title = chosen_metric_neworleans()) 
   })
   
   
