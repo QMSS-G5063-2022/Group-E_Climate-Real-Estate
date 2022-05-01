@@ -170,12 +170,18 @@ function(input, output, session){
   rm(buffalo_shape, grand_isle_shape, coffey_park_shape, moore_ok_shape, new_orleans_shape)
   
   interactive_map_neworleans <- reactive({
+    refined_orleans_data$date2 <- format(refined_orleans_data$date, format="%Y %m")
+    chosen_month_neworleans2 <- format(chosen_month_neworleans(), format="%Y %m")
     refined_orleans_data %>%
-      filter(date == chosen_month_neworleans())})
+      filter(date2 == chosen_month_neworleans2)
+    })
   
   interactive_map_coffeypark <- reactive({
+    refined_coffey_park_data$date2 <- format(refined_coffey_park_data$date, format="%Y %m")
+    chosen_month_coffeypark2 <- format(chosen_month_coffeypark(), format="%Y %m")
     refined_coffey_park_data %>%
-      filter(date == chosen_month_coffeypark())})
+      filter(date2 == chosen_month_coffeypark2)
+    })
   
   interactive_map_moore <- reactive({
     refined_moore_data %>%
@@ -189,18 +195,41 @@ function(input, output, session){
     refined_grandisle_data %>%
       filter(date == chosen_month_grandisle())})
   
+  
   # set up map
-  bins_no <- c(100000, 200000, 300000, 400000, 500000)
-  #pal_no <-colorBin("YlOrRd", domain=interactive_map_neworleans$single_family_homes, bins=bins)
+  bins_no <- c(50000, 100000, 150000, 200000, 300000)
+  
+#  colorData_no <- reactive({
+#      interactive_map_neworleans()[chosen_metric_neworleans()]
+#  })
+  
+  
+#  pal_no <- reactive ({
+#    colorBin("YlOrRed", colorData_no(), bins=bins_no)
+#  })
+  
+  #    pal <- colorBin("YlOrRd", colorData, bins = bins_no)
+  #  })
+  
+  
+  
+  pal_no <- colorBin("YlOrRd", domain=refined_orleans_data$single_fam_val, bins=bins_no)
+  
+  
+  labels_no <- reactive({ 
+    sprintf(
+      "Zip Code: <strong>%s</strong><br/>Home Price: $%g",
+      interactive_map_neworleans()$zip_code, interactive_map_neworleans()$single_fam_val
+    ) %>% lapply(htmltools::HTML)
+  })
   
   ## load the default map ##
   output$disaster_map_neworleans <- renderLeaflet({
-    interactive_map_neworleans() %>%
-      leaflet()  %>%
+    leaflet(interactive_map_neworleans())  %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       setView(lng = -90.0715, lat = 29.95, zoom = 11) %>%
       addPolygons(
-        #fillColor = ~pal(single_family_homes),
+        fillColor = ~pal_no(single_fam_val),
         weight = 2,
         opacity = 1,
         color = "gray",
@@ -208,8 +237,13 @@ function(input, output, session){
         highlightOptions = highlightOptions(
           weight = 5,
           color = "#666",
-          fillOpacity = 0.8))
+          fillOpacity = 0.8),
+        label = labels_no(),
+        labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                    textsize = "15px",
+                                    direction = "auto"))
   })
+  
   
   output$disaster_map_coffeypark <- renderLeaflet({
     interactive_map_coffeypark() %>%

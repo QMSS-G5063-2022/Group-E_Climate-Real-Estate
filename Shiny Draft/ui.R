@@ -1,8 +1,8 @@
 vars <- c(
-  "Annual Home Price Index" = "hpi",
+  "Annual Home Price Index" = "HPI",
   "Bottom Tier Home Value " = "bottom_tier",
-  "Single Family Home Value" = "sfhv",
-  "Annual Change" = "annual_delta")
+  "Single Family Home Value" = "single_fam_val",
+  "Annual Change" = "annual_change")
 
 locations <- c("New Orleans - Hurricane" = "neworleans",
                "Coffey Park - Wildfires" = "coffeypark",
