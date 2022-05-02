@@ -1,10 +1,6 @@
 function(input, output, session){
   
   ### input sliders and drop downs ###
-  
-  chosen_month_neworleans <- reactive({input$choose_month_neworleans})
-  chosen_metric_neworleans <- reactive({input$choose_metric_neworleans})
-  
   chosen_month_coffeypark <- reactive({input$choose_month_coffeypark})
   chosen_metric_coffeypark <- reactive({input$choose_metric_coffeypark})
   
@@ -18,6 +14,15 @@ function(input, output, session){
   chosen_metric_grandisle <- reactive({input$choose_metric_grandisle})
   
   ### update sliders ###
+  ### THIS IS FAKE CODE 
+  ### https://stackoverflow.com/questions/68342780/shiny-if-else-statement
+  
+ # observeEvent(input$x, 
+   #            {updateSelectInput(session,
+   #                               inputId = "y",
+    #                              label = "Variable 2",
+    #                              choices = names(df)[names(df) != input$x])
+   #            })
   
   ### load data sources ###
   single_family_homes <- read.csv("../data/single_family_homes_time_series.csv")
@@ -114,23 +119,61 @@ function(input, output, session){
               avg_HPI_2000 = mean(HPI_2000, na.rm = TRUE),
               avg_HPI = mean(HPI, na.rm = TRUE),
               avg_annual_change = mean(annual_change, na.rm = TRUE))
-
-    # impute the missing zip codes' numbers using the average for the city
+  
+  # impute the missing zip codes' numbers using the average for the city
   base_data <- base_data %>%
     left_join(impute_data_zip, by = c("city", "date")) %>%
-    mutate(single_fam_val = case_when(is.na(zip_code) == TRUE ~ avg_single_fam_val,
+    mutate(single_fam_val = case_when(is.na(single_fam_val) == TRUE ~ avg_single_fam_val,
                                       TRUE ~ as.numeric(single_fam_val)),
-           bottom_tier = case_when(is.na(zip_code) == TRUE ~ avg_bottom_tier,
+           bottom_tier = case_when(is.na(bottom_tier) == TRUE ~ avg_bottom_tier,
                                    TRUE ~ as.numeric(bottom_tier)),
-           HPI_2000 = case_when(is.na(zip_code) == TRUE ~ avg_HPI_2000,
+           HPI_2000 = case_when(is.na(HPI_2000) == TRUE ~ avg_HPI_2000,
                                 TRUE ~ as.numeric(HPI_2000)),
-           HPI = case_when(is.na(zip_code) == TRUE ~ avg_HPI,
-                                TRUE ~ as.numeric(HPI)),
-           annual_change = case_when(is.na(zip_code) == TRUE ~ avg_annual_change,
-                           TRUE ~ as.numeric(annual_change))) %>%
+           HPI = case_when(is.na(HPI) == TRUE ~ avg_HPI,
+                           TRUE ~ as.numeric(HPI)),
+           annual_change = case_when(is.na(annual_change) == TRUE ~ avg_annual_change,
+                                     TRUE ~ as.numeric(annual_change))) %>%
     select(date, zip_code, single_fam_val, bottom_tier, HPI_2000, HPI, annual_change, city)
-    
+  
   rm(bottom_tier, single_family_homes, months, HPI)
+  
+  line_chart_data <- impute_data_zip
+  
+  ## bar chart data ##
+  new_orleans_diff <- base_data %>%
+    filter(city == "New Orleans",
+           date %in% c(as.Date("06/01/2005",  "%m/%d/%Y"),
+                       as.Date("08/01/2005",  "%m/%d/%Y"),
+                       as.Date("10/01/2005",  "%m/%d/%Y")))
+  
+  moore_diff <- base_data  %>%
+    filter(city == "Moore",
+           date %in% c(as.Date("08/01/2017",  "%m/%d/%Y"),
+                       as.Date("10/01/2017",  "%m/%d/%Y"),
+                       as.Date("12/01/2017",  "%m/%d/%Y")))
+  
+  buffalo_diff <- base_data  %>%
+    filter(city == "Buffalo",
+           date %in% c(as.Date("09/01/2014",  "%m/%d/%Y"),
+                       as.Date("11/01/2014",  "%m/%d/%Y"),
+                       as.Date("01/01/2015",  "%m/%d/%Y")))
+  
+  grandisle_diff <- base_data  %>%
+    filter(city == "Grand Isle",
+           date %in% c(as.Date("02/01/2010",  "%m/%d/%Y"),
+                       as.Date("04/01/2010",  "%m/%d/%Y"),
+                       as.Date("06/01/2010",  "%m/%d/%Y")))
+  
+  coffey_diff <- base_data  %>%
+    filter(city == "Coffey Park",
+           date %in% c(as.Date("08/01/2017",  "%m/%d/%Y"),
+                       as.Date("10/01/2017",  "%m/%d/%Y"),
+                       as.Date("12/01/2017",  "%m/%d/%Y")))
+  
+  bar_chart_data <- new_orleans_diff %>%
+    bind_rows(coffey_diff, moore_diff, grandisle_diff, buffalo_diff)
+  
+  rm(new_orleans_diff, coffey_diff, moore_diff, grandisle_diff, buffalo_diff)
   
   #  observe({
   #   if(input$choose_metric == "hpi"){1}
@@ -138,16 +181,6 @@ function(input, output, session){
   # else if(input$choose_metric == "sfhv"){1}
   # else{1}
   #})
-  
-  ### https://stackoverflow.com/questions/68342780/shiny-if-else-statement
-  
-  # observeEvent(input$x, 
-  #            {updateSelectInput(session,
-  #                               inputId = "y",
-  #                              label = "Variable 2",
-  #                              choices = names(df)[names(df) != input$x])
-  #            })
-  
   
   ### load shape files ###
   
@@ -206,85 +239,94 @@ function(input, output, session){
   
   rm(buffalo_shape, grand_isle_shape, coffey_park_shape, moore_ok_shape, new_orleans_shape)
   
-  interactive_map_neworleans <- reactive({
-    refined_orleans_data$date2 <- format(refined_orleans_data$date, format="%Y %m")
-    chosen_month_neworleans2 <- format(chosen_month_neworleans(), format="%Y %m")
-    refined_orleans_data %>%
-      filter(date2 == chosen_month_neworleans2)
-    })
-  
   interactive_map_coffeypark <- reactive({
     refined_coffey_park_data$date2 <- format(refined_coffey_park_data$date, format="%Y %m")
     chosen_month_coffeypark2 <- format(chosen_month_coffeypark(), format="%Y %m")
     refined_coffey_park_data %>%
       filter(date2 == chosen_month_coffeypark2)
-    })
+  })
   
   interactive_map_moore <- reactive({
+    refined_moore_data$date2 <- format(refined_moore_data$date, format="%Y %m")
+    chosen_month_moore2 <- format(chosen_month_moore(), format="%Y %m")
     refined_moore_data %>%
-      filter(date == chosen_month_moore())})
+      filter(date2 == chosen_month_moore2)
+  })
   
   interactive_map_buffalo <- reactive({
+    refined_buffalo_data$date2 <- format(refined_buffalo_data$date, format="%Y %m")
+    chosen_month_buffalo2 <- format(chosen_month_buffalo(), format="%Y %m")
     refined_buffalo_data %>%
-      filter(date == chosen_month_buffalo())})
+      filter(date2 == chosen_month_buffalo2)
+  })
   
   interactive_map_grandisle <- reactive({
+    refined_grandisle_data$date2 <- format(refined_grandisle_data$date, format="%Y %m")
+    chosen_month_grandisle2 <- format(chosen_month_grandisle(), format="%Y %m")
     refined_grandisle_data %>%
-      filter(date == chosen_month_grandisle())})
+      filter(date2 == chosen_month_grandisle2)
+  })
   
   
-  # set up map
-  bins_no <- c(50000, 100000, 150000, 200000, 300000)
-  
-#  colorData_no <- reactive({
-#      interactive_map_neworleans()[chosen_metric_neworleans()]
-#  })
   
   
-  # reactive using interactive_map_neworleans()
-  # can make color scale reactive too based on if statements
-  pal_no <- reactive({
+  
+  output$disaster_map_neworleans <- renderLeaflet({
+    leaflet() %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      setView(lng = -90.0715, lat = 29.95, zoom = 11)
+  })  
+  
+  observe({
     
-    if(chosen_metric_neworleans() == 'HPI') {
+    # input values for date and metric chosen
+    chosen_month_neworleans <- input$choose_month_neworleans
+    chosen_metric_neworleans <- input$choose_metric_neworleans
+    
+    # create date field by month only
+    refined_orleans_data$date2 <- format(refined_orleans_data$date, format="%Y %m")
+    chosen_month_neworleans2 <- format(chosen_month_neworleans, format="%Y %m")
+    
+    # subsets data based on inputs
+    interactive_map_neworleans <- refined_orleans_data %>%
+      filter(date2 == chosen_month_neworleans2) %>% 
+      select(date2, zip_code, chosen_metric_neworleans) %>% 
+      rename(selected_metric = chosen_metric_neworleans)
+    
+    # set palette
+    if(chosen_metric_neworleans == 'HPI') {
       pal = "YlGnBu"
-    } else if(chosen_metric_neworleans() == 'bottom_tier') {
+    } else if(chosen_metric_neworleans == 'bottom_tier') {
       pal = "PuBu"
-    } else if(chosen_metric_neworleans() == 'single_fam_val') {
+    } else if(chosen_metric_neworleans == 'single_fam_val') {
       pal = "YlOrRd"
     } else {
       pal = "PuRd"
     }
     
-    colorBin(pal, domain=interactive_map_neworleans()$selected_metric, bins=5) # customize bins?
-  }) 
-
-#  pal_no <- reactive ({
-#    colorBin("YlOrRed", colorData_no(), bins=bins_no)
-#  })
-  
-  #    pal <- colorBin("YlOrRd", colorData, bins = bins_no)
-  #  })
-  
-  
-  
-  pal_no <- colorBin("YlOrRd", domain=refined_orleans_data$single_fam_val, bins=bins_no)
-
-  
-  
-  labels_no <- reactive({ 
-    sprintf(
-      "Zip Code: <strong>%s</strong><br/>Home Price: $%g",
-      interactive_map_neworleans()$zip_code, interactive_map_neworleans()$single_fam_val
+    pal_no = colorBin(pal, domain=interactive_map_neworleans$selected_metric, bins=5)
+    
+    if(chosen_metric_neworleans == 'HPI') {
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
+    } else if(chosen_metric_neworleans == 'bottom_tier') {
+      hover = "Zip Code: <strong>%s</strong><br/>Bottom Tier Home Price: $%g"
+    } else if(chosen_metric_neworleans == 'single_fam_val') {
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
+    } else {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+    }
+    
+    labels_no = sprintf(
+      hover,
+      interactive_map_neworleans$zip_code, interactive_map_neworleans$selected_metric
     ) %>% lapply(htmltools::HTML)
-  })
-  
-  ## load the default map ##
-  output$disaster_map_neworleans <- renderLeaflet({
-    leaflet(interactive_map_neworleans())  %>%
-      addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -90.0715, lat = 29.95, zoom = 11) %>%
+    
+    # update map
+    leafletProxy("disaster_map_neworleans", data=interactive_map_neworleans) %>%
+      clearShapes() %>%
+      clearControls() %>%
       addPolygons(
-        fillColor = ~pal_no(single_fam_val),
+        fillColor = ~pal_no(selected_metric),
         weight = 2,
         opacity = 1,
         color = "gray",
@@ -293,12 +335,18 @@ function(input, output, session){
           weight = 5,
           color = "#666",
           fillOpacity = 0.8),
-        label = labels_no(),
+        label = labels_no,
         labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
                                     textsize = "15px",
                                     direction = "auto")) %>%
-      addLegend(position="bottomright", pal=pal_no(), values = ~selected_metric, opacity = 0.8, title = chosen_metric_neworleans()) 
+      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_neworleans) 
+  
   })
+  
+  
+  
+  ## load the default map ##
+ 
   
   
   output$disaster_map_coffeypark <- renderLeaflet({
