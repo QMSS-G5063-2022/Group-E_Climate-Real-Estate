@@ -1,8 +1,11 @@
 vars <- c(
   "Annual Home Price Index (HPI)" = "HPI",
   "Single Family Home Value" = "single_fam_val",
-  "Annual Change in HPI (%)" = "annual_change",
-  "Customizable Percent Change" = "percent_change")
+  "Annual Change in HPI (%)" = "annual_change")
+
+# for grand isle, which doesn't have HPI data
+vars_special <- c(  "Single Family Home Value" = "single_fam_val",
+                    "Annual Change in HPI (%)" = "annual_change")
 
 locations <- c("New Orleans - Hurricane" = "neworleans",
                "Coffey Park - Wildfires" = "coffeypark",
@@ -65,10 +68,10 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                   value= as.Date("2005-08-01"),
                   timeFormat="%b %Y"),
                 
-                selectInput("choose_metric_neworleans", "Choose Real Estate Metric", vars, selected = "HPI"),
+                selectInput("choose_metric_neworleans", "Choose Real Estate Metric", vars, selected = "annual_change"),
  
-        plotly::plotlyOutput("line_chart_neworleans")),
-         plotly::plotlyOutput("bar_chart_neworleans"),
+        plotly::plotlyOutput("line_chart_neworleans", height = 250),
+         plotly::plotlyOutput("bar_chart_neworleans", height = 250)),
          
          tags$div(id="cite",
                   'Data compiled from FHFA and Zillow')
@@ -99,14 +102,14 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                       value= as.Date("2017-10-01"),
                       timeFormat="%b %Y"),
                     
-                    selectInput("choose_metric_coffeypark", "Choose Real Estate Metric", vars, selected = "hpi"),
+                    selectInput("choose_metric_coffeypark", "Choose Real Estate Metric", vars, selected = "annual_change"),
                     
-                    plotly::plotlyOutput("line_chart_coffeypark"),
-                    plotly::plotlyOutput("bar_chart_coffeypark"),
+                    plotly::plotlyOutput("line_chart_coffeypark", height = 250),
+                    plotly::plotlyOutput("bar_chart_coffeypark", height = 250)),
                     
                     tags$div(id="cite2",
                              'Data compiled from FHFA and Zillow')
-                    )
+                    
       )),
       
   tabPanel(h6("Moore, OK"),
@@ -134,10 +137,10 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
              value= as.Date("2013-05-01"),
              timeFormat="%b %Y"),
            
-           selectInput("choose_metric_moore", "Choose Real Estate Metric", vars, selected = "hpi"),
+           selectInput("choose_metric_moore", "Choose Real Estate Metric", vars, selected = "annual_change"),
            
-           plotly::plotlyOutput("line_chart_moore"),
-           plotly::plotlyOutput("bar_chart_moore"),
+           plotly::plotlyOutput("line_chart_moore", height = 250),
+           plotly::plotlyOutput("bar_chart_moore", height = 250),
            
            tags$div(id="cite3",
                     'Data compiled from FHFA and Zillow')
@@ -166,10 +169,10 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                                value= as.Date("2014-11-01"),
                                timeFormat="%b %Y"),
                              
-                             selectInput("choose_metric_buffalo", "Choose Real Estate Metric", vars, selected = "hpi"),
+                             selectInput("choose_metric_buffalo", "Choose Real Estate Metric", vars, selected = "annual_change"),
                              
-                             plotly::plotlyOutput("line_chart_buffalo")),
-                            plotly::plotlyOutput("bar_chart_buffalo"),
+                             plotly::plotlyOutput("line_chart_buffalo", height = 250),
+                            plotly::plotlyOutput("bar_chart_buffalo", height = 250)),
                
                tags$div(id="cite4",
                         'Data compiled from FHFA and Zillow')
@@ -198,15 +201,15 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                                value= as.Date("2010-04-01"),
                                timeFormat="%b %Y"),
                              
-                             selectInput("choose_metric_grandisle", "Choose Real Estate Metric", vars, selected = "hpi"),
+                             selectInput("choose_metric_grandisle", "Choose Real Estate Metric", vars_special, selected = "annual_change"),
                              
-                             plotly::plotlyOutput("line_chart_grandisle"),
-                             plotly::plotlyOutput("bar_chart_grandisle"),
+                             plotly::plotlyOutput("line_chart_grandisle", height = 250),
+                             plotly::plotlyOutput("bar_chart_grandisle", height = 250)),
                              
                              tags$div(id="cite5",
                                       'Data compiled from FHFA and Zillow')
                              
-               ))),
+               )),
   tabPanel(h6("Insights",
               id = "insights_tab")))
                                 

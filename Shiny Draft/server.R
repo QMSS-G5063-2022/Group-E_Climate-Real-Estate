@@ -94,7 +94,12 @@ function(input, output, session){
               avg_bottom_tier = mean(bottom_tier, na.rm = TRUE),
               avg_HPI_2000 = mean(HPI_2000, na.rm = TRUE),
               avg_HPI = mean(HPI, na.rm = TRUE),
-              avg_annual_change = mean(annual_change, na.rm = TRUE))
+              avg_annual_change = mean(annual_change, na.rm = TRUE)) %>%
+    ungroup() %>%
+    group_by(city) %>%
+    mutate(avg_annual_change = case_when(is.na(avg_annual_change) == TRUE ~ as.numeric(lag(avg_single_fam_val,0)/lag(avg_single_fam_val,1)-1)*100,
+                                         TRUE ~ as.numeric(avg_annual_change))) %>%
+    ungroup()
   
   # impute the missing zip codes' numbers using the average for the city
   base_data <- base_data %>%
@@ -314,9 +319,16 @@ function(input, output, session){
         layout(showlegend = FALSE,
                xaxis = list(range = c(as.Date("2004-08-01", format = "%Y-%m-%d"),
                                       as.Date("2006-08-01", format = "%Y-%m-%d")),
-                            tickfont = list(size = 8)),
-               yaxis = list(range = c(min(neworleans_line_data2$selected_metric),
-                                      max(neworleans_line_data2$selected_metric))))
+                            tickfont = list(size = 8),
+                            title = "Month / Year"),
+               yaxis = list(range = c(ifelse(min(neworleans_line_data2$selected_metric) > 0,
+                                             min(neworleans_line_data2$selected_metric) * 0.9,
+                                             min(neworleans_line_data2$selected_metric) * 1.1),
+                                      ifelse(max(neworleans_line_data2$selected_metric) > 0,
+                                             max(neworleans_line_data2$selected_metric) * 1.1,
+                                             max(neworleans_line_data2$selected_metric) * 0.9)),
+                            title = chosen_metric_neworleans,
+                            tickfont = list(size = 8)))
       })
     
     
@@ -423,9 +435,16 @@ function(input, output, session){
             layout(showlegend = FALSE,
                    xaxis = list(range = c(as.Date("2016-10-01", format = "%Y-%m-%d"),
                                           as.Date("2018-10-01", format = "%Y-%m-%d")),
-                                tickfont = list(size = 8)),
-                   yaxis = list(range = c(min(coffeypark_line_data2$selected_metric),
-                                          max(coffeypark_line_data2$selected_metric))))
+                                tickfont = list(size = 8),
+                                title = "Month / Year"),
+                   yaxis = list(range = c(ifelse(min(coffeypark_line_data2$selected_metric) > 0,
+                                                 min(coffeypark_line_data2$selected_metric) * 0.9,
+                                                 min(coffeypark_line_data2$selected_metric) * 1.1),
+                                          ifelse(max(coffeypark_line_data2$selected_metric) > 0,
+                                                 max(coffeypark_line_data2$selected_metric) * 1.1,
+                                                 max(coffeypark_line_data2$selected_metric) * 0.9)),
+                                title = chosen_metric_coffeypark,
+                                tickfont = list(size = 8)))
     })
     
     
@@ -531,9 +550,16 @@ function(input, output, session){
         layout(showlegend = FALSE,
                xaxis = list(range = c(as.Date("2011-05-01", format = "%Y-%m-%d"),
                                       as.Date("2013-05-01", format = "%Y-%m-%d")),
-                            tickfont = list(size = 8)),
-               yaxis = list(range = c(min(moore_line_data2$selected_metric),
-                                      max(moore_line_data2$selected_metric)))
+                            tickfont = list(size = 8),
+                            title = "Month / Year"),
+               yaxis = list(range = c(ifelse(min(moore_line_data2$selected_metric) > 0,
+                                             min(moore_line_data2$selected_metric) * 0.9,
+                                             min(moore_line_data2$selected_metric) * 1.1),
+                                      ifelse(max(moore_line_data2$selected_metric) > 0,
+                                             max(moore_line_data2$selected_metric) * 1.1,
+                                             max(moore_line_data2$selected_metric) * 0.9)),
+                            title = chosen_metric_moore,
+                            tickfont = list(size = 8))
                )})
     
   }) 
@@ -635,12 +661,19 @@ function(input, output, session){
         add_segments(x = as.Date("2014-11-01", format = "%Y-%m-%d"),
                      xend = as.Date("2014-11-01", format = "%Y-%m-%d"),
                      y = -100000, yend = 30000000) %>%
-        layout(showlegend = FALSE,
+        layout(legend = list(x = 0.1, y = 0.9),
                xaxis = list(range = c(as.Date("2013-11-01", format = "%Y-%m-%d"),
                                       as.Date("2015-11-01", format = "%Y-%m-%d")),
-                            tickfont = list(size = 8)),
-               yaxis = list(range = c(min(buffalo_line_data2$selected_metric),
-                                      max(buffalo_line_data2$selected_metric)))
+                            tickfont = list(size = 8),
+                            title = "Month/Year"),
+               yaxis = list(range = c(ifelse(min(buffalo_line_data2$selected_metric) > 0,
+                                             min(buffalo_line_data2$selected_metric) * 0.9,
+                                             min(buffalo_line_data2$selected_metric) * 1.1),
+                                      ifelse(max(buffalo_line_data2$selected_metric) > 0,
+                                             max(buffalo_line_data2$selected_metric) * 1.1,
+                                             max(buffalo_line_data2$selected_metric) * 0.9)),
+                            title = chosen_metric_buffalo,
+                            tickfont = list(size = 8))
                )
       })
     
@@ -745,9 +778,16 @@ function(input, output, session){
         layout(showlegend = FALSE,
                xaxis = list(range = c(as.Date("2009-04-01", format = "%Y-%m-%d"),
                                       as.Date("2011-04-01", format = "%Y-%m-%d")),
-                            tickfont = list(size = 8)),
-               yaxis = list(range = c(min(grandisle_line_data2$selected_metric),
-                                      max(grandisle_line_data2$selected_metric))))
+                            tickfont = list(size = 8),
+                            title = "Month / Year"),
+               yaxis = list(range = c(ifelse(min(grandisle_line_data2$selected_metric) > 0,
+                                         min(grandisle_line_data2$selected_metric) * 0.9,
+                                         min(grandisle_line_data2$selected_metric) * 1.1),
+                                      ifelse(max(grandisle_line_data2$selected_metric) > 0,
+                                             max(grandisle_line_data2$selected_metric) * 1.1,
+                                             max(grandisle_line_data2$selected_metric) * 0.9)),
+                            title = chosen_metric_grandisle,
+                            tickfont = list(size = 8)))
     
   }) })
   
