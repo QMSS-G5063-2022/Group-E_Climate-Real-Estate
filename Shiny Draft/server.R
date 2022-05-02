@@ -214,35 +214,8 @@ function(input, output, session){
     st_as_sf()
   
   rm(buffalo_shape, grand_isle_shape, coffey_park_shape, moore_ok_shape, new_orleans_shape)
-  
-  interactive_map_coffeypark <- reactive({
-    refined_coffey_park_data$date2 <- format(refined_coffey_park_data$date, format="%Y %m")
-    chosen_month_coffeypark2 <- format(chosen_month_coffeypark(), format="%Y %m")
-    refined_coffey_park_data %>%
-      filter(date2 == chosen_month_coffeypark2)
-  })
-  
-  interactive_map_moore <- reactive({
-    refined_moore_data$date2 <- format(refined_moore_data$date, format="%Y %m")
-    chosen_month_moore2 <- format(chosen_month_moore(), format="%Y %m")
-    refined_moore_data %>%
-      filter(date2 == chosen_month_moore2)
-  })
-  
-  interactive_map_buffalo <- reactive({
-    refined_buffalo_data$date2 <- format(refined_buffalo_data$date, format="%Y %m")
-    chosen_month_buffalo2 <- format(chosen_month_buffalo(), format="%Y %m")
-    refined_buffalo_data %>%
-      filter(date2 == chosen_month_buffalo2)
-  })
-  
-  interactive_map_grandisle <- reactive({
-    refined_grandisle_data$date2 <- format(refined_grandisle_data$date, format="%Y %m")
-    chosen_month_grandisle2 <- format(chosen_month_grandisle(), format="%Y %m")
-    refined_grandisle_data %>%
-      filter(date2 == chosen_month_grandisle2)
-  })
-  
+ 
+   
   
   # map for New Orleans
   output$disaster_map_neworleans <- renderLeaflet({
@@ -316,7 +289,31 @@ function(input, output, session){
                                     direction = "auto")) %>%
       addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_neworleans) 
   
+    # line chart
+    
+    neworleans_line_data <- line_chart_data %>%
+      filter(city == 'New Orleans')
+    
+    avg_metric_neworleans = paste0('avg_', chosen_metric_neworleans)
+    
+    neworleans_line_data$date2 <- format(neworleans_line_data$date, format="%Y %m")
+    
+    neworleans_line_data2 <- neworleans_line_data %>%
+      filter(date2 > chosen_month_neworleans2) %>% # will fix for range later, for now it picks greater than
+      select(date2, avg_metric_neworleans) %>% 
+      rename(selected_metric = avg_metric_neworleans)  
+      
+    output$line_chart_neworleans <- renderPlotly({
+      plot_ly(neworleans_line_data2, x = ~date, y =~selected_metric, 
+      type = 'scatter', mode = 'lines', name = 'New Orleans Median Prices')
+      })
+    
+    
   })
+  
+  
+  
+  
   
   
   

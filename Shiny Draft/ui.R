@@ -63,7 +63,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                 
                 selectInput("choose_metric_neworleans", "Choose Real Estate Metric", vars, selected = "HPI"),
  
-                plotly::plotlyOutput("bar_chart_neworleans"),
+                #plotly::plotlyOutput("bar_chart_neworleans"),
                 plotly::plotlyOutput("line_chart_neworleans")),
          
          tags$div(id="cite",
