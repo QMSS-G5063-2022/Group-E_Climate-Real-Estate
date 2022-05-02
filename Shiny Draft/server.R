@@ -299,20 +299,28 @@ function(input, output, session){
     neworleans_line_data$date2 <- format(neworleans_line_data$date, format="%Y %m")
     
     neworleans_line_data2 <- neworleans_line_data %>%
-      filter(date2 > chosen_month_neworleans2) %>% # will fix for range later, for now it picks greater than
+      filter(between(date,
+                     as.Date("2004-08-01", format = "%Y-%m-%d"),
+                     as.Date("2006-08-01", format = "%Y-%m-%d"))) %>%
       select(date, date2, avg_metric_neworleans) %>% 
       rename(selected_metric = avg_metric_neworleans)  
       
     output$line_chart_neworleans <- renderPlotly({
       plot_ly(neworleans_line_data2, x = ~date, y =~selected_metric, 
-      type = 'scatter', mode = 'lines', name = 'New Orleans Median Prices')
+      type = 'scatter', mode = 'lines', name = 'New Orleans Median Prices') %>%
+        add_segments(x = as.Date("2005-08-01", format = "%Y-%m-%d"),
+                     xend = as.Date("2005-08-01", format = "%Y-%m-%d"),
+                     y = -100000, yend = 1000000) %>%
+        layout(showlegend = FALSE,
+               xaxis = list(range = c(as.Date("2004-08-01", format = "%Y-%m-%d"),
+                                      as.Date("2006-08-01", format = "%Y-%m-%d")),
+                            tickfont = list(size = 8)),
+               yaxis = list(range = c(min(neworleans_line_data2$selected_metric),
+                                      max(neworleans_line_data2$selected_metric))))
       })
     
     
   })
-  
-  
-  
   
   
   
@@ -388,6 +396,38 @@ function(input, output, session){
                                     textsize = "15px",
                                     direction = "auto")) %>%
       addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_coffeypark) 
+    
+    # line chart
+    
+    coffeypark_line_data <- line_chart_data %>%
+      filter(city == 'Coffey Park')
+    
+    avg_metric_coffeypark = paste0('avg_', chosen_metric_coffeypark)
+    
+    coffeypark_line_data$date2 <- format(coffeypark_line_data$date, format="%Y %m")
+    
+    coffeypark_line_data2 <- coffeypark_line_data %>%
+      filter(between(date,
+                     as.Date("2016-10-01", format = "%Y-%m-%d"),
+                     as.Date("2018-10-01", format = "%Y-%m-%d")
+                     )) %>%
+      select(date, date2, avg_metric_coffeypark) %>% 
+      rename(selected_metric = avg_metric_coffeypark)  
+    
+    output$line_chart_coffeypark <- renderPlotly({
+      plot_ly(coffeypark_line_data2, x = ~date, y =~selected_metric, 
+              type = 'scatter', mode = 'lines', name = 'Coffey Park Median Prices') %>%
+            add_segments(x = as.Date("2017-10-01", format = "%Y-%m-%d"),
+                         xend = as.Date("2017-10-01", format = "%Y-%m-%d"),
+                         y = -2000000, yend = 30000000) %>%
+            layout(showlegend = FALSE,
+                   xaxis = list(range = c(as.Date("2016-10-01", format = "%Y-%m-%d"),
+                                          as.Date("2018-10-01", format = "%Y-%m-%d")),
+                                tickfont = list(size = 8)),
+                   yaxis = list(range = c(min(coffeypark_line_data2$selected_metric),
+                                          max(coffeypark_line_data2$selected_metric))))
+    })
+    
     
   }) 
   
@@ -466,6 +506,36 @@ function(input, output, session){
                                     direction = "auto")) %>%
       addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_moore) 
     
+    # line chart
+    
+    moore_line_data <- line_chart_data %>%
+      filter(city == 'Moore')
+    
+    avg_metric_moore = paste0('avg_', chosen_metric_moore)
+    
+    moore_line_data$date2 <- format(moore_line_data$date, format="%Y %m")
+    
+    moore_line_data2 <- moore_line_data %>%
+      filter(between(date,
+                     as.Date("2011-05-01", format = "%Y-%m-%d"),
+                     as.Date("2013-05-01", format = "%Y-%m-%d"))) %>%
+      select(date, date2, avg_metric_moore) %>% 
+      rename(selected_metric = avg_metric_moore)  
+    
+    output$line_chart_moore <- renderPlotly({
+      plot_ly(moore_line_data2, x = ~date, y =~selected_metric, 
+              type = 'scatter', mode = 'lines', name = 'Moore Median Prices') %>%
+        add_segments(x = as.Date("2012-05-01", format = "%Y-%m-%d"),
+                     xend = as.Date("2012-05-01", format = "%Y-%m-%d"),
+                     y = -2000000, yend = 300000000) %>%
+        layout(showlegend = FALSE,
+               xaxis = list(range = c(as.Date("2011-05-01", format = "%Y-%m-%d"),
+                                      as.Date("2013-05-01", format = "%Y-%m-%d")),
+                            tickfont = list(size = 8)),
+               yaxis = list(range = c(min(moore_line_data2$selected_metric),
+                                      max(moore_line_data2$selected_metric)))
+               )})
+    
   }) 
   
   
@@ -543,6 +613,37 @@ function(input, output, session){
                                     direction = "auto")) %>%
       addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_buffalo) 
     
+    # line chart
+    
+    buffalo_line_data <- line_chart_data %>%
+      filter(city == 'Buffalo')
+    
+    avg_metric_buffalo = paste0('avg_', chosen_metric_buffalo)
+    
+    buffalo_line_data$date2 <- format(buffalo_line_data$date, format="%Y %m")
+    
+    buffalo_line_data2 <- buffalo_line_data %>%
+      filter(between(date,
+                     as.Date("2013-11-01", format = "%Y-%m-%d"),
+                     as.Date("2015-11-01", format = "%Y-%m-%d"))) %>%
+      select(date, date2, avg_metric_buffalo) %>% 
+      rename(selected_metric = avg_metric_buffalo)  
+    
+    output$line_chart_buffalo <- renderPlotly({
+      plot_ly(buffalo_line_data2, x = ~date, y =~selected_metric, 
+              type = 'scatter', mode = 'lines', name = 'Buffalo Median Prices') %>%
+        add_segments(x = as.Date("2014-11-01", format = "%Y-%m-%d"),
+                     xend = as.Date("2014-11-01", format = "%Y-%m-%d"),
+                     y = -100000, yend = 30000000) %>%
+        layout(showlegend = FALSE,
+               xaxis = list(range = c(as.Date("2013-11-01", format = "%Y-%m-%d"),
+                                      as.Date("2015-11-01", format = "%Y-%m-%d")),
+                            tickfont = list(size = 8)),
+               yaxis = list(range = c(min(buffalo_line_data2$selected_metric),
+                                      max(buffalo_line_data2$selected_metric)))
+               )
+      })
+    
   }) 
   
   
@@ -619,7 +720,36 @@ function(input, output, session){
                                     direction = "auto")) %>%
       addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_grandisle) 
     
-  }) 
+    # line chart
+    
+    grandisle_line_data <- line_chart_data %>%
+      filter(city == 'Grand Isle')
+    
+    avg_metric_grandisle = paste0('avg_', chosen_metric_grandisle)
+    
+    grandisle_line_data$date2 <- format(grandisle_line_data$date, format="%Y %m")
+    
+    grandisle_line_data2 <- grandisle_line_data %>%
+      filter(between(date,
+                     as.Date("2009-04-01", format = "%Y-%m-%d"),
+                     as.Date("2011-04-01", format = "%Y-%m-%d"))) %>%
+      select(date, date2, avg_metric_grandisle) %>% 
+      rename(selected_metric = avg_metric_grandisle)  
+    
+    output$line_chart_grandisle <- renderPlotly({
+      plot_ly(grandisle_line_data2, x = ~date, y =~selected_metric, 
+              type = 'scatter', mode = 'lines', name = 'Grand Isle Median Prices') %>%
+        add_segments(x = as.Date("2010-04-01", format = "%Y-%m-%d"),
+                     xend = as.Date("2010-04-01", format = "%Y-%m-%d"),
+                     y = -100000000, yend = 3000000) %>%
+        layout(showlegend = FALSE,
+               xaxis = list(range = c(as.Date("2009-04-01", format = "%Y-%m-%d"),
+                                      as.Date("2011-04-01", format = "%Y-%m-%d")),
+                            tickfont = list(size = 8)),
+               yaxis = list(range = c(min(grandisle_line_data2$selected_metric),
+                                      max(grandisle_line_data2$selected_metric))))
+    
+  }) })
   
 }
   

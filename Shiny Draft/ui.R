@@ -29,14 +29,15 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                        How soon after a disaster is it the ideal time to buy a home and will the value recover?
                        Our project explores these questions in an engaging and interactive manner."),
                     h1(" "),
+                    h5("Each subsequent tab in this app spotlights a unique disaster.  You will find an interactive map to explore and understand
+                       various home value metrics by zip code.  Use the month/year slider to see how these metrics change over time."),
+                    h1(" "),
                     img(id = "neworleanspic", src = "hurricane-katrina-png.png", align = "center", height = "15%", width = "15%"),
                     img(id = "coffeypic", src = 'coffey-park-fire-png.png', align = "center", height = "15%", width = "15%"),
                     img(id = "moorepic", src = 'moore-ok-tornado-png.png', align = "center", height = "15%", width = "15%"),
                     img(id = "buffalopic", src = 'buffalo-snow-png.png', align = "center", height = "15%", width = "15%"),
                     img(id = "grandislepic", src = 'grand-isle-oil-png.png', align = "center", height = "15%", width = "15%"),
-                    useShinyjs(),
-                    h5("Each subsequent tab in this app spotlights a unique disaster.  You will find an interactive map to explore and understand
-                       various home value metrics by zip code.  Use the month/year slider to see how these metrics change over time.")
+                    useShinyjs()
            ),
            
            tabPanel(h6("New Orleans, LA"),
@@ -66,8 +67,8 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                 
                 selectInput("choose_metric_neworleans", "Choose Real Estate Metric", vars, selected = "HPI"),
  
-                #plotly::plotlyOutput("bar_chart_neworleans"),
-                plotly::plotlyOutput("line_chart_neworleans")),
+        plotly::plotlyOutput("line_chart_neworleans")),
+         plotly::plotlyOutput("bar_chart_neworleans"),
          
          tags$div(id="cite",
                   'Data compiled from FHFA and Zillow')
@@ -100,8 +101,8 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                     
                     selectInput("choose_metric_coffeypark", "Choose Real Estate Metric", vars, selected = "hpi"),
                     
-                    plotly::plotlyOutput("bar_chart_coffeypark"),
                     plotly::plotlyOutput("line_chart_coffeypark"),
+                    plotly::plotlyOutput("bar_chart_coffeypark"),
                     
                     tags$div(id="cite2",
                              'Data compiled from FHFA and Zillow')
@@ -135,8 +136,8 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
            
            selectInput("choose_metric_moore", "Choose Real Estate Metric", vars, selected = "hpi"),
            
-           plotly::plotlyOutput("bar_chart_moore"),
            plotly::plotlyOutput("line_chart_moore"),
+           plotly::plotlyOutput("bar_chart_moore"),
            
            tags$div(id="cite3",
                     'Data compiled from FHFA and Zillow')
@@ -167,8 +168,8 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                              
                              selectInput("choose_metric_buffalo", "Choose Real Estate Metric", vars, selected = "hpi"),
                              
-                             plotly::plotlyOutput("bar_chart_buffalo"),
                              plotly::plotlyOutput("line_chart_buffalo")),
+                            plotly::plotlyOutput("bar_chart_buffalo"),
                
                tags$div(id="cite4",
                         'Data compiled from FHFA and Zillow')
@@ -199,8 +200,8 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                              
                              selectInput("choose_metric_grandisle", "Choose Real Estate Metric", vars, selected = "hpi"),
                              
-                             plotly::plotlyOutput("bar_chart_grandisle"),
                              plotly::plotlyOutput("line_chart_grandisle"),
+                             plotly::plotlyOutput("bar_chart_grandisle"),
                              
                              tags$div(id="cite5",
                                       'Data compiled from FHFA and Zillow')
