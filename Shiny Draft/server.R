@@ -156,13 +156,6 @@ function(input, output, session){
   
   rm(new_orleans_diff, coffey_diff, moore_diff, grandisle_diff, buffalo_diff)
   
-  #  observe({
-  #   if(input$choose_metric == "hpi"){1}
-  # else if(input$choose_metric == "bottom_tier"){1}
-  # else if(input$choose_metric == "sfhv"){1}
-  # else{1}
-  #})
-  
   ### load shape files ###
   
   # NEW ORLEANS #
@@ -249,7 +242,7 @@ function(input, output, session){
     # set palette
     if(chosen_metric_neworleans == 'HPI') {
       pal = "YlGnBu"
-    } else if(chosen_metric_neworleans == 'bottom_tier') {
+    } else if(chosen_metric_neworleans == 'annual_change') {
       pal = "PuBu"
     } else if(chosen_metric_neworleans == 'single_fam_val') {
       pal = "YlOrRd"
@@ -261,8 +254,8 @@ function(input, output, session){
     
     if(chosen_metric_neworleans == 'HPI') {
       hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
-    } else if(chosen_metric_neworleans == 'bottom_tier') {
-      hover = "Zip Code: <strong>%s</strong><br/>Bottom Tier Home Price: $%g"
+    } else if(chosen_metric_neworleans == 'annual_change') {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in Home Price: $%g"
     } else if(chosen_metric_neworleans == 'single_fam_val') {
       hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
     } else {
@@ -316,6 +309,9 @@ function(input, output, session){
         add_segments(x = as.Date("2005-08-01", format = "%Y-%m-%d"),
                      xend = as.Date("2005-08-01", format = "%Y-%m-%d"),
                      y = -100000, yend = 1000000) %>%
+        add_text(text = "Hurricane Katrina",
+                 x = as.Date("2005-08-01", format = "%Y-%m-%d"),
+                 y = max(neworleans_line_data2$selected_metric)) %>%
         layout(showlegend = FALSE,
                xaxis = list(range = c(as.Date("2004-08-01", format = "%Y-%m-%d"),
                                       as.Date("2006-08-01", format = "%Y-%m-%d")),
@@ -364,7 +360,7 @@ function(input, output, session){
     # set palette
     if(chosen_metric_coffeypark == 'HPI') {
       pal = "YlGnBu"
-    } else if(chosen_metric_coffeypark == 'bottom_tier') {
+    } else if(chosen_metric_coffeypark == 'annual_change') {
       pal = "PuBu"
     } else if(chosen_metric_coffeypark == 'single_fam_val') {
       pal = "YlOrRd"
@@ -376,8 +372,8 @@ function(input, output, session){
     
     if(chosen_metric_coffeypark == 'HPI') {
       hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
-    } else if(chosen_metric_coffeypark == 'bottom_tier') {
-      hover = "Zip Code: <strong>%s</strong><br/>Bottom Tier Home Price: $%g"
+    } else if(chosen_metric_coffeypark == 'annual_change') {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
     } else if(chosen_metric_coffeypark == 'single_fam_val') {
       hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
     } else {
@@ -432,6 +428,9 @@ function(input, output, session){
             add_segments(x = as.Date("2017-10-01", format = "%Y-%m-%d"),
                          xend = as.Date("2017-10-01", format = "%Y-%m-%d"),
                          y = -2000000, yend = 30000000) %>%
+        add_text(text = "Wildfire",
+                 x = as.Date("2017-10-01", format = "%Y-%m-%d"),
+                 y = max(coffeypark_line_data2$selected_metric)) %>%
             layout(showlegend = FALSE,
                    xaxis = list(range = c(as.Date("2016-10-01", format = "%Y-%m-%d"),
                                           as.Date("2018-10-01", format = "%Y-%m-%d")),
@@ -480,7 +479,7 @@ function(input, output, session){
     # set palette
     if(chosen_metric_moore == 'HPI') {
       pal = "YlGnBu"
-    } else if(chosen_metric_moore == 'bottom_tier') {
+    } else if(chosen_metric_moore == 'annual_change') {
       pal = "PuBu"
     } else if(chosen_metric_moore == 'single_fam_val') {
       pal = "YlOrRd"
@@ -492,8 +491,8 @@ function(input, output, session){
     
     if(chosen_metric_moore == 'HPI') {
       hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
-    } else if(chosen_metric_moore == 'bottom_tier') {
-      hover = "Zip Code: <strong>%s</strong><br/>Bottom Tier Home Price: $%g"
+    } else if(chosen_metric_moore == 'annual_change') {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in Home Price: $%g"
     } else if(chosen_metric_moore == 'single_fam_val') {
       hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
     } else {
@@ -547,6 +546,9 @@ function(input, output, session){
         add_segments(x = as.Date("2012-05-01", format = "%Y-%m-%d"),
                      xend = as.Date("2012-05-01", format = "%Y-%m-%d"),
                      y = -2000000, yend = 300000000) %>%
+      add_text(text = "Tornado",
+               x = as.Date("2012-05-01", format = "%Y-%m-%d"),
+               y = max(moore_line_data2$selected_metric)) %>%
         layout(showlegend = FALSE,
                xaxis = list(range = c(as.Date("2011-05-01", format = "%Y-%m-%d"),
                                       as.Date("2013-05-01", format = "%Y-%m-%d")),
@@ -594,7 +596,7 @@ function(input, output, session){
     # set palette
     if(chosen_metric_buffalo == 'HPI') {
       pal = "YlGnBu"
-    } else if(chosen_metric_buffalo == 'bottom_tier') {
+    } else if(chosen_metric_buffalo == 'annual_change') {
       pal = "PuBu"
     } else if(chosen_metric_buffalo == 'single_fam_val') {
       pal = "YlOrRd"
@@ -606,8 +608,8 @@ function(input, output, session){
     
     if(chosen_metric_buffalo == 'HPI') {
       hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
-    } else if(chosen_metric_buffalo == 'bottom_tier') {
-      hover = "Zip Code: <strong>%s</strong><br/>Bottom Tier Home Price: $%g"
+    } else if(chosen_metric_buffalo == 'annual_change') {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in Home Price: $%g"
     } else if(chosen_metric_buffalo == 'single_fam_val') {
       hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
     } else {
@@ -661,6 +663,9 @@ function(input, output, session){
         add_segments(x = as.Date("2014-11-01", format = "%Y-%m-%d"),
                      xend = as.Date("2014-11-01", format = "%Y-%m-%d"),
                      y = -100000, yend = 30000000) %>%
+        add_text(text = "Snowstorm",
+                 x = as.Date("2014-11-01", format = "%Y-%m-%d"),
+                 y = max(buffalo_line_data2$selected_metric)) %>%
         layout(legend = list(x = 0.1, y = 0.9),
                xaxis = list(range = c(as.Date("2013-11-01", format = "%Y-%m-%d"),
                                       as.Date("2015-11-01", format = "%Y-%m-%d")),
@@ -708,7 +713,7 @@ function(input, output, session){
     # set palette
     if(chosen_metric_grandisle == 'HPI') {
       pal = "YlGnBu"
-    } else if(chosen_metric_grandisle == 'bottom_tier') {
+    } else if(chosen_metric_grandisle == 'annual_change') {
       pal = "PuBu"
     } else if(chosen_metric_grandisle == 'single_fam_val') {
       pal = "YlOrRd"
@@ -720,8 +725,8 @@ function(input, output, session){
     
     if(chosen_metric_grandisle == 'HPI') {
       hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
-    } else if(chosen_metric_grandisle == 'bottom_tier') {
-      hover = "Zip Code: <strong>%s</strong><br/>Bottom Tier Home Price: $%g"
+    } else if(chosen_metric_grandisle == 'annual_change') {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in Home Price: $%g"
     } else if(chosen_metric_grandisle == 'single_fam_val') {
       hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
     } else {
@@ -775,6 +780,9 @@ function(input, output, session){
         add_segments(x = as.Date("2010-04-01", format = "%Y-%m-%d"),
                      xend = as.Date("2010-04-01", format = "%Y-%m-%d"),
                      y = -100000000, yend = 3000000) %>%
+        add_text(text = "BP Oil Spill",
+                 x = as.Date("2010-04-01", format = "%Y-%m-%d"),
+                 y = max(grandisle_line_data2$selected_metric)) %>%
         layout(showlegend = FALSE,
                xaxis = list(range = c(as.Date("2009-04-01", format = "%Y-%m-%d"),
                                       as.Date("2011-04-01", format = "%Y-%m-%d")),
