@@ -1,29 +1,5 @@
 function(input, output, session){
   
-  ### input sliders and drop downs ###
-  chosen_month_coffeypark <- reactive({input$choose_month_coffeypark})
-  chosen_metric_coffeypark <- reactive({input$choose_metric_coffeypark})
-  
-  chosen_month_moore <- reactive({input$choose_month_moore})
-  chosen_metric_moore <- reactive({input$choose_metric_moore})
-  
-  chosen_month_buffalo <- reactive({input$choose_month_buffalo})
-  chosen_metric_buffalo <- reactive({input$choose_metric_buffalo})
-  
-  chosen_month_grandisle <- reactive({input$choose_month_grandisle})
-  chosen_metric_grandisle <- reactive({input$choose_metric_grandisle})
-  
-  ### update sliders ###
-  ### THIS IS FAKE CODE 
-  ### https://stackoverflow.com/questions/68342780/shiny-if-else-statement
-  
- # observeEvent(input$x, 
-   #            {updateSelectInput(session,
-   #                               inputId = "y",
-    #                              label = "Variable 2",
-    #                              choices = names(df)[names(df) != input$x])
-   #            })
-  
   ### load data sources ###
   single_family_homes <- read.csv("../data/single_family_homes_time_series.csv")
   HPI <- read.csv("../data/HPI_data.csv")
@@ -268,15 +244,14 @@ function(input, output, session){
   })
   
   
-  
-  
-  
+  # map for New Orleans
   output$disaster_map_neworleans <- renderLeaflet({
     leaflet() %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       setView(lng = -90.0715, lat = 29.95, zoom = 11)
   })  
   
+  # observing for value changes
   observe({
     
     # input values for date and metric chosen
@@ -345,17 +320,64 @@ function(input, output, session){
   
   
   
-  ## load the default map ##
- 
-  
-  
+  # map for Coffey Park
   output$disaster_map_coffeypark <- renderLeaflet({
-    interactive_map_coffeypark() %>%
-      leaflet()  %>%
+    leaflet() %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -122.748, lat = 38.4777, zoom = 11) %>%
+      setView(lng = -122.748, lat = 38.4777, zoom = 11)
+  })  
+  
+  # observing for value changes
+  observe({
+    
+    # input values for date and metric chosen
+    chosen_month_coffeypark <- input$choose_month_coffeypark
+    chosen_metric_coffeypark <- input$choose_metric_coffeypark
+    
+    # create date field by month only
+    refined_coffey_park_data$date2 <- format(refined_coffey_park_data$date, format="%Y %m")
+    chosen_month_coffeypark2 <- format(chosen_month_coffeypark, format="%Y %m")
+    
+    # subsets data based on inputs
+    interactive_map_coffeypark <- refined_coffey_park_data %>%
+      filter(date2 == chosen_month_coffeypark2) %>% 
+      select(date2, zip_code, chosen_metric_coffeypark) %>% 
+      rename(selected_metric = chosen_metric_coffeypark)
+    
+    # set palette
+    if(chosen_metric_coffeypark == 'HPI') {
+      pal = "YlGnBu"
+    } else if(chosen_metric_coffeypark == 'bottom_tier') {
+      pal = "PuBu"
+    } else if(chosen_metric_coffeypark == 'single_fam_val') {
+      pal = "YlOrRd"
+    } else {
+      pal = "PuRd"
+    }
+    
+    pal_no = colorBin(pal, domain=interactive_map_coffeypark$selected_metric, bins=5)
+    
+    if(chosen_metric_coffeypark == 'HPI') {
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
+    } else if(chosen_metric_coffeypark == 'bottom_tier') {
+      hover = "Zip Code: <strong>%s</strong><br/>Bottom Tier Home Price: $%g"
+    } else if(chosen_metric_coffeypark == 'single_fam_val') {
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
+    } else {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+    }
+    
+    labels_no = sprintf(
+      hover,
+      interactive_map_coffeypark$zip_code, interactive_map_coffeypark$selected_metric
+    ) %>% lapply(htmltools::HTML)
+    
+    # update map
+    leafletProxy("disaster_map_coffeypark", data=interactive_map_coffeypark) %>%
+      clearShapes() %>%
+      clearControls() %>%
       addPolygons(
-       # fillColor = ~pal(median_sale_price),
+        fillColor = ~pal_no(selected_metric),
         weight = 2,
         opacity = 1,
         color = "gray",
@@ -363,16 +385,76 @@ function(input, output, session){
         highlightOptions = highlightOptions(
           weight = 5,
           color = "#666",
-          fillOpacity = 0.8))
-  })
+          fillOpacity = 0.8),
+        label = labels_no,
+        labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                    textsize = "15px",
+                                    direction = "auto")) %>%
+      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_coffeypark) 
+    
+  }) 
+  
+  
 
+
+  # map for Moore OK
   output$disaster_map_moore <- renderLeaflet({
-    interactive_map_moore() %>%
-      leaflet()  %>%
+    leaflet() %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -97.4867, lat = 35.3395, zoom = 11) %>%
+      setView(lng = -97.4867, lat = 35.3395, zoom = 11)
+  })  
+  
+  # observing for value changes
+  observe({
+    
+    # input values for date and metric chosen
+    chosen_month_moore <- input$choose_month_moore
+    chosen_metric_moore <- input$choose_metric_moore
+    
+    # create date field by month only
+    refined_moore_data$date2 <- format(refined_moore_data$date, format="%Y %m")
+    chosen_month_moore2 <- format(chosen_month_moore, format="%Y %m")
+    
+    # subsets data based on inputs
+    interactive_map_moore <- refined_moore_data %>%
+      filter(date2 == chosen_month_moore2) %>% 
+      select(date2, zip_code, chosen_metric_moore) %>% 
+      rename(selected_metric = chosen_metric_moore)
+    
+    # set palette
+    if(chosen_metric_moore == 'HPI') {
+      pal = "YlGnBu"
+    } else if(chosen_metric_moore == 'bottom_tier') {
+      pal = "PuBu"
+    } else if(chosen_metric_moore == 'single_fam_val') {
+      pal = "YlOrRd"
+    } else {
+      pal = "PuRd"
+    }
+    
+    pal_no = colorBin(pal, domain=interactive_map_moore$selected_metric, bins=5)
+    
+    if(chosen_metric_moore == 'HPI') {
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
+    } else if(chosen_metric_moore == 'bottom_tier') {
+      hover = "Zip Code: <strong>%s</strong><br/>Bottom Tier Home Price: $%g"
+    } else if(chosen_metric_moore == 'single_fam_val') {
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
+    } else {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+    }
+    
+    labels_no = sprintf(
+      hover,
+      interactive_map_moore$zip_code, interactive_map_moore$selected_metric
+    ) %>% lapply(htmltools::HTML)
+    
+    # update map
+    leafletProxy("disaster_map_moore", data=interactive_map_moore) %>%
+      clearShapes() %>%
+      clearControls() %>%
       addPolygons(
-        #fillColor = ~pal(median_sale_price),
+        fillColor = ~pal_no(selected_metric),
         weight = 2,
         opacity = 1,
         color = "gray",
@@ -380,33 +462,76 @@ function(input, output, session){
         highlightOptions = highlightOptions(
           weight = 5,
           color = "#666",
-          fillOpacity = 0.8))
-  })
+          fillOpacity = 0.8),
+        label = labels_no,
+        labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                    textsize = "15px",
+                                    direction = "auto")) %>%
+      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_moore) 
+    
+  }) 
   
+  
+  
+  
+  # map for Buffalo NY
   output$disaster_map_buffalo <- renderLeaflet({
-    interactive_map_buffalo() %>%
-      leaflet()  %>%
+    leaflet() %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -78.878738, lat = 42.880230, zoom = 11) %>%
-      addPolygons(
-        #fillColor = ~pal(median_sale_price),
-        weight = 2,
-        opacity = 1,
-        color = "gray",
-        fillOpacity = 0.8,
-        highlightOptions = highlightOptions(
-          weight = 5,
-          color = "#666",
-          fillOpacity = 0.8))
-  })
+      setView(lng = -78.878738, lat = 42.880230, zoom = 11)
+  })  
   
-  output$disaster_map_grandisle <- renderLeaflet({
-    interactive_map_grandisle() %>%
-      leaflet()  %>%
-      addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -89.987294, lat = 29.236617, zoom = 11) %>%
+  # observing for value changes
+  observe({
+    
+    # input values for date and metric chosen
+    chosen_month_buffalo <- input$choose_month_buffalo
+    chosen_metric_buffalo <- input$choose_metric_buffalo
+    
+    # create date field by month only
+    refined_buffalo_data$date2 <- format(refined_buffalo_data$date, format="%Y %m")
+    chosen_month_buffalo2 <- format(chosen_month_buffalo, format="%Y %m")
+    
+    # subsets data based on inputs
+    interactive_map_buffalo <- refined_buffalo_data %>%
+      filter(date2 == chosen_month_buffalo2) %>% 
+      select(date2, zip_code, chosen_metric_buffalo) %>% 
+      rename(selected_metric = chosen_metric_buffalo)
+    
+    # set palette
+    if(chosen_metric_buffalo == 'HPI') {
+      pal = "YlGnBu"
+    } else if(chosen_metric_buffalo == 'bottom_tier') {
+      pal = "PuBu"
+    } else if(chosen_metric_buffalo == 'single_fam_val') {
+      pal = "YlOrRd"
+    } else {
+      pal = "PuRd"
+    }
+    
+    pal_no = colorBin(pal, domain=interactive_map_buffalo$selected_metric, bins=5)
+    
+    if(chosen_metric_buffalo == 'HPI') {
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
+    } else if(chosen_metric_buffalo == 'bottom_tier') {
+      hover = "Zip Code: <strong>%s</strong><br/>Bottom Tier Home Price: $%g"
+    } else if(chosen_metric_buffalo == 'single_fam_val') {
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
+    } else {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+    }
+    
+    labels_no = sprintf(
+      hover,
+      interactive_map_buffalo$zip_code, interactive_map_buffalo$selected_metric
+    ) %>% lapply(htmltools::HTML)
+    
+    # update map
+    leafletProxy("disaster_map_buffalo", data=interactive_map_buffalo) %>%
+      clearShapes() %>%
+      clearControls() %>%
       addPolygons(
-        #fillColor = ~pal(median_sale_price),
+        fillColor = ~pal_no(selected_metric),
         weight = 2,
         opacity = 1,
         color = "gray",
@@ -414,8 +539,90 @@ function(input, output, session){
         highlightOptions = highlightOptions(
           weight = 5,
           color = "#666",
-          fillOpacity = 0.8))
-  })
+          fillOpacity = 0.8),
+        label = labels_no,
+        labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                    textsize = "15px",
+                                    direction = "auto")) %>%
+      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_buffalo) 
+    
+  }) 
+  
+  
+  
+  # map for Grand Isle LA
+  output$disaster_map_grandisle <- renderLeaflet({
+    leaflet() %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      setView(lng = -89.987294, lat = 29.236617, zoom = 11)
+  })  
+  
+  # observing for value changes
+  observe({
+    
+    # input values for date and metric chosen
+    chosen_month_grandisle <- input$choose_month_grandisle
+    chosen_metric_grandisle <- input$choose_metric_grandisle
+    
+    # create date field by month only
+    refined_grandisle_data$date2 <- format(refined_grandisle_data$date, format="%Y %m")
+    chosen_month_grandisle2 <- format(chosen_month_grandisle, format="%Y %m")
+    
+    # subsets data based on inputs
+    interactive_map_grandisle <- refined_grandisle_data %>%
+      filter(date2 == chosen_month_grandisle2) %>% 
+      select(date2, zip_code, chosen_metric_grandisle) %>% 
+      rename(selected_metric = chosen_metric_grandisle)
+    
+    # set palette
+    if(chosen_metric_grandisle == 'HPI') {
+      pal = "YlGnBu"
+    } else if(chosen_metric_grandisle == 'bottom_tier') {
+      pal = "PuBu"
+    } else if(chosen_metric_grandisle == 'single_fam_val') {
+      pal = "YlOrRd"
+    } else {
+      pal = "PuRd"
+    }
+    
+    pal_no = colorBin(pal, domain=interactive_map_grandisle$selected_metric, bins=5)
+    
+    if(chosen_metric_grandisle == 'HPI') {
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
+    } else if(chosen_metric_grandisle == 'bottom_tier') {
+      hover = "Zip Code: <strong>%s</strong><br/>Bottom Tier Home Price: $%g"
+    } else if(chosen_metric_grandisle == 'single_fam_val') {
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
+    } else {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+    }
+    
+    labels_no = sprintf(
+      hover,
+      interactive_map_grandisle$zip_code, interactive_map_grandisle$selected_metric
+    ) %>% lapply(htmltools::HTML)
+    
+    # update map
+    leafletProxy("disaster_map_grandisle", data=interactive_map_grandisle) %>%
+      clearShapes() %>%
+      clearControls() %>%
+      addPolygons(
+        fillColor = ~pal_no(selected_metric),
+        weight = 2,
+        opacity = 1,
+        color = "gray",
+        fillOpacity = 0.8,
+        highlightOptions = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.8),
+        label = labels_no,
+        labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                    textsize = "15px",
+                                    direction = "auto")) %>%
+      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_grandisle) 
+    
+  }) 
   
 }
   
