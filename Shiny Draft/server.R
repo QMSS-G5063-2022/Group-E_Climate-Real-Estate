@@ -300,7 +300,7 @@ function(input, output, session){
     
     neworleans_line_data2 <- neworleans_line_data %>%
       filter(date2 > chosen_month_neworleans2) %>% # will fix for range later, for now it picks greater than
-      select(date2, avg_metric_neworleans) %>% 
+      select(date, date2, avg_metric_neworleans) %>% 
       rename(selected_metric = avg_metric_neworleans)  
       
     output$line_chart_neworleans <- renderPlotly({
