@@ -305,7 +305,7 @@ function(input, output, session){
       
     output$line_chart_neworleans <- renderPlotly({
       plot_ly(neworleans_line_data2, x = ~date, y =~selected_metric, 
-      type = 'scatter', mode = 'lines', name = 'New Orleans Median Prices') %>%
+      type = 'scatter', mode = 'lines', name = 'New Orleans Mean Prices') %>%
         add_segments(x = as.Date("2005-08-01", format = "%Y-%m-%d"),
                      xend = as.Date("2005-08-01", format = "%Y-%m-%d"),
                      y = -100000, yend = 1000000) %>%
@@ -327,11 +327,16 @@ function(input, output, session){
                             tickfont = list(size = 8)))
       })
     
+    # update bar chart based on what's clicked
+    event <- input$disaster_map_neworleans_shape_click
+    filtered_zips <- event$zip_code
     
   })
   
   
   
+  
+  ##### COFFEY PARK #####
   
   # map for Coffey Park
   output$disaster_map_coffeypark <- renderLeaflet({
@@ -424,7 +429,7 @@ function(input, output, session){
     
     output$line_chart_coffeypark <- renderPlotly({
       plot_ly(coffeypark_line_data2, x = ~date, y =~selected_metric, 
-              type = 'scatter', mode = 'lines', name = 'Coffey Park Median Prices') %>%
+              type = 'scatter', mode = 'lines', name = 'Coffey Park Mean Prices') %>%
             add_segments(x = as.Date("2017-10-01", format = "%Y-%m-%d"),
                          xend = as.Date("2017-10-01", format = "%Y-%m-%d"),
                          y = -2000000, yend = 30000000) %>%
@@ -542,7 +547,7 @@ function(input, output, session){
     
     output$line_chart_moore <- renderPlotly({
       plot_ly(moore_line_data2, x = ~date, y =~selected_metric, 
-              type = 'scatter', mode = 'lines', name = 'Moore Median Prices') %>%
+              type = 'scatter', mode = 'lines', name = 'Moore Mean Prices') %>%
         add_segments(x = as.Date("2012-05-01", format = "%Y-%m-%d"),
                      xend = as.Date("2012-05-01", format = "%Y-%m-%d"),
                      y = -2000000, yend = 300000000) %>%
@@ -659,7 +664,7 @@ function(input, output, session){
     
     output$line_chart_buffalo <- renderPlotly({
       plot_ly(buffalo_line_data2, x = ~date, y =~selected_metric, 
-              type = 'scatter', mode = 'lines', name = 'Buffalo Median Prices') %>%
+              type = 'scatter', mode = 'lines', name = 'Buffalo Mean Prices') %>%
         add_segments(x = as.Date("2014-11-01", format = "%Y-%m-%d"),
                      xend = as.Date("2014-11-01", format = "%Y-%m-%d"),
                      y = -100000, yend = 30000000) %>%
@@ -711,22 +716,17 @@ function(input, output, session){
       rename(selected_metric = chosen_metric_grandisle)
     
     # set palette
-    if(chosen_metric_grandisle == 'HPI') {
-      pal = "YlGnBu"
-    } else if(chosen_metric_grandisle == 'annual_change') {
+    if(chosen_metric_grandisle == 'annual_change') {
       pal = "PuBu"
     } else if(chosen_metric_grandisle == 'single_fam_val') {
-      pal = "YlOrRd"
-    } else {
-      pal = "PuRd"
-    }
+      pal = "YlOrRd"}
     
     pal_no = colorBin(pal, domain=interactive_map_grandisle$selected_metric, bins=5)
     
     if(chosen_metric_grandisle == 'HPI') {
       hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
     } else if(chosen_metric_grandisle == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in Home Price: $%g"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
     } else if(chosen_metric_grandisle == 'single_fam_val') {
       hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
     } else {
@@ -776,7 +776,7 @@ function(input, output, session){
     
     output$line_chart_grandisle <- renderPlotly({
       plot_ly(grandisle_line_data2, x = ~date, y =~selected_metric, 
-              type = 'scatter', mode = 'lines', name = 'Grand Isle Median Prices') %>%
+              type = 'scatter', mode = 'lines', name = 'Grand Isle Mean Prices') %>%
         add_segments(x = as.Date("2010-04-01", format = "%Y-%m-%d"),
                      xend = as.Date("2010-04-01", format = "%Y-%m-%d"),
                      y = -100000000, yend = 3000000) %>%

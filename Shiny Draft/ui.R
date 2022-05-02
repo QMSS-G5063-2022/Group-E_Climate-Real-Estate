@@ -71,7 +71,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                 selectInput("choose_metric_neworleans", "Choose Real Estate Metric", vars, selected = "annual_change"),
  
         plotly::plotlyOutput("line_chart_neworleans", height = 250),
-         plotly::plotlyOutput("bar_chart_neworleans", height = 250)),
+        plotly::plotlyOutput("bar_chart_neworleans", height = 250)),
          
          tags$div(id="cite",
                   'Data compiled from FHFA and Zillow')
