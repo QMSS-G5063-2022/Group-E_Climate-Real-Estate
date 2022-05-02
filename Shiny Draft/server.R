@@ -671,7 +671,7 @@ function(input, output, session){
         add_text(text = "Snowstorm",
                  x = as.Date("2014-11-01", format = "%Y-%m-%d"),
                  y = max(buffalo_line_data2$selected_metric)) %>%
-        layout(legend = list(x = 0.1, y = 0.9),
+        layout(showlegend = FALSE,
                xaxis = list(range = c(as.Date("2013-11-01", format = "%Y-%m-%d"),
                                       as.Date("2015-11-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
