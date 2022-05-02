@@ -1,8 +1,8 @@
 vars <- c(
   "Annual Home Price Index (HPI)" = "HPI",
-  "Bottom Tier Home Value " = "bottom_tier",
   "Single Family Home Value" = "single_fam_val",
-  "Annual Change in HPI (%)" = "annual_change")
+  "Annual Change in HPI (%)" = "annual_change",
+  "Customizable Percent Change" = "percent_change")
 
 locations <- c("New Orleans - Hurricane" = "neworleans",
                "Coffey Park - Wildfires" = "coffeypark",
@@ -20,13 +20,14 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                     h1(" "),
                     p("Rory Butler, Cindy Chen, Lizabeth Singh, Jeffray Tsai"),
                     h1(" "),
-                    h5("As climate change and ongoing human events increases both the intensity and frequency of severe environmental
+                    h5("As climate change and ongoing human events increases both the scale and frequency of severe environmental
                     events, these consequences also have immediate impacts on real estate, be that housing sale prices, rental prices, or home price indices.  In profiling
-                       four notable natural disasters in the United States, along with one human-made disaster, we aim to understand
+                       four (1) notable natural disasters in the United States, along with one human-made disaster (an oil spill), we aim to understand
                        the immediate and short-term impact that natural destruction and catastrophe induces on the housing market.
                        
                        Is the housing market more resilient to certain types of disasters?  How quickly does it take to bounce back?
-                       Our project explores these questions in an engaging manner."),
+                       How soon after a disaster is it the ideal time to buy a home and will the value recover?
+                       Our project explores these questions in an engaging and interactive manner."),
                     h1(" "),
                     img(id = "neworleanspic", src = "hurricane-katrina-png.png", align = "center", height = "15%", width = "15%"),
                     img(id = "coffeypic", src = 'coffey-park-fire-png.png', align = "center", height = "15%", width = "15%"),
@@ -34,6 +35,8 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                     img(id = "buffalopic", src = 'buffalo-snow-png.png', align = "center", height = "15%", width = "15%"),
                     img(id = "grandislepic", src = 'grand-isle-oil-png.png', align = "center", height = "15%", width = "15%"),
                     useShinyjs(),
+                    h5("Each subsequent tab in this app spotlights a unique disaster.  You will find an interactive map to explore and understand
+                       various home value metrics by zip code.  Use the month/year slider to see how these metrics change over time.")
            ),
            
            tabPanel(h6("New Orleans, LA"),
@@ -41,7 +44,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                     
                     div(class="outer",
                         id = "div1",
-                        tags$head(includeCSS("styles.css")),
+                        tags$head(includeCSS("./style_sheets/styles.css")),
                         
                         leaflet::leafletOutput("disaster_map_neworleans", height = "100%", width = "100%"),
          
@@ -75,7 +78,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
            
            div(class="outer",
                id = "div2",
-               tags$head(includeCSS("styles.css")),
+               tags$head(includeCSS("./style_sheets/styles2.css")),
   
       leaflet::leafletOutput("disaster_map_coffeypark", height = "100%", width = "100%"),
       
@@ -111,7 +114,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
            div(class="outer",
                id = "div3",
                
-               tags$head(includeCSS("styles.css")),
+               tags$head(includeCSS("./style_sheets/styles3.css")),
            
            leaflet::leafletOutput("disaster_map_moore", height = "100%", width = "100%"),
            
@@ -143,7 +146,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
            id = "buffalo_tab",
            div(class="outer",
                id = "div4",
-               tags$head(includeCSS("styles.css")),
+               tags$head(includeCSS("./style_sheets/styles4.css")),
                
                leaflet::leafletOutput("disaster_map_buffalo", height = "100%", width = "100%"),
                
@@ -175,7 +178,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
 
            div(class="outer",
                id = "div5",
-               tags$head(includeCSS("styles.css")),
+               tags$head(includeCSS("./style_sheets/styles5.css")),
                
                leaflet::leafletOutput("disaster_map_grandisle", height = "100%", width = "100%"),
                
@@ -202,5 +205,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                              tags$div(id="cite5",
                                       'Data compiled from FHFA and Zillow')
                              
-               ))))
+               ))),
+  tabPanel(h6("Insights",
+              id = "insights_tab")))
                                 
