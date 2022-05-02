@@ -540,23 +540,23 @@ function(input, output, session){
     
     moore_line_data2 <- moore_line_data %>%
       filter(between(date,
-                     as.Date("2011-05-01", format = "%Y-%m-%d"),
-                     as.Date("2013-05-01", format = "%Y-%m-%d"))) %>%
+                     as.Date("2012-05-01", format = "%Y-%m-%d"),
+                     as.Date("2014-05-01", format = "%Y-%m-%d"))) %>%
       select(date, date2, avg_metric_moore) %>% 
       rename(selected_metric = avg_metric_moore)  
     
     output$line_chart_moore <- renderPlotly({
       plot_ly(moore_line_data2, x = ~date, y =~selected_metric, 
               type = 'scatter', mode = 'lines', name = 'Moore Mean Prices') %>%
-        add_segments(x = as.Date("2012-05-01", format = "%Y-%m-%d"),
-                     xend = as.Date("2012-05-01", format = "%Y-%m-%d"),
+        add_segments(x = as.Date("2013-05-01", format = "%Y-%m-%d"),
+                     xend = as.Date("2013-05-01", format = "%Y-%m-%d"),
                      y = -2000000, yend = 300000000) %>%
       add_text(text = "Tornado",
-               x = as.Date("2012-05-01", format = "%Y-%m-%d"),
+               x = as.Date("2013-05-01", format = "%Y-%m-%d"),
                y = max(moore_line_data2$selected_metric)) %>%
         layout(showlegend = FALSE,
-               xaxis = list(range = c(as.Date("2011-05-01", format = "%Y-%m-%d"),
-                                      as.Date("2013-05-01", format = "%Y-%m-%d")),
+               xaxis = list(range = c(as.Date("2012-05-01", format = "%Y-%m-%d"),
+                                      as.Date("2014-05-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
                             title = "Month / Year"),
                yaxis = list(range = c(ifelse(min(moore_line_data2$selected_metric) > 0,
