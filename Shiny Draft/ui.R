@@ -229,18 +229,18 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
             h2(strong("INSIGHTS BY DISASTER EVENT")),
               h1(" "),
            
-            h4(strong("NEW ORLEANS, LA - HURRICANE")),
+            h4(strong("NEW ORLEANS, LA - HURRICANE"), style = "background-color:#eff5df;padding:15px"),
               tags$li("After Hurricane Katrina hit, single "),
            h1(""),
            
-            h4(strong("COFFEY PARK, CA - SNELL WILDFIRES")),
+            h4(strong("COFFEY PARK, CA - SNELL WILDFIRES"), style = "background-color:#eff5df;padding:15px"),
            tags$li("While the Snell wildfires began burning in Sep 2018, the gradual devastation of its destruction is clear on all metrics."),
            tags$li("The average annual % change in HPI plummeted to 0% shortly after Sep 2018 (indicating flat growth in home sales)."),
            tags$li("Average single family home values remained below $200K until 2020, when the pandemic yielded greater single family housing demand."),
            tags$li("On a zip code level, zip codes East of Coffey Park were the hardest hit by the fires based on annual % change in HPI."),
            h1(""),
            
-            h4(strong("MOORE, OK - TORNADO")),
+            h4(strong("MOORE, OK - TORNADO"), style = "background-color:#eff5df;padding:15px"),
            tags$li("The tornado led to a brief dip in the value of single family homes, likely because tornadoes did not appear in Moore again, reassuring prospective homebuyers that Moore would not be hit again."),
            tags$li("Since the disaster, single family home prices stagnated until 2015, and has since skyrocketed."),
            tags$li("Meanwhile, the annual % change in HPI has been positive since 2013 when the tornado hit."),
@@ -248,12 +248,12 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            tags$li("On a zip code level, there were no notable discrepancies between areas when it came to real estate value effects."),
            h1(""),
            
-            h4(strong("BUFFALO, NY - SNOWSTORM")),
+            h4(strong("BUFFALO, NY - SNOWSTORM"), style = "background-color:#eff5df;padding:15px"),
            tags$li("Despite the severity of the snowstorm, this disaster did not affect real estate values as all average metrics continued to increase on average."),
            tags$li("Southern suburbs were more heavily impacted by the blizzard (like zip codes 14218, 14219, and 14224);
               we can see this in the Rolling Annual Change % in HPI by zip code as these zip codes become red immediately after the storm."),
            
-            h4(strong("GRAND ISLE, LA - BP OIL SPILL")),
+            h4(strong("GRAND ISLE, LA - BP OIL SPILL"), style = "background-color:#eff5df;padding:15px"),
            tags$li("After the infamous BP Oil Spill in Apr 2010, Grand Isle's single family (vacation) homes' values steadily declined."),
            tags$li("While home values' rolling 12 months' change had rallied into positive growth the year before the spill, the incident led to a firm decline shortly afterward."),
            tags$li("Home prices only improved in 2016, likely when a significant portion of the oil had been cleaned.")),
@@ -263,7 +263,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            p("Home Price Value (HPI) is a weighted sales index that incorporates average price changes in repeat sales or refinancings on the same properties.", style = "font-style:italic;text-align:justify;color:black;background-color:lavender;padding:15px"),
            br(),
            p(strong("What is Single Family Home Value?", style = "font-style: italic;text-align:justify;color:black;background-color:papayawhip;padding:15px")),
-           p("Single Family Home Value is selling price for detached single-family properties.", style = "font-style:italic;text-align:justify;color:black;background-color:papayawhip;padding:15px;")
+           p("Single Family Home Value is the selling price for detached single-family properties.", style = "font-style:italic;text-align:justify;color:black;background-color:papayawhip;padding:15px;")
            ))
           ))
                                 
