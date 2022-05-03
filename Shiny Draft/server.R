@@ -213,15 +213,17 @@ function(input, output, session){
   
   rm(buffalo_shape, grand_isle_shape, coffey_park_shape, moore_ok_shape, new_orleans_shape)
  
-   
+  
   
   # map for New Orleans
+  pal_o = colorBin("RdBu", domain=refined_orleans_data$annual_change, bins=5)
+  
   output$disaster_map_neworleans <- renderLeaflet({
     leaflet(refined_orleans_data) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       setView(lng = -90.0715, lat = 29.95, zoom = 11) %>%
       addPolygons(
-        fillColor = colorBin("RdBu", domain=refined_orleans_data$annual_change, bins=5),
+        fillColor = ~pal_o(annual_change),
         weight = 2,
         opacity = 1,
         color = "gray",
