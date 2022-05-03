@@ -283,6 +283,15 @@ function(input, output, session){
   
     # line chart
     
+    # set axis labels
+    if(chosen_metric_neworleans == 'HPI') {
+      y_lab = "Home Price Index"
+    } else if(chosen_metric_neworleans == 'annual_change') {
+      y_lab = "Annual Change in HPI (%)"
+    } else {
+      y_lab = "Single Family Home Value ($)"
+    }
+    
     neworleans_line_data <- line_chart_data %>%
       filter(city == 'New Orleans')
     
@@ -311,7 +320,7 @@ function(input, output, session){
                                       as.Date("2006-08-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
                             title = "Month / Year"),
-               yaxis = list(range = c(ifelse(min(neworleans_line_data2$selected_metric) > 0,
+               yaxis = list(title = y_lab, range = c(ifelse(min(neworleans_line_data2$selected_metric) > 0,
                                              min(neworleans_line_data2$selected_metric) * 0.9,
                                              min(neworleans_line_data2$selected_metric) * 1.1),
                                       ifelse(max(neworleans_line_data2$selected_metric) > 0,
@@ -400,6 +409,15 @@ function(input, output, session){
     
     # line chart
     
+    # set axis labels
+    if(chosen_metric_coffeypark == 'HPI') {
+      y_lab = "Home Price Index"
+    } else if(chosen_metric_coffeypark == 'annual_change') {
+      y_lab = "Annual Change in HPI (%)"
+    } else {
+      y_lab = "Single Family Home Value ($)"
+    }
+    
     coffeypark_line_data <- line_chart_data %>%
       filter(city == 'Coffey Park')
     
@@ -429,7 +447,7 @@ function(input, output, session){
                                           as.Date("2018-10-01", format = "%Y-%m-%d")),
                                 tickfont = list(size = 8),
                                 title = "Month / Year"),
-                   yaxis = list(range = c(ifelse(min(coffeypark_line_data2$selected_metric) > 0,
+                   yaxis = list(title = y_lab, range = c(ifelse(min(coffeypark_line_data2$selected_metric) > 0,
                                                  min(coffeypark_line_data2$selected_metric) * 0.9,
                                                  min(coffeypark_line_data2$selected_metric) * 1.1),
                                           ifelse(max(coffeypark_line_data2$selected_metric) > 0,
@@ -513,6 +531,15 @@ function(input, output, session){
     
     # line chart
     
+    # set axis labels
+    if(chosen_metric_moore == 'HPI') {
+      y_lab = "Home Price Index"
+    } else if(chosen_metric_moore == 'annual_change') {
+      y_lab = "Annual Change in HPI (%)"
+    } else {
+      y_lab = "Single Family Home Value ($)"
+    }
+    
     moore_line_data <- line_chart_data %>%
       filter(city == 'Moore')
     
@@ -541,7 +568,7 @@ function(input, output, session){
                                       as.Date("2014-05-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
                             title = "Month / Year"),
-               yaxis = list(range = c(ifelse(min(moore_line_data2$selected_metric) > 0,
+               yaxis = list(title = y_lab, range = c(ifelse(min(moore_line_data2$selected_metric) > 0,
                                              min(moore_line_data2$selected_metric) * 0.9,
                                              min(moore_line_data2$selected_metric) * 1.1),
                                       ifelse(max(moore_line_data2$selected_metric) > 0,
@@ -624,6 +651,15 @@ function(input, output, session){
     
     # line chart
     
+    # set axis labels
+    if(chosen_metric_buffalo == 'HPI') {
+      y_lab = "Home Price Index"
+    } else if(chosen_metric_buffalo == 'annual_change') {
+      y_lab = "Annual Change in HPI (%)"
+    } else {
+      y_lab = "Single Family Home Value ($)"
+    }
+    
     buffalo_line_data <- line_chart_data %>%
       filter(city == 'Buffalo')
     
@@ -652,7 +688,7 @@ function(input, output, session){
                                       as.Date("2015-11-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
                             title = "Month/Year"),
-               yaxis = list(range = c(ifelse(min(buffalo_line_data2$selected_metric) > 0,
+               yaxis = list(title = y_lab, range = c(ifelse(min(buffalo_line_data2$selected_metric) > 0,
                                              min(buffalo_line_data2$selected_metric) * 0.9,
                                              min(buffalo_line_data2$selected_metric) * 1.1),
                                       ifelse(max(buffalo_line_data2$selected_metric) > 0,
@@ -733,6 +769,13 @@ function(input, output, session){
     
     # line chart
     
+    # set axis labels
+    if(chosen_metric_grandisle == 'annual_change') {
+      y_lab = "Annual Change in HPI (%)"
+    } else {
+      y_lab = "Single Family Home Value ($)"
+    }
+    
     grandisle_line_data <- line_chart_data %>%
       filter(city == 'Grand Isle')
     
@@ -761,7 +804,7 @@ function(input, output, session){
                                       as.Date("2011-04-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
                             title = "Month / Year"),
-               yaxis = list(range = c(ifelse(min(grandisle_line_data2$selected_metric) > 0,
+               yaxis = list(title = y_lab, range = c(ifelse(min(grandisle_line_data2$selected_metric) > 0,
                                          min(grandisle_line_data2$selected_metric) * 0.9,
                                          min(grandisle_line_data2$selected_metric) * 1.1),
                                       ifelse(max(grandisle_line_data2$selected_metric) > 0,
