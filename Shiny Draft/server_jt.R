@@ -239,38 +239,28 @@ function(input, output, session){
       select(date2, zip_code, chosen_metric_neworleans) %>% 
       rename(selected_metric = chosen_metric_neworleans)
     
-    # doesn't subset on date, use for bins of metrics
-    bin_df_neworleans <- refined_orleans_data %>%
-      select(date, zip_code, chosen_metric_neworleans) %>% 
-      rename(selected_metric = chosen_metric_neworleans) %>%
-      filter(between(date,
-                     as.Date("2002-08-01", format = "%Y-%m-%d"),
-                     as.Date("2008-08-01", format = "%Y-%m-%d")))
-      
-    bins = unname(quantile(bin_df_neworleans$selected_metric, probs = seq(0, 1, 1/5), na.rm = TRUE))
-
-    
-    # set palette, hover text, y-axis labels on line chart
-    if(chosen_metric_neworleans == 'annual_change') {
-      
-      pal = "RdBu"
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
-      y_lab = "Annual Change in HPI (%)"
-      
-    } else if(chosen_metric_neworleans == 'HPI') {
-      
-      pal = "Greens"
-      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
-      y_lab = "Home Price Index"
-      
+    # set palette
+    if(chosen_metric_neworleans == 'HPI') {
+      pal = "YlGnBu"
+    } else if(chosen_metric_neworleans == 'annual_change') {
+      pal = "PuBu"
+    } else if(chosen_metric_neworleans == 'single_fam_val') {
+      pal = "YlOrRd"
     } else {
-      pal = "Greens"
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
-      y_lab = "Single Family Home Value ($)"
-      
+      pal = "PuRd"
     }
     
-    pal_no = colorBin(pal, domain=interactive_map_neworleans$selected_metric, bins=bins)
+    pal_no = colorBin(pal, domain=interactive_map_neworleans$selected_metric, bins=5)
+    
+    if(chosen_metric_neworleans == 'HPI') {
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
+    } else if(chosen_metric_neworleans == 'annual_change') {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in Home Price: $%g"
+    } else if(chosen_metric_neworleans == 'single_fam_val') {
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
+    } else {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+    }
     
     labels_no = sprintf(
       hover,
@@ -299,7 +289,6 @@ function(input, output, session){
   
     # line chart
     
-
     neworleans_line_data <- line_chart_data %>%
       filter(city == 'New Orleans')
     
@@ -328,7 +317,7 @@ function(input, output, session){
                                       as.Date("2006-08-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
                             title = "Month / Year"),
-               yaxis = list(title = y_lab, range = c(ifelse(min(neworleans_line_data2$selected_metric) > 0,
+               yaxis = list(range = c(ifelse(min(neworleans_line_data2$selected_metric) > 0,
                                              min(neworleans_line_data2$selected_metric) * 0.9,
                                              min(neworleans_line_data2$selected_metric) * 1.1),
                                       ifelse(max(neworleans_line_data2$selected_metric) > 0,
@@ -373,31 +362,27 @@ function(input, output, session){
       select(date2, zip_code, chosen_metric_coffeypark) %>% 
       rename(selected_metric = chosen_metric_coffeypark)
     
-    # doesn't subset on date, use for bins of metrics
-    bin_df_coffeypark <- refined_coffey_park_data %>%
-      select(date, zip_code, chosen_metric_coffeypark) %>% 
-      rename(selected_metric = chosen_metric_coffeypark) %>%
-      filter(between(date,
-                     as.Date("2014-10-01", format = "%Y-%m-%d"),
-                     as.Date("2020-10-01", format = "%Y-%m-%d")))
-    
-    bins = unname(quantile(bin_df_coffeypark$selected_metric, probs = seq(0, 1, 1/5), na.rm = TRUE))
-    
     # set palette
-    if(chosen_metric_coffeypark == 'annual_change') {
-      pal = "RdBu"
+    if(chosen_metric_coffeypark == 'HPI') {
+      pal = "YlGnBu"
+    } else if(chosen_metric_coffeypark == 'annual_change') {
+      pal = "PuBu"
+    } else if(chosen_metric_coffeypark == 'single_fam_val') {
+      pal = "YlOrRd"
     } else {
-      pal = "Greens"
+      pal = "PuRd"
     }
     
-    pal_no = colorBin(pal, domain=interactive_map_coffeypark$selected_metric, bins=bins)
+    pal_no = colorBin(pal, domain=interactive_map_coffeypark$selected_metric, bins=5)
     
     if(chosen_metric_coffeypark == 'HPI') {
-      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
     } else if(chosen_metric_coffeypark == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+    } else if(chosen_metric_coffeypark == 'single_fam_val') {
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
     } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
     }
     
     labels_no = sprintf(
@@ -427,15 +412,6 @@ function(input, output, session){
     
     # line chart
     
-    # set axis labels
-    if(chosen_metric_coffeypark == 'HPI') {
-      y_lab = "Home Price Index"
-    } else if(chosen_metric_coffeypark == 'annual_change') {
-      y_lab = "Annual Change in HPI (%)"
-    } else {
-      y_lab = "Single Family Home Value ($)"
-    }
-    
     coffeypark_line_data <- line_chart_data %>%
       filter(city == 'Coffey Park')
     
@@ -445,8 +421,8 @@ function(input, output, session){
     
     coffeypark_line_data2 <- coffeypark_line_data %>%
       filter(between(date,
-                     as.Date("2014-10-01", format = "%Y-%m-%d"),
-                     as.Date("2020-10-01", format = "%Y-%m-%d")
+                     as.Date("2016-10-01", format = "%Y-%m-%d"),
+                     as.Date("2018-10-01", format = "%Y-%m-%d")
                      )) %>%
       select(date, date2, avg_metric_coffeypark) %>% 
       rename(selected_metric = avg_metric_coffeypark)  
@@ -461,11 +437,11 @@ function(input, output, session){
                  x = as.Date("2017-10-01", format = "%Y-%m-%d"),
                  y = max(coffeypark_line_data2$selected_metric)) %>%
             layout(showlegend = FALSE,
-                   xaxis = list(range = c(as.Date("2014-10-01", format = "%Y-%m-%d"),
-                                          as.Date("2020-10-01", format = "%Y-%m-%d")),
+                   xaxis = list(range = c(as.Date("2016-10-01", format = "%Y-%m-%d"),
+                                          as.Date("2018-10-01", format = "%Y-%m-%d")),
                                 tickfont = list(size = 8),
                                 title = "Month / Year"),
-                   yaxis = list(title = y_lab, range = c(ifelse(min(coffeypark_line_data2$selected_metric) > 0,
+                   yaxis = list(range = c(ifelse(min(coffeypark_line_data2$selected_metric) > 0,
                                                  min(coffeypark_line_data2$selected_metric) * 0.9,
                                                  min(coffeypark_line_data2$selected_metric) * 1.1),
                                           ifelse(max(coffeypark_line_data2$selected_metric) > 0,
@@ -505,32 +481,27 @@ function(input, output, session){
       select(date2, zip_code, chosen_metric_moore) %>% 
       rename(selected_metric = chosen_metric_moore)
     
-    # doesn't subset on date, use for bins of metrics
-    bin_df_moore <- refined_moore_data %>%
-      select(date, zip_code, chosen_metric_moore) %>% 
-      rename(selected_metric = chosen_metric_moore) %>%
-      filter(between(date,
-                     as.Date("2010-05-01", format = "%Y-%m-%d"),
-                     as.Date("2016-05-01", format = "%Y-%m-%d")))
-    
-    bins = unname(quantile(bin_df_moore$selected_metric, probs = seq(0, 1, 1/5), na.rm = TRUE))
-    
-    
     # set palette
-    if(chosen_metric_moore == 'annual_change') {
-      pal = "RdBu"
+    if(chosen_metric_moore == 'HPI') {
+      pal = "YlGnBu"
+    } else if(chosen_metric_moore == 'annual_change') {
+      pal = "PuBu"
+    } else if(chosen_metric_moore == 'single_fam_val') {
+      pal = "YlOrRd"
     } else {
-      pal = "Greens"
+      pal = "PuRd"
     }
     
-    pal_no = colorBin(pal, domain=interactive_map_moore$selected_metric, bins=bins)
+    pal_no = colorBin(pal, domain=interactive_map_moore$selected_metric, bins=5)
     
     if(chosen_metric_moore == 'HPI') {
-      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
     } else if(chosen_metric_moore == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in Home Price: $%g"
+    } else if(chosen_metric_moore == 'single_fam_val') {
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
     } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
     }
     
     labels_no = sprintf(
@@ -560,15 +531,6 @@ function(input, output, session){
     
     # line chart
     
-    # set axis labels
-    if(chosen_metric_moore == 'HPI') {
-      y_lab = "Home Price Index"
-    } else if(chosen_metric_moore == 'annual_change') {
-      y_lab = "Annual Change in HPI (%)"
-    } else {
-      y_lab = "Single Family Home Value ($)"
-    }
-    
     moore_line_data <- line_chart_data %>%
       filter(city == 'Moore')
     
@@ -597,7 +559,7 @@ function(input, output, session){
                                       as.Date("2014-05-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
                             title = "Month / Year"),
-               yaxis = list(title = y_lab, range = c(ifelse(min(moore_line_data2$selected_metric) > 0,
+               yaxis = list(range = c(ifelse(min(moore_line_data2$selected_metric) > 0,
                                              min(moore_line_data2$selected_metric) * 0.9,
                                              min(moore_line_data2$selected_metric) * 1.1),
                                       ifelse(max(moore_line_data2$selected_metric) > 0,
@@ -636,31 +598,27 @@ function(input, output, session){
       select(date2, zip_code, chosen_metric_buffalo) %>% 
       rename(selected_metric = chosen_metric_buffalo)
     
-    # doesn't subset on date, use for bins of metrics
-    bin_df_buffalo <- refined_buffalo_data %>%
-      select(date, zip_code, chosen_metric_buffalo) %>% 
-      rename(selected_metric = chosen_metric_buffalo) %>%
-      filter(between(date,
-                     as.Date("2011-11-01", format = "%Y-%m-%d"),
-                     as.Date("2017-11-01", format = "%Y-%m-%d")))
-    
-    bins = unname(quantile(bin_df_buffalo$selected_metric, probs = seq(0, 1, 1/5), na.rm = TRUE))
-    
     # set palette
-    if(chosen_metric_buffalo == 'annual_change') {
-      pal = "RdBu"
+    if(chosen_metric_buffalo == 'HPI') {
+      pal = "YlGnBu"
+    } else if(chosen_metric_buffalo == 'annual_change') {
+      pal = "PuBu"
+    } else if(chosen_metric_buffalo == 'single_fam_val') {
+      pal = "YlOrRd"
     } else {
-      pal = "Greens"
+      pal = "PuRd"
     }
     
-    pal_no = colorBin(pal, domain=interactive_map_buffalo$selected_metric, bins=bins)
+    pal_no = colorBin(pal, domain=interactive_map_buffalo$selected_metric, bins=5)
     
     if(chosen_metric_buffalo == 'HPI') {
-      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
     } else if(chosen_metric_buffalo == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in Home Price: $%g"
+    } else if(chosen_metric_buffalo == 'single_fam_val') {
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
     } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
     }
     
     labels_no = sprintf(
@@ -690,15 +648,6 @@ function(input, output, session){
     
     # line chart
     
-    # set axis labels
-    if(chosen_metric_buffalo == 'HPI') {
-      y_lab = "Home Price Index"
-    } else if(chosen_metric_buffalo == 'annual_change') {
-      y_lab = "Annual Change in HPI (%)"
-    } else {
-      y_lab = "Single Family Home Value ($)"
-    }
-    
     buffalo_line_data <- line_chart_data %>%
       filter(city == 'Buffalo')
     
@@ -727,7 +676,7 @@ function(input, output, session){
                                       as.Date("2015-11-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
                             title = "Month/Year"),
-               yaxis = list(title = y_lab, range = c(ifelse(min(buffalo_line_data2$selected_metric) > 0,
+               yaxis = list(range = c(ifelse(min(buffalo_line_data2$selected_metric) > 0,
                                              min(buffalo_line_data2$selected_metric) * 0.9,
                                              min(buffalo_line_data2$selected_metric) * 1.1),
                                       ifelse(max(buffalo_line_data2$selected_metric) > 0,
@@ -766,29 +715,22 @@ function(input, output, session){
       select(date2, zip_code, chosen_metric_grandisle) %>% 
       rename(selected_metric = chosen_metric_grandisle)
     
-    # doesn't subset on date, use for bins of metrics
-    bin_df_grandisle <- refined_grandisle_data %>%
-      select(date, zip_code, chosen_metric_grandisle) %>% 
-      rename(selected_metric = chosen_metric_grandisle) %>%
-      filter(between(date,
-                     as.Date("2007-04-01", format = "%Y-%m-%d"),
-                     as.Date("2013-04-01", format = "%Y-%m-%d")))
-    
-    bins = unname(quantile(bin_df_grandisle$selected_metric, probs = seq(0, 1, 1/5), na.rm = TRUE))
-    
     # set palette
     if(chosen_metric_grandisle == 'annual_change') {
-      pal = "RdBu"
-    } else {
-      pal = "Greens"
-    }
+      pal = "PuBu"
+    } else if(chosen_metric_grandisle == 'single_fam_val') {
+      pal = "YlOrRd"}
     
-    pal_no = colorBin(pal, domain=interactive_map_grandisle$selected_metric, bins=bins)
+    pal_no = colorBin(pal, domain=interactive_map_grandisle$selected_metric, bins=5)
     
-    if (chosen_metric_grandisle == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
+    if(chosen_metric_grandisle == 'HPI') {
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
+    } else if(chosen_metric_grandisle == 'annual_change') {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+    } else if(chosen_metric_grandisle == 'single_fam_val') {
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
     } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
     }
     
     labels_no = sprintf(
@@ -818,13 +760,6 @@ function(input, output, session){
     
     # line chart
     
-    # set axis labels
-    if(chosen_metric_grandisle == 'annual_change') {
-      y_lab = "Annual Change in HPI (%)"
-    } else {
-      y_lab = "Single Family Home Value ($)"
-    }
-    
     grandisle_line_data <- line_chart_data %>%
       filter(city == 'Grand Isle')
     
@@ -853,7 +788,7 @@ function(input, output, session){
                                       as.Date("2011-04-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
                             title = "Month / Year"),
-               yaxis = list(title = y_lab, range = c(ifelse(min(grandisle_line_data2$selected_metric) > 0,
+               yaxis = list(range = c(ifelse(min(grandisle_line_data2$selected_metric) > 0,
                                          min(grandisle_line_data2$selected_metric) * 0.9,
                                          min(grandisle_line_data2$selected_metric) * 1.1),
                                       ifelse(max(grandisle_line_data2$selected_metric) > 0,
