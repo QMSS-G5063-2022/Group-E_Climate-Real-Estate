@@ -216,14 +216,19 @@ function(input, output, session){
   
   
   # map for New Orleans
-  pal_o = colorBin("RdBu", domain=refined_orleans_data$annual_change, bins=5)
+#  base_orleans <- refined_orleans_data %>%
+#    filter(between(date,
+#                   as.Date("2002-08-01", format = "%Y-%m-%d"),
+#                   as.Date("2008-08-01", format = "%Y-%m-%d")))
+  
+#  pal_o = colorBin("RdBu", domain=base_orleans$annual_change, bins=5)
   
   output$disaster_map_neworleans <- renderLeaflet({
     leaflet(refined_orleans_data) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       setView(lng = -90.0715, lat = 29.95, zoom = 11) %>%
       addPolygons(
-        fillColor = ~pal_o(annual_change),
+        fillColor = colorBin("RdBu", refined_orleans_data$annual_change, bins=5),
         weight = 2,
         opacity = 1,
         color = "gray",
@@ -329,6 +334,9 @@ function(input, output, session){
         add_segments(x = as.Date("2005-08-01", format = "%Y-%m-%d"),
                      xend = as.Date("2005-08-01", format = "%Y-%m-%d"),
                      y = -100000, yend = 1000000) %>%
+        add_segments(x = chosen_month_neworleans, format = "%Y-%m-%d",
+                     xend = chosen_month_neworleans, format = "%Y-%m-%d",
+                     y = -100000, yend = 1000000, line = list(dash="dash")) %>%
         add_text(text = "Hurricane Katrina",
                  textfont = list(size = 10,
                                  color = "darkred"),
@@ -493,6 +501,9 @@ function(input, output, session){
             add_segments(x = as.Date("2018-09-01", format = "%Y-%m-%d"),
                          xend = as.Date("2018-09-01", format = "%Y-%m-%d"),
                          y = -2000000, yend = 30000000) %>%
+            add_segments(x = chosen_month_coffeypark, format = "%Y-%m-%d",
+                     xend = chosen_month_coffeypark, format = "%Y-%m-%d",
+                     y = -100000, yend = 1000000, line = list(dash="dash")) %>%
         add_text(text = "Snell Wildfire",
                  textfont = list(size = 10,
                                  color = "darkred"),
@@ -650,6 +661,9 @@ function(input, output, session){
         add_segments(x = as.Date("2013-05-01", format = "%Y-%m-%d"),
                      xend = as.Date("2013-05-01", format = "%Y-%m-%d"),
                      y = -2000000, yend = 300000000) %>%
+        add_segments(x = chosen_month_moore, format = "%Y-%m-%d",
+                     xend = chosen_month_moore, format = "%Y-%m-%d",
+                     y = -100000, yend = 1000000, line = list(dash="dash")) %>%
       add_text(text = "Tornado",
                textfont = list(size = 10,
                                color = "darkred"),
@@ -805,6 +819,9 @@ function(input, output, session){
         add_segments(x = as.Date("2014-11-01", format = "%Y-%m-%d"),
                      xend = as.Date("2014-11-01", format = "%Y-%m-%d"),
                      y = -100000, yend = 30000000) %>%
+        add_segments(x = chosen_month_buffalo, format = "%Y-%m-%d",
+                     xend = chosen_month_buffalo, format = "%Y-%m-%d",
+                     y = -100000, yend = 1000000, line = list(dash="dash")) %>%
         add_text(text = "Snowstorm",
                  textfont = list(size = 10,
                                  color = "darkred"),
@@ -951,9 +968,12 @@ function(input, output, session){
     output$line_chart_grandisle <- renderPlotly({
       plot_ly(grandisle_line_data2, x = ~date, y =~selected_metric, 
               type = 'scatter', mode = 'lines', name = 'Grand Isle Mean Prices') %>%
-        add_segments(x = as.Date("2011-04-01", format = "%Y-%m-%d"),
-                     xend = as.Date("2011-04-01", format = "%Y-%m-%d"),
+        add_segments(x = as.Date("2010-04-01", format = "%Y-%m-%d"),
+                     xend = as.Date("2010-04-01", format = "%Y-%m-%d"),
                      y = -100000000, yend = 3000000) %>%
+        add_segments(x = chosen_month_grandisle, format = "%Y-%m-%d",
+                     xend = chosen_month_grandisle, format = "%Y-%m-%d",
+                     y = -100000, yend = 1000000, line = list(dash="dash")) %>%
         add_text(text = "BP Oil Spill",
                  textfont = list(size = 10,
                                  color = "darkred"),
