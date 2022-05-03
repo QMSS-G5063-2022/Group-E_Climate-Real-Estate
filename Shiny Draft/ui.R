@@ -30,7 +30,8 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                     img(id = "moorepic", src = 'moore-ok-tornado-png.png', align = "center", height = "55%", width = "55%"),
                     img(id = "buffalopic", src = 'buffalo-snow-png.png', align = "center", height = "55%", width = "55%"),
                     img(id = "grandislepic", src = 'grand-isle-oil-png.png', align = "center", height = "55%", width = "55%"))),
-                    h4(strong("PROJECT PURPOSE")),
+                    fluidRow(column(6,
+                                    h4(strong("PROJECT PURPOSE")),
                     h5("As climate change and ongoing human events intensify both the scale and frequency of severe environmental
                     events, these consequences also have immediate impacts on real estate, be that housing sale prices, rental prices, or home price indices.  In profiling
                        four (1) notable natural disasters in the United States, along with one human-made disaster (an oil spill), we aim to understand
@@ -39,17 +40,18 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                         tags$li("If that's the case, is the housing market more vulnerable to certain types of disasters?"),
                         tags$li("How quickly does it take to bounce back?"),
                         tags$li("How soon after a disaster is it the ideal time to buy a home and will the value recover?"),
-                        tags$li("Our project explores these questions in an engaging and interactive manner."),
+                        tags$li("Our project explores these questions in an engaging and interactive manner.")),
+                    
+                    column(6,
                          
-                    h1(" "),
                     h4(strong("HOW TO USE THIS SHINY APP")),
                     h5("Each subsequent tab in this app spotlights a unique disaster:"),
                     tags$li("Use the month/year slider to see how these real estate valus change over time before/after the disaster."),
                     tags$li("Toggle between real estate metrics like home price index (HPI), mean single family home value, and % annual HPI change."),
                     tags$li("Hover over the interactive map to explore zip codes' real estates "),
                     tags$li("View the complementary plots to understand how the disaster changed real estate values 12 months before and after its consequences."),
-                    tags$li("Read through the Insights tab to see our notable trends from our data."),
-                    h4(strong("**IT TAKES A MOMENT FOR THE DATA TO LOAD THE FIRST TIME YOU SWITCH TABS**"), style = "color: red")
+                    tags$li("Read through the Insights tab to see our notable trends from our data.")),
+                    fluidRow(column(12, h4(strong("**IT TAKES A MOMENT FOR THE DATA TO LOAD THE FIRST TIME YOU SWITCH TABS**"), style = "color: red"))))
            ),
            
            tabPanel(h6("New Orleans, LA", style = "color: #d61849"),
@@ -222,6 +224,8 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
   tabPanel(h6(strong("Insights | Commentary"), style = "color:#96114d"),
               id = "insights_tab",
               
+          fluidRow(
+            column(9,
             h2(strong("INSIGHTS BY DISASTER EVENT")),
               h1(" "),
            
@@ -252,13 +256,14 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
             h4(strong("GRAND ISLE, LA - BP OIL SPILL")),
            tags$li("After the infamous BP Oil Spill in Apr 2010, Grand Isle's single family (vacation) homes' values steadily declined."),
            tags$li("While home values' rolling 12 months' change had rallied into positive growth the year before the spill, the incident led to a firm decline shortly afterward."),
-           tags$li("Home prices only improved in 2016, likely when a significant portion of the oil had been cleaned."),
-           h1(""),
-           h1(""),
-           h1(""),
-           h1(""),
+           tags$li("Home prices only improved in 2016, likely when a significant portion of the oil had been cleaned.")),
            
-           p(strong("What is Home Price Value?", style = "font-style: italic")),
-           p("Home Price Value (HPI) is a weighted sales index that incorporates average price changes in repeat sales or refinancings on the same properties.", style = "font-style: italic")
+           column(3,
+           p(strong("What is Home Price Value?", style = "font-style:italic;text-align:justify;color:black;background-color:lavender;padding:15px")),
+           p("Home Price Value (HPI) is a weighted sales index that incorporates average price changes in repeat sales or refinancings on the same properties.", style = "font-style:italic;text-align:justify;color:black;background-color:lavender;padding:15px"),
+           br(),
+           p(strong("What is Single Family Home Value?", style = "font-style: italic;text-align:justify;color:black;background-color:papayawhip;padding:15px")),
+           p("Single Family Home Value is selling price for detached single-family properties.", style = "font-style:italic;text-align:justify;color:black;background-color:papayawhip;padding:15px;")
            ))
+          ))
                                 
