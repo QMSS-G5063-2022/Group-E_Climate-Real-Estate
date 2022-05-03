@@ -353,6 +353,25 @@ function(input, output, session){
     # update bar chart based on what's clicked
     event <- input$disaster_map_neworleans_shape_click
     filtered_zips <- event$zip_code
+  
+    neworleans_bar_data <- bar_chart_data %>%
+      filter(city == 'New Orleans') %>%
+      filter(zip_code = 12345)
+    
+    output$bar_chart_neworleans <- renderPlotly({
+      plot_ly(neworleans_bar_data,
+              x=~date,
+              y=~selected_metric,
+              group=~zip_code,
+              color=~date,
+              type='bar') %>%
+        layout(legend = list(orientation = "h",
+                             xanchor = "center",
+                             x = 0.5,
+                             y=-0.2),
+               yaxis = list(range=c(130000,145000)))
+    })
+
     
   })
   
@@ -499,6 +518,23 @@ function(input, output, session){
                                 font = list(size = 11)))
     })
     
+    coffeypark_bar_data <- bar_chart_data %>% 
+      filter(city == 'Coffey Park') %>%
+      filter(zip_code = 12345)
+    
+    output$bar_chart_coffeypark <- renderPlotly({
+      plot_ly(coffeypark_bar_data,
+              x=~date,
+              y=~selected_metric,
+              group=~zip_code,
+              color=~date,
+              type='bar') %>%
+        layout(legend = list(orientation = "h",
+                             xanchor = "center",
+                             x = 0.5,
+                             y=-0.2),
+               yaxis = list(range=c(130000,145000)))
+    })
     
   }) 
   
@@ -643,6 +679,23 @@ function(input, output, session){
                             font = list(size = 11))
                )})
     
+    moore_bar_data <- bar_chart_data %>% 
+      filter(city == 'Moore') %>%
+      filter(zip_code = 12345)
+    
+    output$bar_chart_moore <- renderPlotly({
+      plot_ly(moore_bar_data,
+              x=~date,
+              y=~selected_metric,
+              group=~zip_code,
+              color=~date,
+              type='bar') %>%
+        layout(legend = list(orientation = "h",
+                             xanchor = "center",
+                             x = 0.5,
+                             y=-0.2),
+               yaxis = list(range=c(130000,145000)))
+    })
   }) 
   
   
@@ -786,6 +839,25 @@ function(input, output, session){
                )
       })
     
+    buffalo_bar_data <- bar_chart_data %>%
+      filter(city == 'Buffalo') %>%
+      filter(zip_code = 12345)
+    
+    output$bar_chart_buffalo <- renderPlotly({
+      plot_ly(buffalo_bar_data,
+              x=~date,
+              y=~selected_metric,
+              group=~zip_code,
+              color=~date,
+              type='bar') %>%
+        layout(legend = list(orientation = "h",
+                             xanchor = "center",
+                             x = 0.5,
+                             y=-0.2),
+               yaxis = list(range=c(130000,145000)))
+    })
+    
+    
   }) 
   
   
@@ -921,7 +993,27 @@ function(input, output, session){
                               "Avg Monthly Single Family Home \nValue (+/- 3 yrs of Spill)"),
                             font = list(size = 11)))
     
-  }) })
+  }) 
+    
+    #LINE CHART
+    grandisle_bar_data <- bar_chart_data %>%
+      filter(city == 'Grand Isle') %>%
+      filter(zip_code = 12345)
+    
+    output$bar_chart_grandisle <- renderPlotly({
+      plot_ly(grandisle_bar_data,
+              x=~date,
+              y=~selected_metric,
+              group=~zip_code,
+              color=~date,
+              type='bar') %>%
+        layout(legend = list(orientation = "h",
+                             xanchor = "center",
+                             x = 0.5,
+                             y=-0.2),
+               yaxis = list(range=c(130000,145000)))
+    })
+    }) #these closing brackets are for observe
   
 }
   
