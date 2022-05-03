@@ -31,7 +31,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                     img(id = "buffalopic", src = 'buffalo-snow-png.png', align = "center", height = "55%", width = "55%"),
                     img(id = "grandislepic", src = 'grand-isle-oil-png.png', align = "center", height = "55%", width = "55%"))),
                     h4(strong("PROJECT PURPOSE")),
-                    h5("As climate change and ongoing human events increases both the scale and frequency of severe environmental
+                    h5("As climate change and ongoing human events intensify both the scale and frequency of severe environmental
                     events, these consequences also have immediate impacts on real estate, be that housing sale prices, rental prices, or home price indices.  In profiling
                        four (1) notable natural disasters in the United States, along with one human-made disaster (an oil spill), we aim to understand
                        the immediate and short-term impact that natural destruction and catastrophe induces on the housing market."),
@@ -41,14 +41,14 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                         tags$li("Our project explores these questions in an engaging and interactive manner."),
                          
                     h1(" "),
-                    h4(strong("HOW TO USE THIS APP")),
-                    h5("Each subsequent tab in this app spotlights a unique disaster"),
+                    h4(strong("HOW TO USE THIS SHINY APP")),
+                    h5("Each subsequent tab in this app spotlights a unique disaster:"),
                     tags$li("Use the month/year slider to see how these real estate valus change over time before/after the disaster."),
                     tags$li("Toggle between real estate metrics like home price index (HPI), mean single family home value, and % annual HPI change."),
                     tags$li("Hover over the interactive map to explore zip codes' real estates "),
                     tags$li("View the complementary plots to understand how the disaster changed real estate values 12 months before and after its consequences."),
                     tags$li("Read through the Insights tab to see our notable trends from our data."),
-                    tags$li(strong("**IT TAKES A MOMENT FOR THE DATA TO LOAD THE FIRST TIME YOU SWITCH TABS**"))
+                    h4(strong("**IT TAKES A MOMENT FOR THE DATA TO LOAD THE FIRST TIME YOU SWITCH TABS**"))
            ),
            
            tabPanel(h6("New Orleans, LA", style = "color: #d61849"),
@@ -223,26 +223,37 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
               
             h2(strong("INSIGHTS BY DISASTER EVENT")),
               h1(" "),
+           
             h4(strong("NEW ORLEANS, LA - HURRICANE")),
-              h1(""),
               tags$li(""),
            h1(""),
+           
             h4(strong("COFFEY PARK, CA - WILDFIRES")),
-              h1(""),
-           tags$li(""),
+           tags$li("While the average single family home value in Coffey Park was steadily declining prior to the Oct 2017 wildfires, the value observed a steep decline after Jan 2018 until the end of 2018."),
+           tags$li("The average annual % change in HPI steadily climbed, and this is likely due to the fact that HPI is calculated based on repeated sales of the same properties,\n
+                   so the homes included in the metric are only those that survived the fires intact."),
            h1(""),
+           
             h4(strong("MOORE, OK - TORNADO")),
-              h1(""),
-           tags$li(""),
+           tags$li("The tornado led to a brief dip in the value of single family homes, likely because tornadoes did not appear in Moore again, reassuring prospective homebuyers that Moore would not be hit again."),
+           tags$li("Since the disaster, single family home prices have skyrocketed and the annual % change in HPI has been positive since 2017, when the tornado hit."),
+           tags$li("The only period of time when the annual change in home prices was ever negative was around the 2008 to 2012."),
            h1(""),
+           
             h4(strong("BUFFALO, NY - SNOWSTORM")),
-              h1("When it comes "),
-           tags$li(""),
+           tags$li("Despite the severity of the snowstorm, this disaster did not affect real estate values as all metrics continued to increase on average."),
            h1(""),
+           
             h4(strong("GRAND ISLE, LA - BP OIL SPILL")),
-              h1(""),
            tags$li("After the infamous BP Oil Spill in Apr 2010, Grand Isle's single family (vacation) homes' values steadily declined."),
            tags$li("While home values' rolling 12 months' change had rallied into positive growth the year before the spill, the incident led to a firm decline shortly afterward."),
-           tags$li(""),
-           h1("")))
+           tags$li("Home prices only improved in 2016, likely when a significant portion of the oil had been cleaned."),
+           h1(""),
+           h1(""),
+           h1(""),
+           h1(""),
+           
+           p(strong("What is Home Price Value?", style = "font-style: italic")),
+           p("Home Price Value (HPI) is a weighted sales index that incorporates average price changes in repeat sales or refinancings on the same properties.", style = "font-style: italic")
+           ))
                                 
