@@ -4,10 +4,7 @@ author: "Jeffray Tsai"
 date: "5/1/2022"
 output: html_document
 ---
-```{r global options, include=FALSE, echo=FALSE}
-knitr::opts_chunk$set(include=TRUE, warning=FALSE, message=FALSE, echo=FALSE)
-```
-```{r setup}
+```{r}
 library(dplyr)
 library(tidyr)
 library(spdplyr)
@@ -15,14 +12,29 @@ library(plotly)
 ```
 
 
-```{r chart1}
-bar_chart_data <- read.csv('data/bar_chart_data.csv')
+```{r}
+setwd("/Users/tsaijeffray/Documents/GitHub/Group-E_Climate-Real-Estate/Shiny Draft")
+bar_chart_data <- read.csv('bar_chart_data.csv')
 bar_chart_data <- bar_chart_data %>% mutate(zip_code = as.character(zip_code))
-plot_ly(bar_chart_data, x=~zip_code, y=~single_fam_val, group=~date, color=~city, type='bar')
+buffalo_data <- bar_chart_data %>% filter(city=='Buffalo')
+onefourtwoohone <- buffalo_data %>% filter(zip_code=='14201')
+#we only want one zip code at a time 
+plot_ly(onefourtwoohone, x=~date, y=~single_fam_val, group=~zip_code, color=~date, type='bar') %>% layout(legend = list(orientation = "h",   # show entries horizontally
+                     xanchor = "center", 
+                     x = 0.5,y=-0.2), yaxis = list(
+      range=c(130000,145000)))
 ```
 
 ```{r}
-line_chart_data <- read.csv('data/line_chart_data.csv')
+buffalo_data <- bar_chart_data %>% filter(city=='Buffalo')
+plot_ly(buffalo_data, x=~zip_code, y=~single_fam_val, group=~zip_code, color=~date, type='bar')
+```
+
+
+
+```{r}
+setwd("/Users/tsaijeffray/Documents/GitHub/Group-E_Climate-Real-Estate/Shiny Draft")
+line_chart_data <- read.csv('line_chart_data.csv')
 plot_ly(line_chart_data, x=~date, y=~avg_single_fam_val, type = 'scatter', mode = 'lines',color= ~city) 
 # %>% add_trace(x =as.Date("2018-10-01"),type = 'scatter', mode = 'lines', line = list(color = 'black'),name = '') 
 ```
