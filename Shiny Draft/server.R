@@ -217,9 +217,19 @@ function(input, output, session){
   
   # map for New Orleans
   output$disaster_map_neworleans <- renderLeaflet({
-    leaflet() %>%
+    leaflet(refined_orleans_data) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -90.0715, lat = 29.95, zoom = 11)
+      setView(lng = -90.0715, lat = 29.95, zoom = 11) %>%
+      addPolygons(
+        fillColor = colorBin("RdBu", domain=refined_orleans_data$annual_change, bins=5),
+        weight = 2,
+        opacity = 1,
+        color = "gray",
+        fillOpacity = 0.8,
+        highlightOptions = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.8))
   })  
   
   # observing for value changes
@@ -249,7 +259,6 @@ function(input, output, session){
       
     bins = unname(quantile(bin_df_neworleans$selected_metric, probs = seq(0, 1, 1/5), na.rm = TRUE))
 
-    
     # set palette, hover text, y-axis labels on line chart
     if(chosen_metric_neworleans == 'annual_change') {
       
@@ -295,11 +304,9 @@ function(input, output, session){
         labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
                                     textsize = "15px",
                                     direction = "auto")) %>%
-      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_neworleans) 
+      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = y_lab) 
   
     # line chart
-    
-
     neworleans_line_data <- line_chart_data %>%
       filter(city == 'New Orleans')
     
@@ -356,7 +363,7 @@ function(input, output, session){
   
     neworleans_bar_data <- bar_chart_data %>%
       filter(city == 'New Orleans') %>%
-      filter(zip_code = 12345)
+      filter(zip_code == 12345)
     
     output$bar_chart_neworleans <- renderPlotly({
       plot_ly(neworleans_bar_data,
@@ -414,22 +421,27 @@ function(input, output, session){
     
     bins = unname(quantile(bin_df_coffeypark$selected_metric, probs = seq(0, 1, 1/5), na.rm = TRUE))
     
-    # set palette
+    # set palette, hover text, y-axis labels on line chart
     if(chosen_metric_coffeypark == 'annual_change') {
+      
       pal = "RdBu"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
+      y_lab = "Annual Change in HPI (%)"
+      
+    } else if(chosen_metric_coffeypark == 'HPI') {
+      
+      pal = "Greens"
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
+      y_lab = "Home Price Index"
+      
     } else {
       pal = "Greens"
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
+      y_lab = "Single Family Home Value ($)"
+      
     }
     
     pal_no = colorBin(pal, domain=interactive_map_coffeypark$selected_metric, bins=bins)
-    
-    if(chosen_metric_coffeypark == 'HPI') {
-      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
-    } else if(chosen_metric_coffeypark == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
-    } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
-    }
     
     labels_no = sprintf(
       hover,
@@ -454,18 +466,9 @@ function(input, output, session){
         labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
                                     textsize = "15px",
                                     direction = "auto")) %>%
-      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_coffeypark) 
+      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = y_lab) 
     
     # line chart
-    
-    # set axis labels
-    if(chosen_metric_coffeypark == 'HPI') {
-      y_lab = "Home Price Index"
-    } else if(chosen_metric_coffeypark == 'annual_change') {
-      y_lab = "Annual Change in HPI (%)"
-    } else {
-      y_lab = "Single Family Home Value ($)"
-    }
     
     coffeypark_line_data <- line_chart_data %>%
       filter(city == 'Coffey Park')
@@ -476,8 +479,8 @@ function(input, output, session){
     
     coffeypark_line_data2 <- coffeypark_line_data %>%
       filter(between(date,
-                     as.Date("2015-10-01", format = "%Y-%m-%d"),
-                     as.Date("2021-10-01", format = "%Y-%m-%d")
+                     as.Date("2015-09-01", format = "%Y-%m-%d"),
+                     as.Date("2021-09-01", format = "%Y-%m-%d")
                      )) %>%
       select(date, date2, avg_metric_coffeypark) %>% 
       rename(selected_metric = avg_metric_coffeypark)  
@@ -520,7 +523,7 @@ function(input, output, session){
     
     coffeypark_bar_data <- bar_chart_data %>% 
       filter(city == 'Coffey Park') %>%
-      filter(zip_code = 12345)
+      filter(zip_code == 12345)
     
     output$bar_chart_coffeypark <- renderPlotly({
       plot_ly(coffeypark_bar_data,
@@ -576,22 +579,27 @@ function(input, output, session){
     bins = unname(quantile(bin_df_moore$selected_metric, probs = seq(0, 1, 1/5), na.rm = TRUE))
     
     
-    # set palette
+    # set palette, hover text, y-axis labels on line chart
     if(chosen_metric_moore == 'annual_change') {
+      
       pal = "RdBu"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
+      y_lab = "Annual Change in HPI (%)"
+      
+    } else if(chosen_metric_moore == 'HPI') {
+      
+      pal = "Greens"
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
+      y_lab = "Home Price Index"
+      
     } else {
       pal = "Greens"
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
+      y_lab = "Single Family Home Value ($)"
+      
     }
     
     pal_no = colorBin(pal, domain=interactive_map_moore$selected_metric, bins=bins)
-    
-    if(chosen_metric_moore == 'HPI') {
-      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
-    } else if(chosen_metric_moore == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
-    } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
-    }
     
     labels_no = sprintf(
       hover,
@@ -616,19 +624,10 @@ function(input, output, session){
         labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
                                     textsize = "15px",
                                     direction = "auto")) %>%
-      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_moore) 
+      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = y_lab) 
     
     # line chart
-    
-    # set axis labels
-    if(chosen_metric_moore == 'HPI') {
-      y_lab = "Home Price Index"
-    } else if(chosen_metric_moore == 'annual_change') {
-      y_lab = "Annual Change in HPI (%)"
-    } else {
-      y_lab = "Single Family Home Value ($)"
-    }
-    
+
     moore_line_data <- line_chart_data %>%
       filter(city == 'Moore')
     
@@ -681,7 +680,7 @@ function(input, output, session){
     
     moore_bar_data <- bar_chart_data %>% 
       filter(city == 'Moore') %>%
-      filter(zip_code = 12345)
+      filter(zip_code == 12345)
     
     output$bar_chart_moore <- renderPlotly({
       plot_ly(moore_bar_data,
@@ -737,20 +736,25 @@ function(input, output, session){
     
     # set palette
     if(chosen_metric_buffalo == 'annual_change') {
+      
       pal = "RdBu"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
+      y_lab = "Annual Change in HPI (%)"
+      
+    } else if(chosen_metric_buffalo == 'HPI') {
+      
+      pal = "Greens"
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
+      y_lab = "Home Price Index"
+      
     } else {
       pal = "Greens"
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
+      y_lab = "Single Family Home Value ($)"
+      
     }
     
     pal_no = colorBin(pal, domain=interactive_map_buffalo$selected_metric, bins=bins)
-    
-    if(chosen_metric_buffalo == 'HPI') {
-      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
-    } else if(chosen_metric_buffalo == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
-    } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
-    }
     
     labels_no = sprintf(
       hover,
@@ -775,18 +779,9 @@ function(input, output, session){
         labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
                                     textsize = "15px",
                                     direction = "auto")) %>%
-      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_buffalo) 
+      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = y_lab) 
     
     # line chart
-    
-    # set axis labels
-    if(chosen_metric_buffalo == 'HPI') {
-      y_lab = "Home Price Index"
-    } else if(chosen_metric_buffalo == 'annual_change') {
-      y_lab = "Annual Change in HPI (%)"
-    } else {
-      y_lab = "Single Family Home Value ($)"
-    }
     
     buffalo_line_data <- line_chart_data %>%
       filter(city == 'Buffalo')
@@ -841,7 +836,7 @@ function(input, output, session){
     
     buffalo_bar_data <- bar_chart_data %>%
       filter(city == 'Buffalo') %>%
-      filter(zip_code = 12345)
+      filter(zip_code == 12345)
     
     output$bar_chart_buffalo <- renderPlotly({
       plot_ly(buffalo_bar_data,
@@ -896,20 +891,20 @@ function(input, output, session){
     
     bins = unname(quantile(bin_df_grandisle$selected_metric, probs = seq(0, 1, 1/5), na.rm = TRUE))
     
-    # set palette
     if(chosen_metric_grandisle == 'annual_change') {
+      
       pal = "RdBu"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
+      y_lab = "Annual Change in HPI (%)"
+      
     } else {
       pal = "Greens"
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
+      y_lab = "Single Family Home Value ($)"
+      
     }
     
     pal_no = colorBin(pal, domain=interactive_map_grandisle$selected_metric, bins=bins)
-    
-    if (chosen_metric_grandisle == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
-    } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
-    }
     
     labels_no = sprintf(
       hover,
@@ -934,17 +929,9 @@ function(input, output, session){
         labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
                                     textsize = "15px",
                                     direction = "auto")) %>%
-      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = chosen_metric_grandisle) 
+      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = y_lab) 
     
     # line chart
-    
-    # set axis labels
-    if(chosen_metric_grandisle == 'annual_change') {
-      y_lab = "Annual Change in HPI (%)"
-    } else {
-      y_lab = "Single Family Home Value ($)"
-    }
-    
     grandisle_line_data <- line_chart_data %>%
       filter(city == 'Grand Isle')
     
@@ -998,7 +985,7 @@ function(input, output, session){
     #LINE CHART
     grandisle_bar_data <- bar_chart_data %>%
       filter(city == 'Grand Isle') %>%
-      filter(zip_code = 12345)
+      filter(zip_code == 12345)
     
     output$bar_chart_grandisle <- renderPlotly({
       plot_ly(grandisle_bar_data,
