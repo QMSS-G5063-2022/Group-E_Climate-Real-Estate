@@ -1,11 +1,11 @@
 vars <- c(
   "Annual Home Price Index (HPI)" = "HPI",
   "Single Family Home Value" = "single_fam_val",
-  "Annual Change in HPI (%)" = "annual_change")
+  "Rolling Annual Change in HPI (%)" = "annual_change")
 
 # for grand isle, which doesn't have HPI data
 vars_special <- c(  "Single Family Home Value" = "single_fam_val",
-                    "Annual Change in HPI (%)" = "annual_change")
+                    "Rolling Annual Change in Single Family Home Value (%)" = "annual_change")
 
 locations <- c("New Orleans - Hurricane" = "neworleans",
                "Coffey Park - Wildfires" = "coffeypark",
@@ -16,34 +16,42 @@ locations <- c("New Orleans - Hurricane" = "neworleans",
 navbarPage(h4("Major Disasters' Real Estate Effects"),
            id="nav",
            
-           tabPanel(h6("Introduction"),
+           tabPanel(h6(strong("Introduction"), style = "color: #e0194d"),
                     id = "intro",
                     
-                    h2("Real Estate amid Disaster: A Data Visualization Exploration"),
+                    h2(strong("REAL ESTATE AMID DISASTER: A VISUAL EXPLORATION")),
                     h1(" "),
                     p("Rory Butler, Cindy Chen, Lizabeth Singh, Jeffray Tsai"),
                     h1(" "),
+                    fluidRow(
+                      splitLayout(cellsWidths = c("38%", "38%", "38%", "38%", "38%"),
+                    img(id = "neworleanspic", src = "hurricane-katrina-png.png", align = "center", height = "55%", width = "55%"),
+                    img(id = "coffeypic", src = 'coffey-park-fire-png.png', align = "center", height = "55%", width = "55%"),
+                    img(id = "moorepic", src = 'moore-ok-tornado-png.png', align = "center", height = "55%", width = "55%"),
+                    img(id = "buffalopic", src = 'buffalo-snow-png.png', align = "center", height = "55%", width = "55%"),
+                    img(id = "grandislepic", src = 'grand-isle-oil-png.png', align = "center", height = "55%", width = "55%"))),
+                    h4(strong("PROJECT PURPOSE")),
                     h5("As climate change and ongoing human events increases both the scale and frequency of severe environmental
                     events, these consequences also have immediate impacts on real estate, be that housing sale prices, rental prices, or home price indices.  In profiling
                        four (1) notable natural disasters in the United States, along with one human-made disaster (an oil spill), we aim to understand
-                       the immediate and short-term impact that natural destruction and catastrophe induces on the housing market.
-                       
-                       Is the housing market more resilient to certain types of disasters?  How quickly does it take to bounce back?
-                       How soon after a disaster is it the ideal time to buy a home and will the value recover?
-                       Our project explores these questions in an engaging and interactive manner."),
+                       the immediate and short-term impact that natural destruction and catastrophe induces on the housing market."),
+                        tags$li("Is the housing market more resilient to certain types of disasters?"),
+                        tags$li("How quickly does it take to bounce back?"),
+                        tags$li("How soon after a disaster is it the ideal time to buy a home and will the value recover?"),
+                        tags$li("Our project explores these questions in an engaging and interactive manner."),
+                         
                     h1(" "),
-                    h5("Each subsequent tab in this app spotlights a unique disaster.  You will find an interactive map to explore and understand
-                       various home value metrics by zip code.  Use the month/year slider to see how these metrics change over time."),
-                    h1(" "),
-                    img(id = "neworleanspic", src = "hurricane-katrina-png.png", align = "center", height = "15%", width = "15%"),
-                    img(id = "coffeypic", src = 'coffey-park-fire-png.png', align = "center", height = "15%", width = "15%"),
-                    img(id = "moorepic", src = 'moore-ok-tornado-png.png', align = "center", height = "15%", width = "15%"),
-                    img(id = "buffalopic", src = 'buffalo-snow-png.png', align = "center", height = "15%", width = "15%"),
-                    img(id = "grandislepic", src = 'grand-isle-oil-png.png', align = "center", height = "15%", width = "15%"),
-                    useShinyjs()
+                    h4(strong("HOW TO USE THIS APP")),
+                    h5("Each subsequent tab in this app spotlights a unique disaster"),
+                    tags$li("Use the month/year slider to see how these real estate valus change over time before/after the disaster."),
+                    tags$li("Toggle between real estate metrics like home price index (HPI), mean single family home value, and % annual HPI change."),
+                    tags$li("Hover over the interactive map to explore zip codes' real estates "),
+                    tags$li("View the complementary plots to understand how the disaster changed real estate values 12 months before and after its consequences."),
+                    tags$li("Read through the Insights tab to see our notable trends from our data."),
+                    tags$li(strong("**IT TAKES A MOMENT FOR THE DATA TO LOAD THE FIRST TIME YOU SWITCH TABS**"))
            ),
            
-           tabPanel(h6("New Orleans, LA"),
+           tabPanel(h6("New Orleans, LA", style = "color: #d61849"),
                     id = "neworleans_tab",
                     
                     div(class="outer",
@@ -54,7 +62,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
          
          absolutePanel(id = "controls",
                        class = "panel panel-default", fixed = TRUE,
-                draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
+                draggable = TRUE, top = 100, left = 20, right = "auto", bottom = "auto",
                 width = 330, height = "auto",
                 
                 h5("Hurricane"),
@@ -77,7 +85,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                   'Data compiled from FHFA and Zillow')
   )),
   
-  tabPanel(h6("Coffey Park, CA"),
+  tabPanel(h6("Coffey Park, CA", style = "color:#c71644"),
            id = "coffeypark_tab",
            
            div(class="outer",
@@ -88,7 +96,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
       
       absolutePanel(id = "controls2",
                     class = "panel panel-default", fixed = TRUE,
-                    draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
+                    draggable = TRUE, top = 100, left = 20, right = "auto", bottom = "auto",
                     width = 330, height = "auto",
                     
                     h5("Wildfires"),
@@ -112,7 +120,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                     
       )),
       
-  tabPanel(h6("Moore, OK"),
+  tabPanel(h6("Moore, OK", style = "color: #b5123c"),
            id = "moore_tab",
            
            div(class="outer",
@@ -123,7 +131,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
            leaflet::leafletOutput("disaster_map_moore", height = "100%", width = "100%"),
            
            absolutePanel(id = "controls3", class = "panel panel-default", fixed = TRUE,
-                         draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
+                         draggable = TRUE, top = 100, left = 20, right = "auto", bottom = "auto",
                          width = 330, height = "auto",
                          
                         h5("Tornado"),
@@ -146,7 +154,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                     'Data compiled from FHFA and Zillow')
            ))),
   
-  tabPanel(h6("Buffalo, NY"),
+  tabPanel(h6("Buffalo, NY", style = "color: #a30f35"),
            id = "buffalo_tab",
            div(class="outer",
                id = "div4",
@@ -155,7 +163,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                leaflet::leafletOutput("disaster_map_buffalo", height = "100%", width = "100%"),
                
                absolutePanel(id = "controls4", class = "panel panel-default", fixed = TRUE,
-                             draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
+                             draggable = TRUE, top = 100, left = 20, right = "auto", bottom = "auto",
                              width = 330, height = "auto",
                              
                              h5("Snowstorm"),
@@ -177,7 +185,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                tags$div(id="cite4",
                         'Data compiled from FHFA and Zillow')
            )),
-  tabPanel(h6("Grand Isle, LA"),
+  tabPanel(h6("Grand Isle, LA", style = "color: #960f32"),
            id = "grandisle_tab",
 
            div(class="outer",
@@ -187,7 +195,7 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                leaflet::leafletOutput("disaster_map_grandisle", height = "100%", width = "100%"),
                
                absolutePanel(id = "controls5", class = "panel panel-default", fixed = TRUE,
-                             draggable = TRUE, top = 100, left = "auto", right = 20, bottom = "auto",
+                             draggable = TRUE, top = 100, left = 20, right = "auto", bottom = "auto",
                              width = 330, height = "auto",
                              
                              h5("BP Oil Spill"),
@@ -210,6 +218,31 @@ navbarPage(h4("Major Disasters' Real Estate Effects"),
                                       'Data compiled from FHFA and Zillow')
                              
                )),
-  tabPanel(h6("Insights",
-              id = "insights_tab")))
+  tabPanel(h6(strong("Insights | Commentary"), style = "color:#96114d"),
+              id = "insights_tab",
+              
+            h2(strong("INSIGHTS BY DISASTER EVENT")),
+              h1(" "),
+            h4(strong("NEW ORLEANS, LA - HURRICANE")),
+              h1(""),
+              tags$li(""),
+           h1(""),
+            h4(strong("COFFEY PARK, CA - WILDFIRES")),
+              h1(""),
+           tags$li(""),
+           h1(""),
+            h4(strong("MOORE, OK - TORNADO")),
+              h1(""),
+           tags$li(""),
+           h1(""),
+            h4(strong("BUFFALO, NY - SNOWSTORM")),
+              h1("When it comes "),
+           tags$li(""),
+           h1(""),
+            h4(strong("GRAND ISLE, LA - BP OIL SPILL")),
+              h1(""),
+           tags$li("After the infamous BP Oil Spill in Apr 2010, Grand Isle's single family (vacation) homes' values steadily declined."),
+           tags$li("While home values' rolling 12 months' change had rallied into positive growth the year before the spill, the incident led to a firm decline shortly afterward."),
+           tags$li(""),
+           h1("")))
                                 
