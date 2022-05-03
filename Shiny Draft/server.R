@@ -309,8 +309,8 @@ function(input, output, session){
     
     neworleans_line_data2 <- neworleans_line_data %>%
       filter(between(date,
-                     as.Date("2004-08-01", format = "%Y-%m-%d"),
-                     as.Date("2006-08-01", format = "%Y-%m-%d"))) %>%
+                     as.Date("2002-08-01", format = "%Y-%m-%d"),
+                     as.Date("2008-08-01", format = "%Y-%m-%d"))) %>%
       select(date, date2, avg_metric_neworleans) %>% 
       rename(selected_metric = avg_metric_neworleans)  
       
@@ -321,13 +321,18 @@ function(input, output, session){
                      xend = as.Date("2005-08-01", format = "%Y-%m-%d"),
                      y = -100000, yend = 1000000) %>%
         add_text(text = "Hurricane Katrina",
-                 x = as.Date("2005-08-01", format = "%Y-%m-%d"),
-                 y = max(neworleans_line_data2$selected_metric)) %>%
+                 textfont = list(size = 10,
+                                 color = "darkred"),
+                 x = as.Date("2006-08-01", format = "%Y-%m-%d"),
+                 y = ifelse(max(neworleans_line_data2$selected_metric) > 0,
+                            max(neworleans_line_data2$selected_metric) * 0.8,
+                            min(neworleans_line_data2$selected_metric) * 1.2)) %>%
         layout(showlegend = FALSE,
-               xaxis = list(range = c(as.Date("2004-08-01", format = "%Y-%m-%d"),
-                                      as.Date("2006-08-01", format = "%Y-%m-%d")),
+               xaxis = list(range = c(as.Date("2002-08-01", format = "%Y-%m-%d"),
+                                      as.Date("2008-08-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
-                            title = "Month / Year"),
+                            title = "Month / Year",
+                            titlefont = list(size = 9)),
                yaxis = list(title = y_lab, range = c(ifelse(min(neworleans_line_data2$selected_metric) > 0,
                                              min(neworleans_line_data2$selected_metric) * 0.9,
                                              min(neworleans_line_data2$selected_metric) * 1.1),
@@ -335,7 +340,14 @@ function(input, output, session){
                                              max(neworleans_line_data2$selected_metric) * 1.1,
                                              max(neworleans_line_data2$selected_metric) * 0.9)),
                             title = chosen_metric_neworleans,
-                            tickfont = list(size = 8)))
+                            tickfont = list(size = 8),
+                            titlefont = list(size = 9)),
+               title = list(text = ifelse(chosen_metric_neworleans == "annual_change",
+                                          "Avg Annual % Change in HPI (+/- 3 yrs of Hurricane)",
+                                          ifelse(chosen_metric_neworleans == "HPI",
+                                                 "Avg Annual HPI \n(+/- 3 yrs of Hurricane)",
+                                                 "Avg Monthly Single Family Home \nValue (+/- 3 yrs of Hurricane)")),
+                            font = list(size = 11)))
       })
     
     # update bar chart based on what's clicked
@@ -378,8 +390,8 @@ function(input, output, session){
       select(date, zip_code, chosen_metric_coffeypark) %>% 
       rename(selected_metric = chosen_metric_coffeypark) %>%
       filter(between(date,
-                     as.Date("2014-10-01", format = "%Y-%m-%d"),
-                     as.Date("2020-10-01", format = "%Y-%m-%d")))
+                     as.Date("2015-09-01", format = "%Y-%m-%d"),
+                     as.Date("2021-09-01", format = "%Y-%m-%d")))
     
     bins = unname(quantile(bin_df_coffeypark$selected_metric, probs = seq(0, 1, 1/5), na.rm = TRUE))
     
@@ -445,8 +457,8 @@ function(input, output, session){
     
     coffeypark_line_data2 <- coffeypark_line_data %>%
       filter(between(date,
-                     as.Date("2014-10-01", format = "%Y-%m-%d"),
-                     as.Date("2020-10-01", format = "%Y-%m-%d")
+                     as.Date("2015-10-01", format = "%Y-%m-%d"),
+                     as.Date("2021-10-01", format = "%Y-%m-%d")
                      )) %>%
       select(date, date2, avg_metric_coffeypark) %>% 
       rename(selected_metric = avg_metric_coffeypark)  
@@ -454,17 +466,22 @@ function(input, output, session){
     output$line_chart_coffeypark <- renderPlotly({
       plot_ly(coffeypark_line_data2, x = ~date, y =~selected_metric, 
               type = 'scatter', mode = 'lines', name = 'Coffey Park Mean Prices') %>%
-            add_segments(x = as.Date("2017-10-01", format = "%Y-%m-%d"),
-                         xend = as.Date("2017-10-01", format = "%Y-%m-%d"),
+            add_segments(x = as.Date("2018-09-01", format = "%Y-%m-%d"),
+                         xend = as.Date("2018-09-01", format = "%Y-%m-%d"),
                          y = -2000000, yend = 30000000) %>%
-        add_text(text = "Wildfire",
-                 x = as.Date("2017-10-01", format = "%Y-%m-%d"),
-                 y = max(coffeypark_line_data2$selected_metric)) %>%
+        add_text(text = "Snell Wildfire",
+                 textfont = list(size = 10,
+                                 color = "darkred"),
+                 x = as.Date("2019-09-01", format = "%Y-%m-%d"),
+                 y = ifelse(max(coffeypark_line_data2$selected_metric) > 0,
+                            max(coffeypark_line_data2$selected_metric) * 0.8,
+                            min(coffeypark_line_data2$selected_metric) * 1.2)) %>%
             layout(showlegend = FALSE,
-                   xaxis = list(range = c(as.Date("2014-10-01", format = "%Y-%m-%d"),
-                                          as.Date("2020-10-01", format = "%Y-%m-%d")),
+                   xaxis = list(range = c(as.Date("2015-09-01", format = "%Y-%m-%d"),
+                                          as.Date("2021-09-01", format = "%Y-%m-%d")),
                                 tickfont = list(size = 8),
-                                title = "Month / Year"),
+                                title = "Month / Year",
+                                titlefont = list(size = 9)),
                    yaxis = list(title = y_lab, range = c(ifelse(min(coffeypark_line_data2$selected_metric) > 0,
                                                  min(coffeypark_line_data2$selected_metric) * 0.9,
                                                  min(coffeypark_line_data2$selected_metric) * 1.1),
@@ -472,7 +489,14 @@ function(input, output, session){
                                                  max(coffeypark_line_data2$selected_metric) * 1.1,
                                                  max(coffeypark_line_data2$selected_metric) * 0.9)),
                                 title = chosen_metric_coffeypark,
-                                tickfont = list(size = 8)))
+                                tickfont = list(size = 8),
+                                titlefont = list(size = 9)),
+                   title = list(text = ifelse(chosen_metric_coffeypark == "annual_change",
+                                              "Avg Annual % Change in HPI (+/- 3 yrs of Wildfire)",
+                                              ifelse(chosen_metric_coffeypark == "HPI",
+                                                     "Avg Annual HPI \n(+/- 3 yrs of Wildfire)",
+                                                     "Avg Monthly Single Family Home \nValue (+/- 3 yrs of Wildfire)")),
+                                font = list(size = 11)))
     })
     
     
@@ -578,8 +602,8 @@ function(input, output, session){
     
     moore_line_data2 <- moore_line_data %>%
       filter(between(date,
-                     as.Date("2012-05-01", format = "%Y-%m-%d"),
-                     as.Date("2014-05-01", format = "%Y-%m-%d"))) %>%
+                     as.Date("2010-05-01", format = "%Y-%m-%d"),
+                     as.Date("2016-05-01", format = "%Y-%m-%d"))) %>%
       select(date, date2, avg_metric_moore) %>% 
       rename(selected_metric = avg_metric_moore)  
     
@@ -590,13 +614,18 @@ function(input, output, session){
                      xend = as.Date("2013-05-01", format = "%Y-%m-%d"),
                      y = -2000000, yend = 300000000) %>%
       add_text(text = "Tornado",
-               x = as.Date("2013-05-01", format = "%Y-%m-%d"),
-               y = max(moore_line_data2$selected_metric)) %>%
+               textfont = list(size = 10,
+                               color = "darkred"),
+               x = as.Date("2014-05-01", format = "%Y-%m-%d"),
+               y = ifelse(max(moore_line_data2$selected_metric) > 0,
+                          max(moore_line_data2$selected_metric) * 0.8,
+                          min(moore_line_data2$selected_metric) * 1.2)) %>%
         layout(showlegend = FALSE,
-               xaxis = list(range = c(as.Date("2012-05-01", format = "%Y-%m-%d"),
-                                      as.Date("2014-05-01", format = "%Y-%m-%d")),
+               xaxis = list(range = c(as.Date("2010-05-01", format = "%Y-%m-%d"),
+                                      as.Date("2016-05-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
-                            title = "Month / Year"),
+                            title = "Month / Year",
+                            titlefont = list(size = 9)),
                yaxis = list(title = y_lab, range = c(ifelse(min(moore_line_data2$selected_metric) > 0,
                                              min(moore_line_data2$selected_metric) * 0.9,
                                              min(moore_line_data2$selected_metric) * 1.1),
@@ -604,7 +633,14 @@ function(input, output, session){
                                              max(moore_line_data2$selected_metric) * 1.1,
                                              max(moore_line_data2$selected_metric) * 0.9)),
                             title = chosen_metric_moore,
-                            tickfont = list(size = 8))
+                            tickfont = list(size = 8),
+                            titlefont = list(size = 9)),
+               title = list(text = ifelse(chosen_metric_moore == "annual_change",
+                                          "Avg Annual % Change in HPI \n(+/- 3 yrs of Tornado)",
+                                          ifelse(chosen_metric_moore == "HPI",
+                                                 "Avg Annual HPI (+/- 3 yrs of Tornado)",
+                                                 "Avg Monthly Single Family Home \nValue (+/- 3 yrs of Tornado)")),
+                            font = list(size = 11))
                )})
     
   }) 
@@ -708,8 +744,8 @@ function(input, output, session){
     
     buffalo_line_data2 <- buffalo_line_data %>%
       filter(between(date,
-                     as.Date("2013-11-01", format = "%Y-%m-%d"),
-                     as.Date("2015-11-01", format = "%Y-%m-%d"))) %>%
+                     as.Date("2011-11-01", format = "%Y-%m-%d"),
+                     as.Date("2017-11-01", format = "%Y-%m-%d"))) %>%
       select(date, date2, avg_metric_buffalo) %>% 
       rename(selected_metric = avg_metric_buffalo)  
     
@@ -720,13 +756,18 @@ function(input, output, session){
                      xend = as.Date("2014-11-01", format = "%Y-%m-%d"),
                      y = -100000, yend = 30000000) %>%
         add_text(text = "Snowstorm",
+                 textfont = list(size = 10,
+                                 color = "darkred"),
                  x = as.Date("2014-11-01", format = "%Y-%m-%d"),
-                 y = max(buffalo_line_data2$selected_metric)) %>%
+                 y = ifelse(max(buffalo_line_data2$selected_metric) > 0,
+                            max(buffalo_line_data2$selected_metric) * 0.8,
+                            min(buffalo_line_data2$selected_metric) * 1.2)) %>%
         layout(showlegend = FALSE,
-               xaxis = list(range = c(as.Date("2013-11-01", format = "%Y-%m-%d"),
-                                      as.Date("2015-11-01", format = "%Y-%m-%d")),
+               xaxis = list(range = c(as.Date("2011-11-01", format = "%Y-%m-%d"),
+                                      as.Date("2017-11-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
-                            title = "Month/Year"),
+                            title = "Month/Year",
+                            titlefont = list(size = 9)),
                yaxis = list(title = y_lab, range = c(ifelse(min(buffalo_line_data2$selected_metric) > 0,
                                              min(buffalo_line_data2$selected_metric) * 0.9,
                                              min(buffalo_line_data2$selected_metric) * 1.1),
@@ -734,7 +775,14 @@ function(input, output, session){
                                              max(buffalo_line_data2$selected_metric) * 1.1,
                                              max(buffalo_line_data2$selected_metric) * 0.9)),
                             title = chosen_metric_buffalo,
-                            tickfont = list(size = 8))
+                            titlefont = list(size = 9),
+                            tickfont = list(size = 8)),
+               title = list(text = ifelse(chosen_metric_buffalo == "annual_change",
+                                          "Avg Annual % Change in HPI (+/- 3 yrs of Snowstorm)",
+                                          ifelse(chosen_metric_buffalo == "HPI",
+                                          "Avg Annual HPI \n(+/- 3 yrs of Snowstorm)",
+                                          "Avg Monthly Single Family Home \nValue (+/- 3 yrs of Snowstorm)")),
+                            font = list(size = 11))
                )
       })
     
@@ -834,33 +882,44 @@ function(input, output, session){
     
     grandisle_line_data2 <- grandisle_line_data %>%
       filter(between(date,
-                     as.Date("2009-04-01", format = "%Y-%m-%d"),
-                     as.Date("2011-04-01", format = "%Y-%m-%d"))) %>%
+                     as.Date("2007-04-01", format = "%Y-%m-%d"),
+                     as.Date("2013-04-01", format = "%Y-%m-%d"))) %>%
       select(date, date2, avg_metric_grandisle) %>% 
       rename(selected_metric = avg_metric_grandisle)  
     
     output$line_chart_grandisle <- renderPlotly({
       plot_ly(grandisle_line_data2, x = ~date, y =~selected_metric, 
               type = 'scatter', mode = 'lines', name = 'Grand Isle Mean Prices') %>%
-        add_segments(x = as.Date("2010-04-01", format = "%Y-%m-%d"),
-                     xend = as.Date("2010-04-01", format = "%Y-%m-%d"),
+        add_segments(x = as.Date("2011-04-01", format = "%Y-%m-%d"),
+                     xend = as.Date("2011-04-01", format = "%Y-%m-%d"),
                      y = -100000000, yend = 3000000) %>%
         add_text(text = "BP Oil Spill",
+                 textfont = list(size = 10,
+                                 color = "darkred"),
                  x = as.Date("2010-04-01", format = "%Y-%m-%d"),
-                 y = max(grandisle_line_data2$selected_metric)) %>%
+                 y = ifelse(max(grandisle_line_data2$selected_metric) > 0,
+                            max(grandisle_line_data2$selected_metric) * 0.8,
+                            min(grandisle_line_data2$selected_metric) * 1.2)) %>%
         layout(showlegend = FALSE,
-               xaxis = list(range = c(as.Date("2009-04-01", format = "%Y-%m-%d"),
-                                      as.Date("2011-04-01", format = "%Y-%m-%d")),
+               xaxis = list(range = c(as.Date("2007-04-01", format = "%Y-%m-%d"),
+                                      as.Date("2013-04-01", format = "%Y-%m-%d")),
                             tickfont = list(size = 8),
-                            title = "Month / Year"),
-               yaxis = list(title = y_lab, range = c(ifelse(min(grandisle_line_data2$selected_metric) > 0,
+                            title = "Month / Year",
+                            titlefont = list(size = 9)),
+               yaxis = list(title = y_lab,
+                            range = c(ifelse(min(grandisle_line_data2$selected_metric) > 0,
                                          min(grandisle_line_data2$selected_metric) * 0.9,
                                          min(grandisle_line_data2$selected_metric) * 1.1),
                                       ifelse(max(grandisle_line_data2$selected_metric) > 0,
                                              max(grandisle_line_data2$selected_metric) * 1.1,
                                              max(grandisle_line_data2$selected_metric) * 0.9)),
                             title = chosen_metric_grandisle,
-                            tickfont = list(size = 8)))
+                            titlefont = list(size = 9),
+                            tickfont = list(size = 8)),
+               title = list(text = ifelse(chosen_metric_grandisle == 'annual_change',
+                              "Avg Annual % Change in Single Family \n Home Value (+/- 3 yrs of Spill)",
+                              "Avg Monthly Single Family Home \nValue (+/- 3 yrs of Spill)"),
+                            font = list(size = 11)))
     
   }) })
   
