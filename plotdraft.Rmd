@@ -15,11 +15,17 @@ library(plotly)
 ```{r}
 setwd("/Users/tsaijeffray/Documents/GitHub/Group-E_Climate-Real-Estate/Shiny Draft")
 bar_chart_data <- read.csv('bar_chart_data.csv')
-bar_chart_data <- bar_chart_data %>% mutate(zip_code = as.character(zip_code))
-buffalo_data <- bar_chart_data %>% filter(city=='Buffalo')
-onefourtwoohone <- buffalo_data %>% filter(zip_code=='14201')
+coffeypark_bar_data <- bar_chart_data %>% filter(city == 'Coffey Park')
+orleans_bar_data <- bar_chart_data %>% filter(city == 'New Orleans')
+moore_bar_data <- bar_chart_data %>% filter(city == 'Moore')
+grandisle_bar_data <- bar_chart_data %>% filter(city == 'Grand Isle')
+buffalo_bar_data <- bar_chart_data %>% filter(city == 'Buffalo')
+```
+
+```{r}
+onefourtwoohone <- buffalo_bar_data %>% filter(zip_code=='14201')
 #we only want one zip code at a time 
-plot_ly(onefourtwoohone, x=~date, y=~single_fam_val, group=~zip_code, color=~date, type='bar') %>% layout(legend = list(orientation = "h",   # show entries horizontally
+plot_ly(onefourtwoohone, x=~date, y=~single_fam_val, group=~zip_code, color=~date, type='bar') %>% layout(legend = list(orientation = "h", 
                      xanchor = "center", 
                      x = 0.5,y=-0.2), yaxis = list(
       range=c(130000,145000)))
@@ -49,7 +55,24 @@ output$line_chart_grandisle <- renderPlotly({plot_ly(refined_orleans_data, x = ~
 ```
 
 ```{r}
-output$bar_chart_neworleans <- renderPlotly({plot_ly(Prefined_orleans_data, x = ~zip_code, y = ~single_fam_val, type = 'bar', mode = 'lines', name = 'New Orleans Prices by Zip Codes')})
+output$temp <- renderPrint({
+    input$map_marker_click$lng
+  })
+  
+  
+  output$bar_chart_neworleans <- renderPlotly({plot_ly(temp <- orleans_bar_data, 
+                                                       x=~date, y=~single_fam_val, 
+                                                       group=~zip_code, color=~date, type='bar') %>% 
+                          layout(legend = list(orientation = "h", 
+                           xanchor = "center", 
+                           x = 0.5,y=-0.2), yaxis = list(range=c(130000,145000)))})
+```
+
+```{r}
+output$bar_chart_neworleans <- renderPlotly({plot_ly(temp <- orleans_bar_data, x=~date, y=~single_fam_val, group=~zip_code, color=~date, type='bar') %>% layout(legend = list(orientation = "h", 
+                     xanchor = "center", 
+                     x = 0.5,y=-0.2), yaxis = list(
+      range=c(130000,145000)))})
 output$bar_chart_moore <- renderPlotly({plot_ly(refined_moore_data, x = ~zip_code, y = ~single_fam_val, type = 'bar', mode = 'lines', name = 'Moore Prices by Zip Codes')})
 output$bar_chart_buffalo <- renderPlotly({plot_ly(refined_buffalo_data, x = ~zip_code, y = ~single_fam_val, type = 'bar', mode = 'lines', name = 'Buffalo Prices by Zip Codes')})
 output$bar_chart_coffeypark <- renderPlotly({plot_ly(refined_coffey_park_data, x = ~zip_code, y = ~single_fam_val, type = 'bar', mode = 'lines', name = 'Coffey Park Prices by Zip Codes')})
