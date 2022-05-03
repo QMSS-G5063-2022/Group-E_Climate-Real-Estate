@@ -240,26 +240,20 @@ function(input, output, session){
       rename(selected_metric = chosen_metric_neworleans)
     
     # set palette
-    if(chosen_metric_neworleans == 'HPI') {
-      pal = "YlGnBu"
-    } else if(chosen_metric_neworleans == 'annual_change') {
-      pal = "PuBu"
-    } else if(chosen_metric_neworleans == 'single_fam_val') {
-      pal = "YlOrRd"
+    if(chosen_metric_neworleans == 'annual_change') {
+      pal = "RdBu"
     } else {
-      pal = "PuRd"
+      pal = "Greens"
     }
     
     pal_no = colorBin(pal, domain=interactive_map_neworleans$selected_metric, bins=5)
     
     if(chosen_metric_neworleans == 'HPI') {
-      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
     } else if(chosen_metric_neworleans == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in Home Price: $%g"
-    } else if(chosen_metric_neworleans == 'single_fam_val') {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
     } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
     }
     
     labels_no = sprintf(
@@ -363,26 +357,20 @@ function(input, output, session){
       rename(selected_metric = chosen_metric_coffeypark)
     
     # set palette
-    if(chosen_metric_coffeypark == 'HPI') {
-      pal = "YlGnBu"
-    } else if(chosen_metric_coffeypark == 'annual_change') {
-      pal = "PuBu"
-    } else if(chosen_metric_coffeypark == 'single_fam_val') {
-      pal = "YlOrRd"
+    if(chosen_metric_coffeypark == 'annual_change') {
+      pal = "RdBu"
     } else {
-      pal = "PuRd"
+      pal = "Greens"
     }
     
     pal_no = colorBin(pal, domain=interactive_map_coffeypark$selected_metric, bins=5)
     
     if(chosen_metric_coffeypark == 'HPI') {
-      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
     } else if(chosen_metric_coffeypark == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
-    } else if(chosen_metric_coffeypark == 'single_fam_val') {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
     } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
     }
     
     labels_no = sprintf(
@@ -482,26 +470,20 @@ function(input, output, session){
       rename(selected_metric = chosen_metric_moore)
     
     # set palette
-    if(chosen_metric_moore == 'HPI') {
-      pal = "YlGnBu"
-    } else if(chosen_metric_moore == 'annual_change') {
-      pal = "PuBu"
-    } else if(chosen_metric_moore == 'single_fam_val') {
-      pal = "YlOrRd"
+    if(chosen_metric_moore == 'annual_change') {
+      pal = "RdBu"
     } else {
-      pal = "PuRd"
+      pal = "Greens"
     }
     
     pal_no = colorBin(pal, domain=interactive_map_moore$selected_metric, bins=5)
     
     if(chosen_metric_moore == 'HPI') {
-      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
     } else if(chosen_metric_moore == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in Home Price: $%g"
-    } else if(chosen_metric_moore == 'single_fam_val') {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
     } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
     }
     
     labels_no = sprintf(
@@ -599,26 +581,20 @@ function(input, output, session){
       rename(selected_metric = chosen_metric_buffalo)
     
     # set palette
-    if(chosen_metric_buffalo == 'HPI') {
-      pal = "YlGnBu"
-    } else if(chosen_metric_buffalo == 'annual_change') {
-      pal = "PuBu"
-    } else if(chosen_metric_buffalo == 'single_fam_val') {
-      pal = "YlOrRd"
+    if(chosen_metric_buffalo == 'annual_change') {
+      pal = "RdBu"
     } else {
-      pal = "PuRd"
+      pal = "Greens"
     }
     
     pal_no = colorBin(pal, domain=interactive_map_buffalo$selected_metric, bins=5)
     
     if(chosen_metric_buffalo == 'HPI') {
-      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
+      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
     } else if(chosen_metric_buffalo == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in Home Price: $%g"
-    } else if(chosen_metric_buffalo == 'single_fam_val') {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
     } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
     }
     
     labels_no = sprintf(
@@ -717,20 +693,17 @@ function(input, output, session){
     
     # set palette
     if(chosen_metric_grandisle == 'annual_change') {
-      pal = "PuBu"
-    } else if(chosen_metric_grandisle == 'single_fam_val') {
-      pal = "YlOrRd"}
+      pal = "RdBu"
+    } else {
+      pal = "Greens"
+    }
     
     pal_no = colorBin(pal, domain=interactive_map_grandisle$selected_metric, bins=5)
     
-    if(chosen_metric_grandisle == 'HPI') {
-      hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): %g"
-    } else if(chosen_metric_grandisle == 'annual_change') {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
-    } else if(chosen_metric_grandisle == 'single_fam_val') {
-      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: $%g"
+    if (chosen_metric_grandisle == 'annual_change') {
+      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>"
     } else {
-      hover = "Zip Code: <strong>%s</strong><br/>Annual Change in HPI (%%): %g"
+      hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
     }
     
     labels_no = sprintf(
