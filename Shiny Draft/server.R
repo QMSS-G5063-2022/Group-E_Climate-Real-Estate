@@ -234,7 +234,7 @@ function(input, output, session){
   
   output$disaster_map_neworleans <- renderLeaflet({
     leaflet(base_orleans_date) %>%
-      addProviderTiles(providers$CartoDB.Positron) %>%
+      addProviderTiles(providers$CartoDB.VoyagerLabelsUnder) %>%
       setView(lng = -90.0715, lat = 29.95, zoom = 11) %>%
       addPolygons(
         fillColor = ~pal_no(annual_change),
@@ -437,7 +437,7 @@ function(input, output, session){
   
   output$disaster_map_coffeypark <- renderLeaflet({
     leaflet(base_coffey_date) %>%
-      addProviderTiles(providers$CartoDB.Positron) %>%
+      addProviderTiles(providers$OpenStreetMap.Mapnik) %>%
       setView(lng = -122.748, lat = 38.4777, zoom = 11) %>%
       addPolygons(
         fillColor = ~pal_cp(annual_change),
@@ -632,7 +632,7 @@ function(input, output, session){
   
   output$disaster_map_moore <- renderLeaflet({
     leaflet(base_moore_date) %>%
-      addProviderTiles(providers$CartoDB.Positron) %>%
+      addProviderTiles(providers$CartoDB.DarkMatter) %>%
       setView(lng = -97.4867, lat = 35.3395, zoom = 11) %>%
       addPolygons(
         fillColor = ~pal_m(annual_change),
@@ -826,7 +826,7 @@ function(input, output, session){
   
   output$disaster_map_buffalo <- renderLeaflet({
     leaflet(base_buffalo_date) %>%
-      addProviderTiles(providers$CartoDB.Positron) %>%
+      addProviderTiles(providers$Stamen.Terrain) %>%
       setView(lng = -78.878738, lat = 42.880230, zoom = 11) %>%
       addPolygons(
         fillColor = ~pal_b(annual_change),
@@ -1019,7 +1019,7 @@ function(input, output, session){
   
   output$disaster_map_grandisle <- renderLeaflet({
     leaflet(base_grandisle_date) %>%
-      addProviderTiles(providers$CartoDB.Positron) %>%
+      addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
       setView(lng = -89.987294, lat = 29.236617, zoom = 11) %>%
       addPolygons(
         fillColor = ~pal_gi(annual_change),
