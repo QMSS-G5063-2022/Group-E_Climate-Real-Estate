@@ -214,21 +214,30 @@ function(input, output, session){
   rm(buffalo_shape, grand_isle_shape, coffey_park_shape, moore_ok_shape, new_orleans_shape)
  
   
+  #map for new orleans
+  base_orleans <- refined_orleans_data %>%
+    filter(between(date,
+                   as.Date("2002-08-01", format = "%Y-%m-%d"),
+                   as.Date("2008-08-01", format = "%Y-%m-%d")))
   
-  # map for New Orleans
-#  base_orleans <- refined_orleans_data %>%
-#    filter(between(date,
-#                   as.Date("2002-08-01", format = "%Y-%m-%d"),
-#                   as.Date("2008-08-01", format = "%Y-%m-%d")))
+  bins_o = unname(quantile(base_orleans$annual_change, probs = seq(0, 1, 1/5), na.rm = TRUE))
   
-#  pal_o = colorBin("RdBu", domain=base_orleans$annual_change, bins=5)
+  pal_o = colorBin("RdBu", domain=base_orleans$annual_change, bins=bins_o)
+  
+  base_orleans_date <- base_orleans %>%
+    filter(date == "2005-08-01")
+  
+  labels_o = sprintf(
+    "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>",
+    base_orleans_date$zip_code, base_orleans_date$annual_change
+  ) %>% lapply(htmltools::HTML)
   
   output$disaster_map_neworleans <- renderLeaflet({
-    leaflet(refined_orleans_data) %>%
+    leaflet(base_orleans_date) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       setView(lng = -90.0715, lat = 29.95, zoom = 11) %>%
       addPolygons(
-        fillColor = colorBin("RdBu", refined_orleans_data$annual_change, bins=5),
+        fillColor = ~pal_o(annual_change),
         weight = 2,
         opacity = 1,
         color = "gray",
@@ -236,7 +245,12 @@ function(input, output, session){
         highlightOptions = highlightOptions(
           weight = 5,
           color = "#666",
-          fillOpacity = 0.8))
+          fillOpacity = 0.8),
+        label = labels_o,
+        labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                    textsize = "15px",
+                                    direction = "auto")) %>%
+      addLegend(position="bottomright", pal=pal_o, values = ~annual_change, opacity = 0.8, title = "Annual Change in HPI (%)")
   })  
   
   # observing for value changes
@@ -369,11 +383,16 @@ function(input, output, session){
     
     # update bar chart based on what's clicked
     event <- input$disaster_map_neworleans_shape_click
-    filtered_zips <- event$zip_code
+    filtered_zips <- event$id
   
+    # update bar chart based on what's clicked
+    event <- input$disaster_map_neworleans_shape_click
+    print(event$id)
+    
     neworleans_bar_data <- bar_chart_data %>%
       filter(city == 'New Orleans') %>%
-      filter(zip_code == 12345)
+      filter(zip_code == 70112) %>%
+      rename(selected_metric = chosen_metric_neworleans)
     
     output$bar_chart_neworleans <- renderPlotly({
       plot_ly(neworleans_bar_data,
@@ -386,7 +405,9 @@ function(input, output, session){
                              xanchor = "center",
                              x = 0.5,
                              y=-0.2),
-               yaxis = list(range=c(130000,145000)))
+               yaxis = list(range=c(min(neworleans_bar_data$selected_metric) * 0.7,
+                                    max(neworleans_bar_data$selected_metric) * 1.1)),
+               title = list(text = "Real Estate Impact by Zip Code (+/- 3 months from Hurricane)"))
     })
 
     
@@ -536,7 +557,8 @@ function(input, output, session){
     
     coffeypark_bar_data <- bar_chart_data %>% 
       filter(city == 'Coffey Park') %>%
-      filter(zip_code == 12345)
+      filter(zip_code == 95401) %>%
+      rename(selected_metric = chosen_metric_coffeypark)
     
     output$bar_chart_coffeypark <- renderPlotly({
       plot_ly(coffeypark_bar_data,
@@ -549,13 +571,15 @@ function(input, output, session){
                              xanchor = "center",
                              x = 0.5,
                              y=-0.2),
-               yaxis = list(range=c(130000,145000)))
+               yaxis = list(range=c(min(coffeypark_bar_data$selected_metric) * 0.7,
+                                    max(coffeypark_bar_data$selected_metric) * 1.1)),
+               title = list(text = "Real Estate Impact by Zip Code (+/- 3 months from Wildfire)"))
     })
     
   }) 
   
   
-
+  ############# MOORE ##################
 
   # map for Moore OK
   output$disaster_map_moore <- renderLeaflet({
@@ -696,7 +720,8 @@ function(input, output, session){
     
     moore_bar_data <- bar_chart_data %>% 
       filter(city == 'Moore') %>%
-      filter(zip_code == 12345)
+      filter(zip_code == 73160) %>%
+      rename(selected_metric = chosen_metric_moore)
     
     output$bar_chart_moore <- renderPlotly({
       plot_ly(moore_bar_data,
@@ -709,12 +734,14 @@ function(input, output, session){
                              xanchor = "center",
                              x = 0.5,
                              y=-0.2),
-               yaxis = list(range=c(130000,145000)))
+               yaxis = list(range=c(min(moore_bar_data$selected_metric) * 0.7,
+                                    max(moore_bar_data$selected_metric) * 1.1)),
+               title = list(text = "Real Estate Impact by Zip Code (+/- 3 months from Tornado)"))
     })
   }) 
   
   
-  
+  ### BUFFALO ###
   
   # map for Buffalo NY
   output$disaster_map_buffalo <- renderLeaflet({
@@ -855,7 +882,8 @@ function(input, output, session){
     
     buffalo_bar_data <- bar_chart_data %>%
       filter(city == 'Buffalo') %>%
-      filter(zip_code == 12345)
+      filter(zip_code == 14201) %>%
+      rename(selected_metric = chosen_metric_buffalo)
     
     output$bar_chart_buffalo <- renderPlotly({
       plot_ly(buffalo_bar_data,
@@ -868,13 +896,13 @@ function(input, output, session){
                              xanchor = "center",
                              x = 0.5,
                              y=-0.2),
-               yaxis = list(range=c(130000,145000)))
-    })
-    
+               yaxis = list(range=c(min(buffalo_bar_data$selected_metric) * 0.7,
+                                    max(buffalo_bar_data$selected_metric) * 1.1)),
+               title = list(text = "Real Estate Impact by Zip Code (+/- 3 months from Snowstorm)"))})
     
   }) 
   
-  
+  ##### GRAND ISLE ##############
   
   # map for Grand Isle LA
   output$disaster_map_grandisle <- renderLeaflet({
@@ -1006,8 +1034,8 @@ function(input, output, session){
     
     #LINE CHART
     grandisle_bar_data <- bar_chart_data %>%
-      filter(city == 'Grand Isle') %>%
-      filter(zip_code == 12345)
+      filter(city == 'Grand Isle') %>% # only one zip code
+      rename(selected_metric = chosen_metric_grandisle)
     
     output$bar_chart_grandisle <- renderPlotly({
       plot_ly(grandisle_bar_data,
@@ -1019,8 +1047,10 @@ function(input, output, session){
         layout(legend = list(orientation = "h",
                              xanchor = "center",
                              x = 0.5,
-                             y=-0.2),
-               yaxis = list(range=c(130000,145000)))
+                             y = -0.2),
+               yaxis = list(range=c(min(grandisle_bar_data$selected_metric) * 0.7,
+                                    max(grandisle_bar_data$selected_metric) * 1.1)),
+               title = list(text = "Real Estate Impact by Zip Code (+/- 3 months from BP Oil Spill)"))
     })
     }) #these closing brackets are for observe
   
