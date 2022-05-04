@@ -214,21 +214,30 @@ function(input, output, session){
   rm(buffalo_shape, grand_isle_shape, coffey_park_shape, moore_ok_shape, new_orleans_shape)
  
   
+  #map for new orleans
+  base_orleans <- refined_orleans_data %>%
+    filter(between(date,
+                   as.Date("2002-08-01", format = "%Y-%m-%d"),
+                   as.Date("2008-08-01", format = "%Y-%m-%d")))
   
-  # map for New Orleans
-#  base_orleans <- refined_orleans_data %>%
-#    filter(between(date,
-#                   as.Date("2002-08-01", format = "%Y-%m-%d"),
-#                   as.Date("2008-08-01", format = "%Y-%m-%d")))
+  bins_o = unname(quantile(base_orleans$annual_change, probs = seq(0, 1, 1/5), na.rm = TRUE))
   
-#  pal_o = colorBin("RdBu", domain=base_orleans$annual_change, bins=5)
+  pal_o = colorBin("RdBu", domain=base_orleans$annual_change, bins=bins_o)
+  
+  base_orleans_date <- base_orleans %>%
+    filter(date == "2005-08-01")
+  
+  labels_o = sprintf(
+    "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>",
+    base_orleans_date$zip_code, base_orleans_date$annual_change
+  ) %>% lapply(htmltools::HTML)
   
   output$disaster_map_neworleans <- renderLeaflet({
-    leaflet(refined_orleans_data) %>%
+    leaflet(base_orleans_date) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       setView(lng = -90.0715, lat = 29.95, zoom = 11) %>%
       addPolygons(
-        fillColor = colorBin("RdBu", refined_orleans_data$annual_change, bins=5),
+        fillColor = ~pal_o(annual_change),
         weight = 2,
         opacity = 1,
         color = "gray",
@@ -236,7 +245,12 @@ function(input, output, session){
         highlightOptions = highlightOptions(
           weight = 5,
           color = "#666",
-          fillOpacity = 0.8))
+          fillOpacity = 0.8),
+        label = labels_o,
+        labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                    textsize = "15px",
+                                    direction = "auto")) %>%
+      addLegend(position="bottomright", pal=pal_o, values = ~annual_change, opacity = 0.8, title = "Annual Change in HPI (%)")
   })  
   
   # observing for value changes
