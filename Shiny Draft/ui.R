@@ -230,8 +230,11 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
               h1(" "),
            
             h4(strong("NEW ORLEANS, LA - HURRICANE"), style = "background-color:#eff5df;padding:15px"),
-              tags$li("After Hurricane Katrina hit, single "),
-           h1(""),
+              tags$li("Single family home values grew steadily, and continued to do so after Hurrican Katrina hit."),
+            tags$li("The annual home price index (HPI) grew bit by bit, but stagnated around a year after Hurricane Katrina came."),
+            tags$li("The rolling HPI percentage was increasing until 2004, but was already decreasing before Hurricane Katrina hit."),
+            tags$li("On a zip code level, 70115 and 70130 had a substantial increase in price as these are deemed wealthier areas."),
+            h1(""),
            
             h4(strong("COFFEY PARK, CA - SNELL WILDFIRES"), style = "background-color:#eff5df;padding:15px"),
            tags$li("While the Snell wildfires began burning in Sep 2018, the gradual devastation of its destruction is clear on all metrics."),
@@ -250,13 +253,18 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            
             h4(strong("BUFFALO, NY - SNOWSTORM"), style = "background-color:#eff5df;padding:15px"),
            tags$li("Despite the severity of the snowstorm, this disaster did not affect real estate values as all average metrics continued to increase on average."),
+           tags$li("Single family home prices continue to rise even with the snowstorm, so do the HPI and rolling HPI % change."),
            tags$li("Southern suburbs were more heavily impacted by the blizzard (like zip codes 14218, 14219, and 14224);
               we can see this in the Rolling Annual Change % in HPI by zip code as these zip codes become red immediately after the storm."),
+           tags$li("Since Buffalo is accustomed to heavy snow and snowstorms, it is noticeable that there will either be a normal increase or no change to home prices."),
+           h1(""),
            
             h4(strong("GRAND ISLE, LA - BP OIL SPILL"), style = "background-color:#eff5df;padding:15px"),
            tags$li("After the infamous BP Oil Spill in Apr 2010, Grand Isle's single family (vacation) homes' values steadily declined."),
            tags$li("While home values' rolling 12 months' change had rallied into positive growth the year before the spill, the incident led to a firm decline shortly afterward."),
-           tags$li("Home prices only improved in 2016, likely when a significant portion of the oil had been cleaned.")),
+           tags$li("Home prices only improved in 2016, likely when a significant portion of the oil had been cleaned."),
+           tags$li("The rolling annual % change in single family home value decreased for around two years and rose up again in 2012.")),
+           h1(""),
            
            column(3,
            p(strong("What is Home Price Value?", style = "font-style:italic;text-align:justify;color:black;background-color:lavender;padding:15px")),
