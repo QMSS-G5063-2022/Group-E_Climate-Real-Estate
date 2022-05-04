@@ -220,14 +220,14 @@ function(input, output, session){
                    as.Date("2002-08-01", format = "%Y-%m-%d"),
                    as.Date("2008-08-01", format = "%Y-%m-%d")))
   
-  bins_o = unname(quantile(base_orleans$annual_change, probs = seq(0, 1, 1/5), na.rm = TRUE))
+  bins_no = unname(quantile(base_orleans$annual_change, probs = seq(0, 1, 1/5), na.rm = TRUE))
   
-  pal_o = colorBin("RdBu", domain=base_orleans$annual_change, bins=bins_o)
+  pal_no = colorBin("RdBu", domain=base_orleans$annual_change, bins=bins_no)
   
   base_orleans_date <- base_orleans %>%
     filter(date == "2005-08-01")
   
-  labels_o = sprintf(
+  labels_no = sprintf(
     "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>",
     base_orleans_date$zip_code, base_orleans_date$annual_change
   ) %>% lapply(htmltools::HTML)
@@ -237,7 +237,7 @@ function(input, output, session){
       addProviderTiles(providers$CartoDB.Positron) %>%
       setView(lng = -90.0715, lat = 29.95, zoom = 11) %>%
       addPolygons(
-        fillColor = ~pal_o(annual_change),
+        fillColor = ~pal_no(annual_change),
         weight = 2,
         opacity = 1,
         color = "gray",
@@ -246,11 +246,11 @@ function(input, output, session){
           weight = 5,
           color = "#666",
           fillOpacity = 0.8),
-        label = labels_o,
+        label = labels_no,
         labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
                                     textsize = "15px",
                                     direction = "auto")) %>%
-      addLegend(position="bottomright", pal=pal_o, values = ~annual_change, opacity = 0.8, title = "Annual Change in HPI (%)")
+      addLegend(position="bottomright", pal=pal_no, values = ~annual_change, opacity = 0.8, title = "Annual Change in HPI (%)")
   })  
   
   # observing for value changes
@@ -300,9 +300,9 @@ function(input, output, session){
       
     }
     
-    pal_no = colorBin(pal, domain=interactive_map_neworleans$selected_metric, bins=bins)
+    pal_o = colorBin(pal, domain=interactive_map_neworleans$selected_metric, bins=bins)
     
-    labels_no = sprintf(
+    labels_o = sprintf(
       hover,
       interactive_map_neworleans$zip_code, interactive_map_neworleans$selected_metric
     ) %>% lapply(htmltools::HTML)
@@ -312,7 +312,7 @@ function(input, output, session){
       clearShapes() %>%
       clearControls() %>%
       addPolygons(
-        fillColor = ~pal_no(selected_metric),
+        fillColor = ~pal_o(selected_metric),
         weight = 2,
         opacity = 1,
         color = "gray",
@@ -321,11 +321,11 @@ function(input, output, session){
           weight = 5,
           color = "#666",
           fillOpacity = 0.8),
-        label = labels_no,
+        label = labels_o,
         labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
                                     textsize = "15px",
                                     direction = "auto")) %>%
-      addLegend(position="bottomright", pal=pal_no, values = ~selected_metric, opacity = 0.8, title = y_lab) 
+      addLegend(position="bottomright", pal=pal_o, values = ~selected_metric, opacity = 0.8, title = y_lab) 
   
     # line chart
     neworleans_line_data <- line_chart_data %>%
@@ -418,11 +418,42 @@ function(input, output, session){
   
   ##### COFFEY PARK #####
   
-  # map for Coffey Park
+  base_coffey <- refined_coffey_park_data %>%
+    filter(between(date,
+                   as.Date("2015-09-01", format = "%Y-%m-%d"),
+                   as.Date("2021-09-01", format = "%Y-%m-%d")))
+  
+  bins_cp = unname(quantile(base_coffey$annual_change, probs = seq(0, 1, 1/5), na.rm = TRUE))
+  
+  pal_cp = colorBin("RdBu", domain=base_coffey$annual_change, bins=bins_cp)
+  
+  base_coffey_date <- base_coffey %>%
+    filter(date == "2018-09-01")
+  
+  labels_cp = sprintf(
+    "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>",
+    base_coffey_date$zip_code, base_coffey_date$annual_change
+  ) %>% lapply(htmltools::HTML)
+  
   output$disaster_map_coffeypark <- renderLeaflet({
-    leaflet() %>%
+    leaflet(base_coffey_date) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -122.748, lat = 38.4777, zoom = 11)
+      setView(lng = -122.748, lat = 38.4777, zoom = 11) %>%
+      addPolygons(
+        fillColor = ~pal_cp(annual_change),
+        weight = 2,
+        opacity = 1,
+        color = "gray",
+        fillOpacity = 0.8,
+        highlightOptions = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.8),
+        label = labels_cp,
+        labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                    textsize = "15px",
+                                    direction = "auto")) %>%
+      addLegend(position="bottomright", pal=pal_cp, values = ~annual_change, opacity = 0.8, title = "Annual Change in HPI (%)")
   })  
   
   # observing for value changes
@@ -582,10 +613,42 @@ function(input, output, session){
   ############# MOORE ##################
 
   # map for Moore OK
+  base_moore <- refined_moore_data %>%
+    filter(between(date,
+                   as.Date("2010-05-01", format = "%Y-%m-%d"),
+                   as.Date("2016-05-01", format = "%Y-%m-%d")))
+  
+  bins_m = unname(quantile(base_moore$annual_change, probs = seq(0, 1, 1/5), na.rm = TRUE))
+  
+  pal_m = colorBin("RdBu", domain=base_moore$annual_change, bins=bins_m)
+  
+  base_moore_date <- base_moore %>%
+    filter(date == "2013-05-01")
+  
+  labels_m = sprintf(
+    "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>",
+    base_moore_date$zip_code, base_moore_date$annual_change
+  ) %>% lapply(htmltools::HTML)
+  
   output$disaster_map_moore <- renderLeaflet({
-    leaflet() %>%
+    leaflet(base_moore_date) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -97.4867, lat = 35.3395, zoom = 11)
+      setView(lng = -97.4867, lat = 35.3395, zoom = 11) %>%
+      addPolygons(
+        fillColor = ~pal_m(annual_change),
+        weight = 2,
+        opacity = 1,
+        color = "gray",
+        fillOpacity = 0.8,
+        highlightOptions = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.8),
+        label = labels_m,
+        labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                    textsize = "15px",
+                                    direction = "auto")) %>%
+      addLegend(position="bottomright", pal=pal_m, values = ~annual_change, opacity = 0.8, title = "Annual Change in HPI (%)")
   })  
   
   # observing for value changes
@@ -744,10 +807,42 @@ function(input, output, session){
   ### BUFFALO ###
   
   # map for Buffalo NY
+  base_buffalo <- refined_buffalo_data %>%
+    filter(between(date,
+                   as.Date("2011-11-01", format = "%Y-%m-%d"),
+                   as.Date("2017-11-01", format = "%Y-%m-%d")))
+  
+  bins_b = unname(quantile(base_buffalo$annual_change, probs = seq(0, 1, 1/5), na.rm = TRUE))
+  
+  pal_b = colorBin("RdBu", domain=base_buffalo$annual_change, bins=bins_b)
+  
+  base_buffalo_date <- base_buffalo %>%
+    filter(date == "2014-11-01")
+  
+  labels_b = sprintf(
+    "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>",
+    base_buffalo_date$zip_code, base_buffalo_date$annual_change
+  ) %>% lapply(htmltools::HTML)
+  
   output$disaster_map_buffalo <- renderLeaflet({
-    leaflet() %>%
+    leaflet(base_buffalo_date) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -78.878738, lat = 42.880230, zoom = 11)
+      setView(lng = -78.878738, lat = 42.880230, zoom = 11) %>%
+      addPolygons(
+        fillColor = ~pal_b(annual_change),
+        weight = 2,
+        opacity = 1,
+        color = "gray",
+        fillOpacity = 0.8,
+        highlightOptions = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.8),
+        label = labels_b,
+        labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                    textsize = "15px",
+                                    direction = "auto")) %>%
+      addLegend(position="bottomright", pal=pal_b, values = ~annual_change, opacity = 0.8, title = "Annual Change in HPI (%)")
   })  
   
   # observing for value changes
@@ -905,10 +1000,42 @@ function(input, output, session){
   ##### GRAND ISLE ##############
   
   # map for Grand Isle LA
+  base_grandisle <- refined_grandisle_data %>%
+    filter(between(date,
+                   as.Date("2007-04-01", format = "%Y-%m-%d"),
+                   as.Date("2013-04-01", format = "%Y-%m-%d")))
+  
+  bins_gi = unname(quantile(base_grandisle$annual_change, probs = seq(0, 1, 1/5), na.rm = TRUE))
+  
+  pal_gi = colorBin("RdBu", domain=base_grandisle$annual_change, bins=bins_gi)
+  
+  base_grandisle_date <- base_grandisle %>%
+    filter(date == "2010-04-01")
+  
+  labels_gi = sprintf(
+    "Zip Code: <strong>%s</strong><br/>Annual Change in HPI: <strong>%g%%</strong>",
+    base_grandisle_date$zip_code, base_grandisle_date$annual_change
+  ) %>% lapply(htmltools::HTML)
+  
   output$disaster_map_grandisle <- renderLeaflet({
-    leaflet() %>%
+    leaflet(base_grandisle_date) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -89.987294, lat = 29.236617, zoom = 11)
+      setView(lng = -89.987294, lat = 29.236617, zoom = 11) %>%
+      addPolygons(
+        fillColor = ~pal_gi(annual_change),
+        weight = 2,
+        opacity = 1,
+        color = "gray",
+        fillOpacity = 0.8,
+        highlightOptions = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.8),
+        label = labels_gi,
+        labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                    textsize = "15px",
+                                    direction = "auto")) %>%
+      addLegend(position="bottomright", pal=pal_gi, values = ~annual_change, opacity = 0.8, title = "Annual Change in HPI (%)")
   })  
   
   # observing for value changes
