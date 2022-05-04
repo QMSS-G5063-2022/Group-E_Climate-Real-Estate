@@ -396,18 +396,24 @@ function(input, output, session){
     
     output$bar_chart_neworleans <- renderPlotly({
       plot_ly(neworleans_bar_data,
-              x=~date,
-              y=~selected_metric,
-              group_by=~zip_code,
+              x = ~date,
+              y = ~selected_metric,
               color=~date,
               type='bar') %>%
         layout(legend = list(orientation = "h",
                              xanchor = "center",
                              x = 0.5,
-                             y=-0.2),
+                             y = -0.2),
+               xaxis = list(title = "Event Timeline",
+                            titlefont = list(size = 9),
+                            tickfont = list(size = 8)),
                yaxis = list(range=c(min(neworleans_bar_data$selected_metric) * 0.7,
-                                    max(neworleans_bar_data$selected_metric) * 1.1)),
-               title = list(text = "Real Estate Impact by Zip Code (+/- 3 months from Hurricane)"))
+                                    max(neworleans_bar_data$selected_metric) * 1.1),
+                            title = y_lab,
+                            titlefont = list(size = 9),
+                            tickfont = list(size = 8)),
+               title = list(text = "Real Estate Impact by Zip Code \n(+/- 3 months from Hurricane)",
+                            font = list(size = 11)))
     })
 
     
@@ -569,13 +575,13 @@ function(input, output, session){
                                 tickfont = list(size = 8),
                                 title = "Month / Year",
                                 titlefont = list(size = 9)),
-                   yaxis = list(title = y_lab, range = c(ifelse(min(coffeypark_line_data2$selected_metric) > 0,
+                   yaxis = list(title = y_lab,
+                                range = c(ifelse(min(coffeypark_line_data2$selected_metric) > 0,
                                                  min(coffeypark_line_data2$selected_metric) * 0.9,
                                                  min(coffeypark_line_data2$selected_metric) * 1.1),
                                           ifelse(max(coffeypark_line_data2$selected_metric) > 0,
                                                  max(coffeypark_line_data2$selected_metric) * 1.1,
                                                  max(coffeypark_line_data2$selected_metric) * 0.9)),
-                                title = chosen_metric_coffeypark,
                                 tickfont = list(size = 8),
                                 titlefont = list(size = 9)),
                    title = list(text = ifelse(chosen_metric_coffeypark == "annual_change",
@@ -595,16 +601,22 @@ function(input, output, session){
       plot_ly(coffeypark_bar_data,
               x=~date,
               y=~selected_metric,
-              group_by=~zip_code,
               color=~date,
               type='bar') %>%
         layout(legend = list(orientation = "h",
                              xanchor = "center",
                              x = 0.5,
                              y=-0.2),
+               xaxis = list(title = "Event Timeline",
+                            titlefont = list(size = 9),
+                            tickfont = list(size = 8)),
                yaxis = list(range=c(min(coffeypark_bar_data$selected_metric) * 0.7,
-                                    max(coffeypark_bar_data$selected_metric) * 1.1)),
-               title = list(text = "Real Estate Impact by Zip Code (+/- 3 months from Wildfire)"))
+                                    max(coffeypark_bar_data$selected_metric) * 1.1),
+                            title = y_lab,
+                            titlefont = list(size = 9),
+                            tickfont = list(size = 8)),
+               title = list(text = "Real Estate Impact by Zip Code \n(+/- 3 months from Wildfire)",
+                            font = list(size = 11)))
     })
     
   }) 
@@ -764,13 +776,13 @@ function(input, output, session){
                             tickfont = list(size = 8),
                             title = "Month / Year",
                             titlefont = list(size = 9)),
-               yaxis = list(title = y_lab, range = c(ifelse(min(moore_line_data2$selected_metric) > 0,
+               yaxis = list(title = y_lab,
+                            range = c(ifelse(min(moore_line_data2$selected_metric) > 0,
                                              min(moore_line_data2$selected_metric) * 0.9,
                                              min(moore_line_data2$selected_metric) * 1.1),
                                       ifelse(max(moore_line_data2$selected_metric) > 0,
                                              max(moore_line_data2$selected_metric) * 1.1,
                                              max(moore_line_data2$selected_metric) * 0.9)),
-                            title = chosen_metric_moore,
                             tickfont = list(size = 8),
                             titlefont = list(size = 9)),
                title = list(text = ifelse(chosen_metric_moore == "annual_change",
@@ -790,16 +802,22 @@ function(input, output, session){
       plot_ly(moore_bar_data,
               x=~date,
               y=~selected_metric,
-              group_by=~zip_code,
               color=~date,
               type='bar') %>%
         layout(legend = list(orientation = "h",
                              xanchor = "center",
                              x = 0.5,
-                             y=-0.2),
-               yaxis = list(range=c(min(moore_bar_data$selected_metric) * 0.7,
-                                    max(moore_bar_data$selected_metric) * 1.1)),
-               title = list(text = "Real Estate Impact by Zip Code (+/- 3 months from Tornado)"))
+                             y = -0.2),
+               xaxis = list(title = "Event Timeline",
+                            titlefont = list(size = 9),
+                            tickfont = list(size = 8)),
+               yaxis = list(title = y_lab,
+                            range=c(min(moore_bar_data$selected_metric) * 0.7,
+                                    max(moore_bar_data$selected_metric) * 1.1),
+                            tickfont = list(size = 8),
+                            titlefont = list(size = 9)),
+               title = list(text = "Real Estate Impact by Zip Code \n(+/- 3 months from Tornado)",
+                            font = list(size = 11)))
     })
   }) 
   
@@ -957,7 +975,8 @@ function(input, output, session){
                             tickfont = list(size = 8),
                             title = "Month/Year",
                             titlefont = list(size = 9)),
-               yaxis = list(title = y_lab, range = c(ifelse(min(buffalo_line_data2$selected_metric) > 0,
+               yaxis = list(title = y_lab,
+                            range = c(ifelse(min(buffalo_line_data2$selected_metric) > 0,
                                              min(buffalo_line_data2$selected_metric) * 0.9,
                                              min(buffalo_line_data2$selected_metric) * 1.1),
                                       ifelse(max(buffalo_line_data2$selected_metric) > 0,
@@ -984,16 +1003,22 @@ function(input, output, session){
       plot_ly(buffalo_bar_data,
               x=~date,
               y=~selected_metric,
-              group_by=~zip_code,
               color=~date,
               type='bar') %>%
         layout(legend = list(orientation = "h",
                              xanchor = "center",
                              x = 0.5,
                              y=-0.2),
-               yaxis = list(range=c(min(buffalo_bar_data$selected_metric) * 0.7,
+               xaxis = list(tickfont = list(size = 8),
+                            title = "Event Timeline",
+                            titlefont = list(size = 9)),
+               yaxis = list(title = y_lab,
+                            titlefont = list(size = 9),
+                            tickfont = list(size = 8),
+                            range=c(min(buffalo_bar_data$selected_metric) * 0.7,
                                     max(buffalo_bar_data$selected_metric) * 1.1)),
-               title = list(text = "Real Estate Impact by Zip Code (+/- 3 months from Snowstorm)"))})
+               title = list(text = "Real Estate Impact by Zip Code \n(+/- 3 months from Snowstorm)",
+                            font = list(size = 11)))})
     
   }) 
   
@@ -1168,16 +1193,26 @@ function(input, output, session){
       plot_ly(grandisle_bar_data,
               x=~date,
               y=~selected_metric,
-              group_by=~zip_code,
               color=~date,
               type='bar') %>%
         layout(legend = list(orientation = "h",
                              xanchor = "center",
                              x = 0.5,
                              y = -0.2),
-               yaxis = list(range=c(min(grandisle_bar_data$selected_metric) * 0.7,
-                                    max(grandisle_bar_data$selected_metric) * 1.1)),
-               title = list(text = "Real Estate Impact by Zip Code (+/- 3 months from BP Oil Spill)"))
+               yaxis = list(title = y_lab,
+                            range=c(ifelse(min(grandisle_bar_data$selected_metric) > 0,
+                                           min(grandisle_bar_data$selected_metric) * 0.7,
+                                           min(grandisle_bar_data$selected_metric) * 1.1),
+                                    ifelse(max(grandisle_bar_data$selected_metric) > 0,
+                                           max(grandisle_bar_data$selected_metric) * 1.1,
+                                           max(grandisle_bar_data$selected_metric) * 0.7)),
+                            tickfont = list(size = 8),
+                            titlefont = list(size = 9)),
+               xaxis = list(tickfont = list(size = 8),
+                            title = "Event Timeline",
+                            titlefont = list(size = 9)),
+               title = list(text = "Real Estate Impact by Zip Code \n(+/- 3 months from BP Oil Spill)",
+                            font = list(size = 11)))
     })
     }) #these closing brackets are for observe
   

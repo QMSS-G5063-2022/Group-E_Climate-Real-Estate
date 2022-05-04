@@ -88,6 +88,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                 selectInput("choose_metric_neworleans", "Choose Real Estate Metric", vars, selected = "annual_change"),
  
         plotly::plotlyOutput("line_chart_neworleans", height = 250),
+        br(),
         plotly::plotlyOutput("bar_chart_neworleans", height = 250)),
          
          tags$div(id="cite",
@@ -122,6 +123,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                     selectInput("choose_metric_coffeypark", "Choose Real Estate Metric", vars, selected = "annual_change"),
                     
                     plotly::plotlyOutput("line_chart_coffeypark", height = 250),
+                    br(),
                     plotly::plotlyOutput("bar_chart_coffeypark", height = 250)),
                     
                     tags$div(id="cite2",
@@ -157,6 +159,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            selectInput("choose_metric_moore", "Choose Real Estate Metric", vars, selected = "annual_change"),
            
            plotly::plotlyOutput("line_chart_moore", height = 250),
+           br(),
            plotly::plotlyOutput("bar_chart_moore", height = 250),
            
            tags$div(id="cite3",
@@ -189,6 +192,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                              selectInput("choose_metric_buffalo", "Choose Real Estate Metric", vars, selected = "annual_change"),
                              
                              plotly::plotlyOutput("line_chart_buffalo", height = 250),
+                             br(),
                             plotly::plotlyOutput("bar_chart_buffalo", height = 250)),
                
                tags$div(id="cite4",
@@ -221,6 +225,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                              selectInput("choose_metric_grandisle", "Choose Real Estate Metric", vars_special, selected = "annual_change"),
                              
                              plotly::plotlyOutput("line_chart_grandisle", height = 250),
+                             br(),
                              plotly::plotlyOutput("bar_chart_grandisle", height = 250)),
                              
                              tags$div(id="cite5",
@@ -233,21 +238,22 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
           fluidRow(
             column(9,
             h2(strong("INSIGHTS BY DISASTER EVENT"),style="color: #FFD166"),
-              h1(" "),
+            br(),
+            br(),
            
             h4(strong("NEW ORLEANS, LA - HURRICANE"), style = "padding:15px"),
             tags$li("Single family home values grew steadily, and continued to do so after Hurrican Katrina hit."), style="color: #FFD166;font-weight:bold",
             tags$li("The annual home price index (HPI) grew bit by bit, but stagnated around a year after Hurricane Katrina came."),style="color: #FFD166;font-weight:bold",
             tags$li("The rolling HPI percentage was increasing until 2004, but was already decreasing before Hurricane Katrina hit."),style="color:#FFD166;font-weight:bold",
-            tags$li("On a zip code level, 70115 and 70130 had a substantial increase in price as these are deemed wealthier areas."),style="color:#FFD166;font-weight:bold",
-            h1(""),
+            tags$li("The affluent Garden District neighborhood of New Orleans (zip codes 70115 and 70130) had a substantial increase in price after Hurricane Katrina, suggesting their home value resilience amid disaster."),style="color:#FFD166;font-weight:bold",
+            br(),
            
             h4(strong("COFFEY PARK, CA - SNELL WILDFIRES"), style = "padding:15px"),
            tags$li("While the Snell wildfires began burning in Sep 2018, the gradual devastation of its destruction is clear on all metrics."),style="color:#FFD166;font-weight:bold",
            tags$li("The average annual % change in HPI plummeted to 0% shortly after Sep 2018 (indicating flat growth in home sales)."),style="color:#FFD166;font-weight:bold",
            tags$li("Average single family home values remained below $200K until 2020, when the pandemic yielded greater single family housing demand."),style="color:#FFD166;font-weight:bold",
            tags$li("On a zip code level, zip codes East of Coffey Park were the hardest hit by the fires based on annual % change in HPI."),style="color:#FFD166;font-weight:bold",
-           h1(""),
+           br(),
            
             h4(strong("MOORE, OK - TORNADO"), style = "padding:15px"),
            tags$li("The tornado led to a brief dip in the value of single family homes, likely because tornadoes did not appear in Moore again, reassuring prospective homebuyers that Moore would not be hit again."),style="color:#FFD166;font-weight:bold",
@@ -255,7 +261,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            tags$li("Meanwhile, the annual % change in HPI has been positive since 2013 when the tornado hit."),style="color:#FFD166;font-weight:bold",
            tags$li("The only period of time when the annual change in home prices was ever negative was around the 2008 to 2012."),style="color:#FFD166;font-weight:bold",
            tags$li("On a zip code level, there were no notable discrepancies between areas when it came to real estate value effects."),style="color:#FFD166;font-weight:bold",
-           h1(""),
+           br(),
            
             h4(strong("BUFFALO, NY - SNOWSTORM"), style = "padding:15px"),
            tags$li("Despite the severity of the snowstorm, this disaster did not affect real estate values as all average metrics continued to increase on average."),style="color:#FFD166;font-weight:bold",
@@ -263,14 +269,14 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            tags$li("Southern suburbs were more heavily impacted by the blizzard (like zip codes 14218, 14219, and 14224);
               we can see this in the Rolling Annual Change % in HPI by zip code as these zip codes become red immediately after the storm."),style="color:#FFD166;font-weight:bold",
            tags$li("Since Buffalo is accustomed to heavy snow and snowstorms, it is noticeable that there will either be a normal increase or no change to home prices."),style="color:#FFD166;font-weight:bold",
-           h1(""),
+           br(),
            
             h4(strong("GRAND ISLE, LA - BP OIL SPILL"), style = "padding:15px"),
            tags$li("After the infamous BP Oil Spill in Apr 2010, Grand Isle's single family (vacation) homes' values steadily declined."),style="color:#FFD166;font-weight:bold",
            tags$li("While home values' rolling 12 months' change had rallied into positive growth the year before the spill, the incident led to a firm decline shortly afterward."),style="color:#FFD166;font-weight:bold",
            tags$li("Home prices only improved in 2016, likely when a significant portion of the oil had been cleaned."),style="color:#FFD166;font-weight:bold",
            tags$li("The rolling annual % change in single family home value decreased for around two years and rose up again in 2012.")),style="color:#FFD166;font-weight:bold",
-           h1(""),
+           br(),
            
            column(3,
            p(strong("What is Home Price Value?", style = "font-style:italic;text-align:justify;color:black;background-color:#FFD166;padding:15px")),
