@@ -1,0 +1,13 @@
+name: main
+title: main
+username:
+account: jtsai97
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6227809
+bundleId: 5867150
+url: https://jtsai97.shinyapps.io/main/
+when: 1651633869.662
+lastSyncTime: 1651633869.66201
+asMultiple: FALSE
+asStatic: FALSE
