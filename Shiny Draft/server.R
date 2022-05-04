@@ -289,12 +289,12 @@ function(input, output, session){
       
     } else if(chosen_metric_neworleans == 'HPI') {
       
-      pal = "Greens"
+      pal = "PiYG"
       hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
       y_lab = "Home Price Index"
       
     } else {
-      pal = "Greens"
+      pal = "RdYlGn"
       hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
       y_lab = "Single Family Home Value ($)"
       
@@ -625,12 +625,12 @@ function(input, output, session){
       
     } else if(chosen_metric_moore == 'HPI') {
       
-      pal = "Greens"
+      pal = "PiYG"
       hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
       y_lab = "Home Price Index"
       
     } else {
-      pal = "Greens"
+      pal = "RdYlGn"
       hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
       y_lab = "Single Family Home Value ($)"
       
@@ -786,12 +786,12 @@ function(input, output, session){
       
     } else if(chosen_metric_buffalo == 'HPI') {
       
-      pal = "Greens"
+      pal = "PiYG"
       hover = "Zip Code: <strong>%s</strong><br/>Home Price Index (HPI): <strong>%g</strong>"
       y_lab = "Home Price Index"
       
     } else {
-      pal = "Greens"
+      pal = "RdYlGn"
       hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
       y_lab = "Single Family Home Value ($)"
       
@@ -945,7 +945,7 @@ function(input, output, session){
       y_lab = "Annual Change in HPI (%)"
       
     } else {
-      pal = "Greens"
+      pal = "RdYlGn"
       hover = "Zip Code: <strong>%s</strong><br/>Single Family Home Value: <strong>$%g</strong>"
       y_lab = "Single Family Home Value ($)"
       
