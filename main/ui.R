@@ -26,38 +26,54 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            tabPanel(h6(strong("Introduction"), style = "color: #F26430"),
                     id = "intro",
                     
-                    h2(strong("REAL ESTATE AMID DISASTER: A VISUAL EXPLORATION"),style="color: #FFD166"),
+                    h1(strong("REAL ESTATE AMID DISASTER: A VISUAL EXPLORATION"),style="color: #FFD166"),
                     h1(" "),
                     p("Rory Butler, Cindy Chen, Lizabeth Singh, Jeffray Tsai"), style="color: #FFD166", 
                     h1(" "),
                     fluidRow(
-                      splitLayout(cellsWidths = c("38%", "38%", "38%", "38%", "38%"),
-                    img(id = "neworleanspic", src = "hurricane-katrina-png.png", align = "center", height = "55%", width = "55%"),
-                    img(id = "coffeypic", src = 'coffey-park-fire-png.png', align = "center", height = "55%", width = "55%"),
-                    img(id = "moorepic", src = 'moore-ok-tornado-png.png', align = "center", height = "55%", width = "55%"),
-                    img(id = "buffalopic", src = 'buffalo-snow-png.png', align = "center", height = "55%", width = "55%"),
-                    img(id = "grandislepic", src = 'grand-isle-oil-png.png', align = "center", height = "55%", width = "55%"))),
-                    fluidRow(
-                                    h3(strong("PROJECT PURPOSE")),
-                    h5("As climate change and ongoing human events intensify both the scale and frequency of severe environmental
-                    events, these consequences also have immediate impacts on real estate, be that housing sale prices, rental prices, or home price indices.  In profiling
-                       four (1) notable natural disasters in the United States, along with one human-made disaster (an oil spill), we aim to understand
-                       the immediate and short-term impact that natural destruction and catastrophe induces on the housing market."),
-                        tags$li("How is the real estate valuation market affected by natural and man-made disasters (if at all)?"),
-                        tags$li("If that's the case, is the housing market more vulnerable to certain types of disasters?"),
-                        tags$li("How quickly does it take to bounce back?"),
-                        tags$li("How soon after a disaster is it the ideal time to buy a home and will the value recover?"),
-                        tags$li("Our project explores these questions in an engaging and interactive manner."),style="color: #FFD166; font-weight:bold"),
-                    fluidRow(br()),
+                      column(1, " "),
+                      column(2, img(id = "neworleanspic", src = "hurricane-katrina-png.png", align = "center", height = "80%", width = "80%")),
+                      column(2, img(id = "coffeypic", src = 'coffey-park-fire-png.png', align = "center", height = "80%", width = "80%")),
+                    column(2, img(id = "moorepic", src = 'moore-ok-tornado-png.png', align = "center", height = "80%", width = "80%")),
+                    column(2, img(id = "buffalopic", src = 'buffalo-snow-png.png', align = "center", height = "80%", width = "80%")),
+                    column(2, img(id = "grandislepic", src = 'grand-isle-oil-png.png', align = "center", height = "80%", width = "80%")),
+                    column(1," ")),
                     
-                    fluidRow(h3(strong("HOW TO USE THIS SHINY APP")),
-                    h5("Each subsequent tab in this app spotlights a unique disaster:"),
-                    tags$li("Use the month/year slider to see how these real estate valus change over time before/after the disaster."),
-                    tags$li("Toggle between real estate metrics like home price index (HPI), mean single family home value, and % annual HPI change."),
-                    tags$li("Hover over the interactive map to explore zip codes' real estates "),
-                    tags$li("View the complementary plots to understand how the disaster changed real estate values 12 months before and after its consequences."),
-                    tags$li("Read through the Insights tab to see our notable trends from our data."),style="color: #FFD166; font-weight:bold"),
-                    fluidRow(h4(strong("**IT TAKES A MOMENT FOR THE DATA TO LOAD THE FIRST TIME YOU SWITCH TABS**"), style = "color: white;background-color: #F26430;text-align:center;padding:15px")))
+                    br(),
+                    fluidRow(
+                    tabsetPanel(id = "inside",
+                                type = "tabs",
+                                
+                                tabPanel(h6(strong("Project Purpose"), style = "color:#F26430;"),
+                                        
+                                         column(7,
+                                         h4("As climate change and ongoing human events intensify both the scale and frequency of severe environmental
+                                          events, these consequences also have immediate impacts on real estate, be that housing sale price or home price indices.  In profiling
+                                          four (1) notable natural disasters in the United States, along with one human-made disaster (an oil spill), we aim to understand
+                                          the immediate and short-term impact that natural destruction and catastrophe induces on the housing market."),
+                                          h4(" - How is the real estate valuation market affected by natural and man-made disasters (if at all)?"),
+                        h4(" - If that's the case, is the housing market more vulnerable to certain types of disasters?"),
+                        h4(" - How quickly does it take to bounce back?"),
+                        h4(" - How soon after a disaster is it the ideal time to buy a home and will the value recover?"),
+                        h4(" - Our project explores these questions in an engaging and interactive manner.")),
+                        column(5, " ")),
+
+                    tabPanel(h6(strong("HOW TO USE THIS SHINY APP"), style = "color:#F26430"),
+                             
+                             column(7,
+                             h4("Each subsequent tab in this app spotlights a unique disaster:"),
+                    h4(" - Use the month/year slider to see how these real estate valus change over time before/after the disaster."),
+                    h4(" - Toggle between real estate metrics like home price index (HPI), mean single family home value, and % annual HPI change."),
+                    h4(" - Hover over the interactive map to explore zip codes' real estates "),
+                    h4(" - Click on the zip code to see the home value impact of immediately before and after the disaster for that specific zip code"),
+                    h4(" - View the complementary plots to understand how the disaster changed real estate values 12 months before and after its consequences."),
+                    h4(" - Read through the Insights tab to see our notable trends from our data.")),
+                    column(5, " ")))),
+                    br(),
+                    br(),
+                    fluidRow(h4(strong("**IT TAKES A MOMENT FOR THE DATA TO LOAD THE FIRST TIME YOU SWITCH TABS**"),
+                                style = "color: white;background-color: #F26430;text-align:center;padding:15px"))
+                    )
            ,
            
            tabPanel(h6("New Orleans, LA", style = "color: #F26430"),
@@ -236,52 +252,63 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
               id = "insights_tab",
               
           fluidRow(
-            column(8,
+            column(7,
             h2(strong("INSIGHTS BY DISASTER EVENT"),style="color: #FFD166"),
             br(),
             br(),
            
             tabsetPanel(type = "tabs",
-                        tabPanel(h6(strong("New Orleans, LA"), style = "padding:15px;color:#FFD166;background-color:#36393B"),
-            h4(strong("NEW ORLEANS, LA - HURRICANE"), style = "padding:15px;color:#FFD166;background-color:#36393B"),
-            tags$li("Single family home values grew steadily, and continued to do so after Hurrican Katrina hit."), style="color: #FFD166;font-weight:bold",
-            tags$li("The annual home price index (HPI) grew bit by bit, but stagnated around a year after Hurricane Katrina came."),style="color: #FFD166;font-weight:bold",
-            tags$li("The rolling HPI percentage was increasing until 2004, but was already decreasing before Hurricane Katrina hit."),style="color:#FFD166;font-weight:bold",
-            tags$li("The affluent Garden District neighborhood of New Orleans (zip codes 70115 and 70130) had a substantial increase in price after Hurricane Katrina, 
-                    suggesting their home value resilience amid disaster."),style="color:#FFD166;font-weight:bold"),
-           
-            tabPanel(h6(strong("Coffey Park, CA"), style = "padding:15px;color:#FFD166;background-color:#36393B"),
-            h4(strong("COFFEY PARK, CA - SNELL WILDFIRES"), style = "padding:15px"),
-           tags$li("While the Snell wildfires began burning in Sep 2018, the gradual devastation of its destruction is clear on all metrics."),style="color:#FFD166;font-weight:bold",
-           tags$li("The average annual % change in HPI plummeted to 0% shortly after Sep 2018 (indicating flat growth in home sales)."),style="color:#FFD166;font-weight:bold",
-           tags$li("Average single family home values remained below $200K until 2020, when the pandemic yielded greater single family housing demand."),style="color:#FFD166;font-weight:bold",
-           tags$li("On a zip code level, zip codes East of Coffey Park were the hardest hit by the fires based on annual % change in HPI."),style="color:#FFD166;font-weight:bold"),
-           
-           tabPanel(h6(strong("Moore, OK"), style = "padding:15px;color:#FFD166;background-color:#36393B"),
-            h4(strong("MOORE, OK - TORNADO"), style = "padding:15px"),
-           tags$li("The tornado led to a brief dip in the value of single family homes, likely because tornadoes did not appear in Moore again, reassuring prospective homebuyers that Moore would not be hit again."),style="color:#FFD166;font-weight:bold",
-           tags$li("Since the disaster, single family home prices stagnated until 2015, and has since skyrocketed."),style="color:#FFD166;font-weight:bold",
-           tags$li("Meanwhile, the annual % change in HPI has been positive since 2013 when the tornado hit."),style="color:#FFD166;font-weight:bold",
-           tags$li("The only period of time when the annual change in home prices was ever negative was around the 2008 to 2012."),style="color:#FFD166;font-weight:bold",
-           tags$li("On a zip code level, there were no notable discrepancies between areas when it came to real estate value effects."),style="color:#FFD166;font-weight:bold"),
-           
-          tabPanel(h6(strong("Buffalo, NY"), style = "padding:15px;color:#FFD166;background-color:#36393B"),
-            h4(strong("BUFFALO, NY - SNOWSTORM"), style = "padding:15px;"),
-           tags$li("Despite the severity of the snowstorm, this disaster did not affect real estate values as all average metrics continued to increase on average."),style="color:#FFD166;font-weight:bold",
-           tags$li("Single family home prices continue to rise even with the snowstorm, so do the HPI and rolling HPI % change."),style="color:#FFD166;font-weight:bold",
-           tags$li("Southern suburbs were more heavily impacted by the blizzard (like zip codes 14218, 14219, and 14224);
+                        tabPanel(
+                          h6(strong("New Orleans, LA"), style = "color:#F26430"),
+                          fluidRow(12,h4(strong("NEW ORLEANS, LA - HURRICANE"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                          fluidRow(column(10,tags$li("Single family home values grew steadily, and continued to do so after Hurrican Katrina hit."), style="color: #FFD166;font-weight:bold;font-size:14px",
+                                          tags$li("The annual home price index (HPI) grew bit by bit, but stagnated around a year after Hurricane Katrina came."),style="color: #FFD166;font-weight:bold;font-size:14px",
+                                          tags$li("The rolling HPI percentage was increasing until 2004, but was already decreasing before Hurricane Katrina hit."),style="color:#FFD166;font-weight:bold;font-size:14px",
+                                          tags$li("The affluent Garden District neighborhood of New Orleans (zip codes 70115 and 70130) had a substantial increase in price after Hurricane Katrina, 
+                    suggesting their home value resilience amid disaster."),style="color:#FFD166;font-weight:bold;font-size:14px"),
+                                   column(2, " "))),
+                        
+                        tabPanel(
+                          h6(strong("Coffey Park, CA"), style = "color:#F26430"),
+                          fluidRow(12, h4(strong("COFFEY PARK, CA - SNELL WILDFIRES"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                          fluidRow(column(10,tags$li("While the Snell wildfires began burning in Sep 2018, the gradual devastation of its destruction is clear on all metrics."),style="color:#FFD166;font-weight:bold;font-size:14px",
+                                          tags$li("The average annual % change in HPI plummeted to 0% shortly after Sep 2018 (indicating flat growth in home sales)."),style="color:#FFD166;font-weight:bold;font-size:14px",
+                                          tags$li("Average single family home values remained below $200K until 2020, when the pandemic yielded greater single family housing demand."),style="color:#FFD166;font-weight:bold;font-size:14px",
+                                          tags$li("On a zip code level, zip codes East of Coffey Park were the hardest hit by the fires based on annual % change in HPI."),style="color:#FFD166;font-weight:bold;font-size:14px"),
+                                   column(2, ""))),
+                        
+                        tabPanel(
+                          h6(strong("Moore, OK"), style = "color:#F26430"),
+                          fluidRow(12, h4(strong("MOORE, OK - TORNADO"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                          fluidRow(column(10, tags$li("The tornado led to a brief dip in the value of single family homes, likely because tornadoes did not appear in Moore again, reassuring prospective homebuyers that Moore would not be hit again."),style="color:#FFD166;font-weight:bold",
+                                          tags$li("Since the disaster, single family home prices stagnated until 2015, and has since skyrocketed."),style="color:#FFD166;font-weight:bold",
+                                          tags$li("Meanwhile, the annual % change in HPI has been positive since 2013 when the tornado hit."),style="color:#FFD166;font-weight:bold",
+                                          tags$li("The only period of time when the annual change in home prices was ever negative was around the 2008 to 2012."),style="color:#FFD166;font-weight:bold",
+                                          tags$li("On a zip code level, there were no notable discrepancies between areas when it came to real estate value effects."),style="color:#FFD166;font-weight:bold"),
+                                   column(2, " "))),
+                        
+                        tabPanel(
+                          h6(strong("Buffalo, NY"), style = "color:#F26430"),
+                          fluidRow(12, h4(strong("BUFFALO, NY - SNOWSTORM"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                          fluidRow(column(10, tags$li("Despite the severity of the snowstorm, this disaster did not affect real estate values as all average metrics continued to increase on average."),style="color:#FFD166;font-weight:bold",
+                                          tags$li("Single family home prices continue to rise even with the snowstorm, so do the HPI and rolling HPI % change."),style="color:#FFD166;font-weight:bold",
+                                          tags$li("Southern suburbs were more heavily impacted by the blizzard (like zip codes 14218, 14219, and 14224);
               we can see this in the Rolling Annual Change % in HPI by zip code as these zip codes become red immediately after the storm."),style="color:#FFD166;font-weight:bold",
-           tags$li("Since Buffalo is accustomed to heavy snow and snowstorms, it is noticeable that there will either be a normal increase or no change to home prices."),
-           style="color:#FFD166;font-weight:bold"),
+                                          tags$li("Since Buffalo is accustomed to heavy snow and snowstorms, it is noticeable that there will either be a normal increase or no change to home prices."), style="color:#FFD166;font-weight:bold"),
+                                   column(2, " "))),
+                        
+                        tabPanel(
+                          h6(strong("Grand Isle, LA"), style = "color:#F26430"),
+                          fluidRow(12, h4(strong("GRAND ISLE, LA - BP OIL SPILL"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                          fluidRow(column(8, tags$li("After the infamous BP Oil Spill in Apr 2010, Grand Isle's single family (vacation) homes' values steadily declined."),style="color:#FFD166;font-weight:bold",
+                                          tags$li("While home values' rolling 12 months' change had rallied into positive growth the year before the spill, the incident led to a firm decline shortly afterward."),style="color:#FFD166;font-weight:bold",
+                                          tags$li("Home prices only improved in 2016, likely when a significant portion of the oil had been cleaned."), style="color:#FFD166;font-weight:bold",
+                                          tags$li("The rolling annual % change in single family home value decreased for around two years and rose up again in 2012."),style="color:#FFD166;font-weight:bold;font-size:14px"),
+                                   column(4, " ")))
+            )),
+     
            
-          tabPanel(h6(strong("Grand Isle, LA"), style = "padding:15px;color:#FFD166;background-color:#36393B"),
-            h4(strong("GRAND ISLE, LA - BP OIL SPILL"), style = "padding:15px"),
-           tags$li("After the infamous BP Oil Spill in Apr 2010, Grand Isle's single family (vacation) homes' values steadily declined."),style="color:#FFD166;font-weight:bold",
-           tags$li("While home values' rolling 12 months' change had rallied into positive growth the year before the spill, the incident led to a firm decline shortly afterward."),style="color:#FFD166;font-weight:bold",
-           tags$li("Home prices only improved in 2016, likely when a significant portion of the oil had been cleaned."), style="color:#FFD166;font-weight:bold",
-           tags$li("The rolling annual % change in single family home value decreased for around two years and rose up again in 2012."),style="color:#FFD166;font-weight:bold"))),
-           
-          column(3,
+          column(5,
                  fluidRow()),
            column(4,
            p(strong("What is Home Price Value?", style = "font-style:italic;text-align:justify;color:black;background-color:#FFD166;padding:15px")),
@@ -289,5 +316,6 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            br(),
            p(strong("What is Single Family Home Value?", style = "font-style: italic;text-align:justify;color:black;background-color:#FFD166;padding:15px")),
            p("Single Family Home Value is the selling price for detached single-family properties.", 
-             style = "font-style:italic;text-align:justify;color:black;background-color:papayawhip;padding:15px;")))))
+             style = "font-style:italic;text-align:justify;color:black;background-color:papayawhip;padding:15px;")
+           ))))
                                 
