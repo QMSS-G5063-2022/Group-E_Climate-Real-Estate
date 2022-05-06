@@ -31,6 +31,7 @@ function(input, output, session){
   
   grand_isle_zips <- c("70358")
   
+  
   ## HPI ##
   HPI <- HPI %>%
     filter(zip_code %in% ZCTA_list) # refine the list so the data is smaller
@@ -123,33 +124,43 @@ function(input, output, session){
   ## bar chart data ##
   new_orleans_diff <- base_data %>%
     filter(city == "New Orleans",
-           date %in% c(as.Date("06/01/2005",  "%m/%d/%Y"),
+           date %in% c(as.Date("02/01/2005",  "%m/%d/%Y"),
+                       as.Date("05/01/2005",  "%m/%d/%Y"),
                        as.Date("08/01/2005",  "%m/%d/%Y"),
-                       as.Date("10/01/2005",  "%m/%d/%Y")))
+                       as.Date("11/01/2005",  "%m/%d/%Y"),
+                       as.Date("02/01/2006",  "%m/%d/%Y")))
   
   moore_diff <- base_data  %>%
     filter(city == "Moore",
-           date %in% c(as.Date("08/01/2017",  "%m/%d/%Y"),
+           date %in% c(as.Date("04/01/2017",  "%m/%d/%Y"),
+                       as.Date("07/01/2017",  "%m/%d/%Y"),
                        as.Date("10/01/2017",  "%m/%d/%Y"),
-                       as.Date("12/01/2017",  "%m/%d/%Y")))
+                       as.Date("01/01/2017",  "%m/%d/%Y"),
+                       as.Date("04/01/2018",  "%m/%d/%Y")))
   
   buffalo_diff <- base_data  %>%
     filter(city == "Buffalo",
-           date %in% c(as.Date("09/01/2014",  "%m/%d/%Y"),
+           date %in% c(as.Date("05/01/2014",  "%m/%d/%Y"),
+                       as.Date("08/01/2014",  "%m/%d/%Y"),
                        as.Date("11/01/2014",  "%m/%d/%Y"),
-                       as.Date("01/01/2015",  "%m/%d/%Y")))
+                       as.Date("02/01/2015",  "%m/%d/%Y"),
+                       as.Date("05/01/2015",  "%m/%d/%Y")))
   
   grandisle_diff <- base_data  %>%
     filter(city == "Grand Isle",
-           date %in% c(as.Date("02/01/2010",  "%m/%d/%Y"),
+           date %in% c(as.Date("11/01/2009",  "%m/%d/%Y"),
+                       as.Date("01/01/2010",  "%m/%d/%Y"),
                        as.Date("04/01/2010",  "%m/%d/%Y"),
-                       as.Date("06/01/2010",  "%m/%d/%Y")))
+                       as.Date("07/01/2010",  "%m/%d/%Y"),
+                       as.Date("10/01/2010",  "%m/%d/%Y")))
   
   coffey_diff <- base_data  %>%
     filter(city == "Coffey Park",
-           date %in% c(as.Date("08/01/2017",  "%m/%d/%Y"),
+           date %in% c(as.Date("04/01/2017",  "%m/%d/%Y"),
+                       as.Date("07/01/2017",  "%m/%d/%Y"),
                        as.Date("10/01/2017",  "%m/%d/%Y"),
-                       as.Date("12/01/2017",  "%m/%d/%Y")))
+                       as.Date("01/01/2018",  "%m/%d/%Y"),
+                       as.Date("04/01/2018",  "%m/%d/%Y")))
   
   bar_chart_data <- new_orleans_diff %>%
     bind_rows(coffey_diff, moore_diff, grandisle_diff, buffalo_diff)
@@ -212,7 +223,6 @@ function(input, output, session){
     st_as_sf()
   
   rm(buffalo_shape, grand_isle_shape, coffey_park_shape, moore_ok_shape, new_orleans_shape)
- 
   
   #map for new orleans
   base_orleans <- refined_orleans_data %>%
@@ -241,6 +251,7 @@ function(input, output, session){
         weight = 2,
         opacity = 1,
         color = "gray",
+        layer = ~zip_code,
         fillOpacity = 0.8,
         highlightOptions = highlightOptions(
           weight = 5,
@@ -252,6 +263,8 @@ function(input, output, session){
                                     direction = "auto")) %>%
       addLegend(position="bottomright", pal=pal_no, values = ~annual_change, opacity = 0.8, title = "Annual Change in HPI (%)")
   })  
+  
+  
   
   # observing for value changes
   observe({
@@ -316,6 +329,7 @@ function(input, output, session){
         weight = 2,
         opacity = 1,
         color = "gray",
+        layer = ~zip_code,
         fillOpacity = 0.8,
         highlightOptions = highlightOptions(
           weight = 5,
@@ -374,7 +388,7 @@ function(input, output, session){
                             tickfont = list(size = 8),
                             titlefont = list(size = 9)),
                title = list(text = ifelse(chosen_metric_neworleans == "annual_change",
-                                          "Avg Annual % Change in HPI (+/- 3 yrs of Hurricane)",
+                                          "Avg Annual % Change in HPI \n(+/- 3 yrs of Hurricane)",
                                           ifelse(chosen_metric_neworleans == "HPI",
                                                  "Avg Annual HPI \n(+/- 3 yrs of Hurricane)",
                                                  "Avg Monthly Single Family Home \nValue (+/- 3 yrs of Hurricane)")),
@@ -382,37 +396,47 @@ function(input, output, session){
       })
     
     # update bar chart based on what's clicked
-    event <- input$disaster_map_neworleans_shape_click
-    filtered_zips <- event$id
+    event_neworleans <- input$disaster_map_neworleans_shape_click
+    filtered_zip <- event_neworleans$id
   
-    # update bar chart based on what's clicked
-    event <- input$disaster_map_neworleans_shape_click
-    print(event$id)
+    if (is.null(event_neworleans$id) == TRUE)
+      return()
+    
+    # bar chart
     
     neworleans_bar_data <- bar_chart_data %>%
       filter(city == 'New Orleans') %>%
-      filter(zip_code == 70112) %>%
+      filter(zip_code == filtered_zip) %>%
       rename(selected_metric = chosen_metric_neworleans)
     
     output$bar_chart_neworleans <- renderPlotly({
       plot_ly(neworleans_bar_data,
               x = ~date,
               y = ~selected_metric,
-              color=~date,
+              marker = list(color = c('rgba(204,204,204,1)', 'rgba(204,204,204,1)',
+                                      'rgba(222,45,38,0.8)','rgba(204,204,204,1)', 'rgba(204,204,204,1)')),
               type='bar') %>%
-        layout(legend = list(orientation = "h",
-                             xanchor = "center",
-                             x = 0.5,
-                             y = -0.2),
+        add_trace(neworleans_bar_data,
+                  x = ~ date,
+                  y = ~ selected_metric,
+                  type = 'scatter',
+                  mode ='lines+markers',
+                  line = list(color = 'orange')) %>%
+        layout(showlegend = FALSE,
                xaxis = list(title = "Event Timeline",
+                            type = "date",
                             titlefont = list(size = 9),
                             tickfont = list(size = 8)),
-               yaxis = list(range=c(min(neworleans_bar_data$selected_metric) * 0.7,
-                                    max(neworleans_bar_data$selected_metric) * 1.1),
+               yaxis = list(range=c(ifelse(min(neworleans_bar_data$selected_metric) > 0,
+                                           min(neworleans_bar_data$selected_metric) * 0.7,
+                                           min(neworleans_bar_data$selected_metric) * 1.1),
+                                    ifelse(max(neworleans_bar_data$selected_metric) > 0,
+                                           max(neworleans_bar_data$selected_metric) * 1.1,
+                                           max(neworleans_bar_data$selected_metric) * 0.7)),
                             title = y_lab,
                             titlefont = list(size = 9),
                             tickfont = list(size = 8)),
-               title = list(text = "Real Estate Impact by Zip Code \n(+/- 3 months from Hurricane)",
+               title = list(text = paste0("Impact for Zip Code ", filtered_zip, "\nImmediately Before/After Hurricane"),
                             font = list(size = 11)))
     })
 
@@ -450,6 +474,7 @@ function(input, output, session){
         weight = 2,
         opacity = 1,
         color = "gray",
+        layer = ~zip_code,
         fillOpacity = 0.8,
         highlightOptions = highlightOptions(
           weight = 5,
@@ -524,6 +549,7 @@ function(input, output, session){
         fillColor = ~pal_no(selected_metric),
         weight = 2,
         opacity = 1,
+        layer = ~zip_code,
         color = "gray",
         fillOpacity = 0.8,
         highlightOptions = highlightOptions(
@@ -592,30 +618,48 @@ function(input, output, session){
                                 font = list(size = 11)))
     })
     
+    # click on zip code
+    event_coffeypark <- input$disaster_map_coffeypark_shape_click
+    filtered_zip <- event_coffeypark$id
+    
+    if (is.null(event_coffeypark$id) == TRUE)
+      return()
+    
+    # bar chart
+    
     coffeypark_bar_data <- bar_chart_data %>% 
       filter(city == 'Coffey Park') %>%
-      filter(zip_code == 95401) %>%
+      filter(zip_code == filtered_zip) %>%
       rename(selected_metric = chosen_metric_coffeypark)
     
     output$bar_chart_coffeypark <- renderPlotly({
       plot_ly(coffeypark_bar_data,
               x=~date,
               y=~selected_metric,
-              color=~date,
+              marker = list(color = c('rgba(204,204,204,1)', 'rgba(204,204,204,1)',
+                                      'rgba(222,45,38,0.8)','rgba(204,204,204,1)', 'rgba(204,204,204,1)')),
               type='bar') %>%
-        layout(legend = list(orientation = "h",
-                             xanchor = "center",
-                             x = 0.5,
-                             y=-0.2),
+        add_trace(coffeypark_bar_data,
+                  x = ~ date,
+                  y = ~ selected_metric,
+                  type = 'scatter',
+                  mode ='lines+markers',
+                  line = list(color = 'orange')) %>%
+        layout(showlegend = FALSE,
                xaxis = list(title = "Event Timeline",
+                            type = "date",
                             titlefont = list(size = 9),
                             tickfont = list(size = 8)),
-               yaxis = list(range=c(min(coffeypark_bar_data$selected_metric) * 0.7,
-                                    max(coffeypark_bar_data$selected_metric) * 1.1),
+               yaxis = list(range=c(ifelse(min(coffeypark_bar_data$selected_metric) > 0,
+                                           min(coffeypark_bar_data$selected_metric) * 0.7,
+                                           min(coffeypark_bar_data$selected_metric) * 1.1),
+                                    ifelse(max(coffeypark_bar_data$selected_metric) > 0,
+                                           max(coffeypark_bar_data$selected_metric) * 1.1,
+                                           max(coffeypark_bar_data$selected_metric) * 0.7)),
                             title = y_lab,
                             titlefont = list(size = 9),
                             tickfont = list(size = 8)),
-               title = list(text = "Real Estate Impact by Zip Code \n(+/- 3 months from Wildfire)",
+               title = list(text = paste0("Impact for Zip Code ", filtered_zip, "\nImmediately Before/After Wildfire"),
                             font = list(size = 11)))
     })
     
@@ -650,6 +694,7 @@ function(input, output, session){
         fillColor = ~pal_m(annual_change),
         weight = 2,
         opacity = 1,
+        layer = ~zip_code,
         color = "gray",
         fillOpacity = 0.8,
         highlightOptions = highlightOptions(
@@ -662,6 +707,7 @@ function(input, output, session){
                                     direction = "auto")) %>%
       addLegend(position="bottomright", pal=pal_m, values = ~annual_change, opacity = 0.8, title = "Annual Change in HPI (%)")
   })  
+  
   
   # observing for value changes
   observe({
@@ -727,6 +773,7 @@ function(input, output, session){
         weight = 2,
         opacity = 1,
         color = "gray",
+        layer = ~zip_code,
         fillOpacity = 0.8,
         highlightOptions = highlightOptions(
           weight = 5,
@@ -793,35 +840,54 @@ function(input, output, session){
                             font = list(size = 11))
                )})
     
+    # click on zip code
+    event_moore <- input$disaster_map_moore_shape_click
+    filtered_zip <- event_moore$id
+    
+    if (is.null(event_moore$id) == TRUE)
+      return()
+    
+    # bar chart
+    
+    isolate({
     moore_bar_data <- bar_chart_data %>% 
       filter(city == 'Moore') %>%
-      filter(zip_code == 73160) %>%
+      filter(zip_code == filtered_zip) %>%
       rename(selected_metric = chosen_metric_moore)
     
     output$bar_chart_moore <- renderPlotly({
       plot_ly(moore_bar_data,
               x=~date,
               y=~selected_metric,
-              color=~date,
+              marker = list(color = c('rgba(204,204,204,1)', 'rgba(204,204,204,1)',
+                                      'rgba(222,45,38,0.8)','rgba(204,204,204,1)', 'rgba(204,204,204,1)')),
               type='bar') %>%
-        layout(legend = list(orientation = "h",
-                             xanchor = "center",
-                             x = 0.5,
-                             y = -0.2),
+        add_trace(moore_bar_data,
+                  x = ~ date,
+                  y = ~ selected_metric,
+                  type = 'scatter',
+                  mode ='lines+markers',
+                  line = list(color = 'orange')) %>%
+        layout(showlegend = FALSE,
                xaxis = list(title = "Event Timeline",
+                            type = "date",
                             titlefont = list(size = 9),
                             tickfont = list(size = 8)),
                yaxis = list(title = y_lab,
-                            range=c(min(moore_bar_data$selected_metric) * 0.7,
-                                    max(moore_bar_data$selected_metric) * 1.1),
+                            range=c(ifelse(min(moore_bar_data$selected_metric) > 0,
+                                           min(moore_bar_data$selected_metric) * 0.7,
+                                           min(moore_bar_data$selected_metric) * 1.1),
+                                    ifelse(max(moore_bar_data$selected_metric) > 0,
+                                           max(moore_bar_data$selected_metric) * 1.1,
+                                           max(moore_bar_data$selected_metric) * 0.7)),
                             tickfont = list(size = 8),
                             titlefont = list(size = 9)),
-               title = list(text = "Real Estate Impact by Zip Code \n(+/- 3 months from Tornado)",
+               title = list(text = paste0("Impact for Zip Code ", filtered_zip, "\nImmediately Before/After Tornado)"),
                             font = list(size = 11)))
     })
+    })
   }) 
-  
-  
+
   ### BUFFALO ###
   
   # map for Buffalo NY
@@ -926,6 +992,7 @@ function(input, output, session){
         weight = 2,
         opacity = 1,
         color = "gray",
+        layer = ~zip_code,
         fillOpacity = 0.8,
         highlightOptions = highlightOptions(
           weight = 5,
@@ -994,32 +1061,52 @@ function(input, output, session){
                )
       })
     
+    # click on zip code
+    event_buffalo <- input$disaster_map_buffalo_shape_click
+    filtered_zip <- event_buffalo$id
+    
+    if (is.null(event_buffalo$id) == TRUE)
+      return()
+    
+    # bar chart
+    isolate({
     buffalo_bar_data <- bar_chart_data %>%
       filter(city == 'Buffalo') %>%
-      filter(zip_code == 14201) %>%
+      filter(zip_code == filtered_zip) %>%
       rename(selected_metric = chosen_metric_buffalo)
     
     output$bar_chart_buffalo <- renderPlotly({
       plot_ly(buffalo_bar_data,
               x=~date,
               y=~selected_metric,
-              color=~date,
+              marker = list(color = c('rgba(204,204,204,1)', 'rgba(204,204,204,1)',
+                                      'rgba(222,45,38,0.8)','rgba(204,204,204,1)', 'rgba(204,204,204,1)')),
               type='bar') %>%
-        layout(legend = list(orientation = "h",
-                             xanchor = "center",
-                             x = 0.5,
-                             y=-0.2),
+        add_trace(buffalo_bar_data,
+                  x = ~ date,
+                  y = ~ selected_metric,
+                  type = 'scatter',
+                  mode ='lines+markers',
+                  line = list(color = 'orange')) %>%
+        layout(showlegend = FALSE,
                xaxis = list(tickfont = list(size = 8),
                             title = "Event Timeline",
+                            type = "date",
                             titlefont = list(size = 9)),
                yaxis = list(title = y_lab,
+                            range=c(ifelse(min(buffalo_bar_data$selected_metric) > 0,
+                                           min(buffalo_bar_data$selected_metric) * 0.7,
+                                           min(buffalo_bar_data$selected_metric) * 1.1),
+                                    ifelse(max(buffalo_bar_data$selected_metric) > 0,
+                                           max(buffalo_bar_data$selected_metric) * 1.1,
+                                           max(buffalo_bar_data$selected_metric) * 0.7)),
                             titlefont = list(size = 9),
                             tickfont = list(size = 8),
                             range=c(min(buffalo_bar_data$selected_metric) * 0.7,
                                     max(buffalo_bar_data$selected_metric) * 1.1)),
-               title = list(text = "Real Estate Impact by Zip Code \n(+/- 3 months from Snowstorm)",
+               title = list(text = paste0("Impact for Zip Code ", filtered_zip, " \nImmediately Before/After Snowstorm"),
                             font = list(size = 11)))})
-    
+    })
   }) 
   
   ##### GRAND ISLE ##############
@@ -1118,6 +1205,7 @@ function(input, output, session){
         fillColor = ~pal_no(selected_metric),
         weight = 2,
         opacity = 1,
+        layer = ~zip_code,
         color = "gray",
         fillOpacity = 0.8,
         highlightOptions = highlightOptions(
@@ -1184,21 +1272,25 @@ function(input, output, session){
     
   }) 
     
-    #LINE CHART
+    #BAR CHART - not dynamic since there is only 1 zip code
     grandisle_bar_data <- bar_chart_data %>%
       filter(city == 'Grand Isle') %>% # only one zip code
       rename(selected_metric = chosen_metric_grandisle)
     
     output$bar_chart_grandisle <- renderPlotly({
       plot_ly(grandisle_bar_data,
-              x=~date,
-              y=~selected_metric,
-              color=~date,
+              x = ~date,
+              y = ~selected_metric,
+              marker = list(color = c('rgba(204,204,204,1)', 'rgba(204,204,204,1)',
+                                      'rgba(222,45,38,0.8)','rgba(204,204,204,1)', 'rgba(204,204,204,1)')),
               type='bar') %>%
-        layout(legend = list(orientation = "h",
-                             xanchor = "center",
-                             x = 0.5,
-                             y = -0.2),
+        add_trace(grandisle_bar_data,
+                  x = ~ date,
+                  y = ~ selected_metric,
+                  type = 'scatter',
+                  mode ='lines+markers',
+                  line = list(color = 'orange')) %>%
+        layout(showlegend = FALSE,
                yaxis = list(title = y_lab,
                             range=c(ifelse(min(grandisle_bar_data$selected_metric) > 0,
                                            min(grandisle_bar_data$selected_metric) * 0.7,
@@ -1210,8 +1302,9 @@ function(input, output, session){
                             titlefont = list(size = 9)),
                xaxis = list(tickfont = list(size = 8),
                             title = "Event Timeline",
+                            type = "date",
                             titlefont = list(size = 9)),
-               title = list(text = "Real Estate Impact by Zip Code \n(+/- 3 months from BP Oil Spill)",
+               title = list(text = "Impact for Zip Code 70358 Immediately Before/After BP Oil Spill)",
                             font = list(size = 11)))
     })
     }) #these closing brackets are for observe
