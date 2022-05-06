@@ -1319,7 +1319,7 @@ function(input, output, session){
   pretty_headers <- 
     gsub("[_]", " ", colnames(b2))
   
-  output$table <- DT::renderDataTable({
+  output$my_data_table <- DT::renderDataTable({
     b2 %>%
       datatable(
         rownames = FALSE,
