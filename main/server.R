@@ -1309,5 +1309,25 @@ function(input, output, session){
     })
     }) #these closing brackets are for observe
   
+  # data table
+  # it is not reactive: data table filtering functionality built-in
+  b2 <- base_data %>%
+    select(date, zip_code, single_fam_val, HPI, annual_change, city) %>%
+    rename(Single_Family_Home_Value = single_fam_val, Annual_Change_in_HPI = annual_change,
+           Date = date, Zip_Code = zip_code, City = city)
+  
+  pretty_headers <- 
+    gsub("[_]", " ", colnames(b2))
+  
+  output$table <- DT::renderDataTable({
+    b2 %>%
+      datatable(
+        rownames = FALSE,
+        colnames = pretty_headers,
+        filter = list(position = "top"),
+        options = list(language = list(sSearch = "Filter:"))
+      )
+  })
+  
 }
   
