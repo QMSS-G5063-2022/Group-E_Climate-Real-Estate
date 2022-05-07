@@ -132,11 +132,11 @@ function(input, output, session){
   
   moore_diff <- base_data  %>%
     filter(city == "Moore",
-           date %in% c(as.Date("04/01/2017",  "%m/%d/%Y"),
-                       as.Date("07/01/2017",  "%m/%d/%Y"),
-                       as.Date("10/01/2017",  "%m/%d/%Y"),
-                       as.Date("01/01/2017",  "%m/%d/%Y"),
-                       as.Date("04/01/2018",  "%m/%d/%Y")))
+           date %in% c(as.Date("12/01/2012",  "%m/%d/%Y"),
+                       as.Date("02/01/2013",  "%m/%d/%Y"),
+                       as.Date("05/01/2013",  "%m/%d/%Y"),
+                       as.Date("08/01/2013",  "%m/%d/%Y"),
+                       as.Date("11/01/2013",  "%m/%d/%Y")))
   
   buffalo_diff <- base_data  %>%
     filter(city == "Buffalo",
@@ -156,11 +156,11 @@ function(input, output, session){
   
   coffey_diff <- base_data  %>%
     filter(city == "Coffey Park",
-           date %in% c(as.Date("04/01/2017",  "%m/%d/%Y"),
-                       as.Date("07/01/2017",  "%m/%d/%Y"),
-                       as.Date("10/01/2017",  "%m/%d/%Y"),
-                       as.Date("01/01/2018",  "%m/%d/%Y"),
-                       as.Date("04/01/2018",  "%m/%d/%Y")))
+           date %in% c(as.Date("03/01/2018",  "%m/%d/%Y"),
+                       as.Date("06/01/2018",  "%m/%d/%Y"),
+                       as.Date("09/01/2018",  "%m/%d/%Y"),
+                       as.Date("12/01/2018",  "%m/%d/%Y"),
+                       as.Date("03/01/2019",  "%m/%d/%Y")))
   
   bar_chart_data <- new_orleans_diff %>%
     bind_rows(coffey_diff, moore_diff, grandisle_diff, buffalo_diff)
