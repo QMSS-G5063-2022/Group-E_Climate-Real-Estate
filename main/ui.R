@@ -332,6 +332,25 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
   tabPanel(h6(strong("Explore the Data"), style = "color: #F26430"),
            id = "datatable_tab",
            
+           theme = shinytheme("slate"),
+           tags$head(tags$style(HTML(
+             "
+                  .dataTables_length label,
+                  .dataTables_filter label,
+                  .dataTables_info {
+                      color: white!important;
+                      }
+
+                  .paginate_button {
+                      background: white!important;
+                  }
+
+                  thead {
+                      color: white;
+                      }
+
+                  "))),
+           
            h1(strong("Explore the Data"), style = "color:#FFD166"),
            dataTableOutput("my_data_table")
            ))

@@ -1325,7 +1325,11 @@ function(input, output, session){
         rownames = FALSE,
         colnames = pretty_headers,
         filter = list(position = "top"),
-        options = list(language = list(sSearch = "Filter:"))
+        options = list(language = list(sSearch = "Filter:"),
+                       initComplete = JS(
+                         "function(settings, json) {",
+                         "$(this.api().table().header()).css({'background-color': '#FFD166', 'color': 'black'});",
+                         "}"))
       )
   })
   
