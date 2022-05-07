@@ -26,9 +26,9 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            tabPanel(h6(strong("Introduction"), style = "color: #F26430"),
                     id = "intro",
                     
-                    h1(strong("REAL ESTATE AMID DISASTER: A VISUAL EXPLORATION"),style="color: #FFD166"),
-                    h1(" "),
-                    p("Rory Butler, Cindy Chen, Lizabeth Singh, Jeffray Tsai"), style="color: #FFD166", 
+                    fluidRow(h1(strong("REAL ESTATE AMID DISASTER: A VISUAL EXPLORATION"), style="color:#FFD16")),
+                    fluidRow(h1(" ")),
+                    fluidRow(p("Rory Butler, Cindy Chen, Lizabeth Singh, Jeffray Tsai"), style="color: #FFD166"), 
                     h1(" "),
                     fluidRow(
                       column(1, " "),
@@ -243,7 +243,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                          width = 330, height = "auto",
                          
                         h5(strong("TORNADO")),
-                        h5(strong("May 2013")),
+                        h5(strong("Disaster Date: May 2013")),
            
            sliderInput(
              inputId = "choose_month_moore", 
