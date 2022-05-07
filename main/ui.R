@@ -26,7 +26,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            tabPanel(h6(strong("Introduction"), style = "color: #F26430"),
                     id = "intro",
                     
-                    fluidRow(h1(strong("REAL ESTATE AMID DISASTER: A VISUAL EXPLORATION"), style="color:#FFD16")),
+                    fluidRow(h1(strong("REAL ESTATE AMID DISASTER: A VISUAL EXPLORATION"), style="color:#FFD166")),
                     fluidRow(h1(" ")),
                     fluidRow(p("Rory Butler, Cindy Chen, Lizabeth Singh, Jeffray Tsai"), style="color: #FFD166"), 
                     h1(" "),
@@ -81,7 +81,13 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                       p("Single Family Home Value is the selling price for detached single-family properties.", 
                         style = "font-style:italic;text-align:justify;color:black;background-color:papayawhip;padding:15px;"))),
                       column(5, fluidRow()))
-                    ))),
+                    ),
+                    tabPanel(h6(strong("MAP OF ALL DISASTERS"), style = "color:#F26430"),
+                             fluidRow(column(4,),
+                                      column(4,img(id = "usmapdatavis", src = "usmapdatavis.png", align = "center", height = "120%", width = "120%"))),
+                             column(4,))
+                    
+                    )),
                     br(),
                     br(),
                     fluidRow(h4(strong("**IT TAKES A MOMENT FOR THE DATA TO LOAD THE FIRST TIME YOU SWITCH TABS**"),
