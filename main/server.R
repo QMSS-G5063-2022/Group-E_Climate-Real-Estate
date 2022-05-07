@@ -1316,6 +1316,8 @@ function(input, output, session){
     rename(Single_Family_Home_Value = single_fam_val, Annual_Change_in_HPI = annual_change,
            Date = date, Zip_Code = zip_code, City = city)
   
+  b2$Single_Family_Home_Value = format_dollars(round(b2$Single_Family_Home_Value, 2), 0)
+  
   pretty_headers <- 
     gsub("[_]", " ", colnames(b2))
   
