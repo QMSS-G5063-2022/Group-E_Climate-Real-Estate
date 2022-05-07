@@ -225,7 +225,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
  
         plotly::plotlyOutput("line_chart_neworleans", height = 320),
         br(),
-        plotly::plotlyOutput("bar_chart_neworleans", height = 320)),
+        plotly::plotlyOutput("bar_chart_neworleans", height = 300)),
          
          tags$div(id="cite",
                   'Data compiled from FHFA and Zillow')
@@ -260,7 +260,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                     
                     plotly::plotlyOutput("line_chart_coffeypark", height = 320),
                     br(),
-                    plotly::plotlyOutput("bar_chart_coffeypark", height = 320)),
+                    plotly::plotlyOutput("bar_chart_coffeypark", height = 300)),
                     
                     tags$div(id="cite2",
                              'Data compiled from FHFA and Zillow')
@@ -296,7 +296,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            
            plotly::plotlyOutput("line_chart_moore", height = 320),
            br(),
-           plotly::plotlyOutput("bar_chart_moore", height = 320),
+           plotly::plotlyOutput("bar_chart_moore", height = 300),
            
            tags$div(id="cite3",
                     'Data compiled from FHFA and Zillow')
@@ -329,7 +329,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                              
                              plotly::plotlyOutput("line_chart_buffalo", height = 320),
                              br(),
-                            plotly::plotlyOutput("bar_chart_buffalo", height = 320)),
+                            plotly::plotlyOutput("bar_chart_buffalo", height = 300)),
                
                tags$div(id="cite4",
                         'Data compiled from FHFA and Zillow')
@@ -362,7 +362,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                              
                              plotly::plotlyOutput("line_chart_grandisle", height = 320),
                              br(),
-                             plotly::plotlyOutput("bar_chart_grandisle", height = 320)),
+                             plotly::plotlyOutput("bar_chart_grandisle", height = 300)),
                              
                              tags$div(id="cite5",
                                       'Data compiled from FHFA and Zillow')
