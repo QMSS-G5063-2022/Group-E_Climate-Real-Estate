@@ -105,18 +105,29 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                              tabsetPanel(type = "tabs",
                                          tabPanel(
                                            h6(strong("New Orleans, LA"), style = "color:#F26430"),
-                                           fluidRow(12, h2(strong("NEW ORLEANS, LA - HURRICANE"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                                           fluidRow(12, h2(strong("NEW ORLEANS, LA - HURRICANE - Aug 2005"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                                           fluidRow(" "),
                                            fluidRow(column(10,
-                                                           h4(" - Single family home values grew steadily, and continued to do so after Hurrican Katrina hit."), style="color: #FFD166;font-weight:bold;font-size:14px",
-                                                           h4(" - The annual home price index (HPI) grew bit by bit, but stagnated around a year after Hurricane Katrina came."),style="color: #FFD166;font-weight:bold;font-size:14px",
-                                                           h4(" - The rolling HPI percentage was increasing until 2004, but was already decreasing before Hurricane Katrina hit."),style="color:#FFD166;font-weight:bold;font-size:14px",
+                                                           h2(em("Hurricane Katrina was one of the most devastating hurricanes to hit the United States.
+                                                                 It flooded 80% of New Orleans, reaching depths of 15 feet, and caused about $108 billion in damage."), style="color:#F26430;font-size:16px;padding:15px;background-color:white")),
+                                                    column(2, )),
+                                           fluidRow(column(10,
+                                                           h4(" - Average single family home values grew steadily before and after Hurrican Katrina hit, even though 80% of New Orleans flooded due to the hurricane."), style="color: #FFD166;font-weight:bold;font-size:14px",
+                                                           h4(" - The average annual home price index (HPI) has observed positive growth even after Hurricane Katrina hit. It only slightly faltered in 2008."),style="color: #FFD166;font-weight:bold;font-size:14px",
+                                                           h4(" - The rolling HPI percentage was increasing until 2004, but was already decreasing before Hurricane Katrina hit.  The rate of growth decelerated towards zero and became negative in 2008."),style="color:#FFD166;font-weight:bold;font-size:14px",
                                                            h4(" - The affluent Garden District neighborhood of New Orleans (zip codes 70115 and 70130) had a substantial increase in price after Hurricane Katrina, 
                     suggesting their home value resilience amid disaster."),style="color:#FFD166;font-weight:bold;font-size:14px"),
                                                     column(2, " "))),
                                          
                                          tabPanel(
                                            h6(strong("Coffey Park, CA"), style = "color:#F26430"),
-                                           fluidRow(12, h2(strong("COFFEY PARK, CA - SNELL WILDFIRES"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                                           fluidRow(12, h2(strong("COFFEY PARK, CA - SNELL WILDFIRES - Sep 2018"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                                           fluidRow(""),
+                                           fluidRow(column(10,
+                                                           h2(em("The residential neighborhood of Coffey Park has encountered several wildfires over the past few years.
+                                                                 After the Tubbs fire in Oct 2017, it was hit by a larger wildfire, the Snell wildfires, in Sep 2018.
+                                                                 Buildings and homes devastated in the wildfires have had to be rebuilt."), style="color:#F26430;font-size:16px;padding:15px;background-color:white")),
+                                                    column(2,)),
                                            fluidRow(column(10,
                                                            h4(" - While the Snell wildfires began burning in Sep 2018, the gradual devastation of its destruction is clear on all metrics."),style="color:#FFD166;font-weight:bold;font-size:14px",
                                                            h4(" - The average annual % change in HPI plummeted to 0% shortly after Sep 2018 (indicating flat growth in home sales)."),style="color:#FFD166;font-weight:bold;font-size:14px",
@@ -126,7 +137,11 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                                          
                                          tabPanel(
                                            h6(strong("Moore, OK"), style = "color:#F26430"),
-                                           fluidRow(12, h2(strong("MOORE, OK - TORNADO"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                                           fluidRow(12, h2(strong("MOORE, OK - TORNADO - May 2013"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                                           fluidRow(""),
+                                           fluidRow(column(10,
+                                                           h2(em("Moore, OK is no stranger to tornados."), style="color:#F26430;font-size:16px;padding:15px;background-color:white")),
+                                                    column(2,)),
                                            fluidRow(column(10,
                                                            h4(" - The tornado led to a brief dip in the value of single family homes, likely because tornadoes did not appear in Moore again, reassuring prospective homebuyers that Moore would not be hit again."),style="color:#FFD166;font-weight:bold;text-align:justify",
                                                            h4(" - Since the disaster, single family home prices stagnated until 2015, and has since skyrocketed."),style="color:#FFD166;font-weight:bold;text-align:justify",
@@ -137,7 +152,11 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                                          
                                          tabPanel(
                                            h6(strong("Buffalo, NY"), style = "color:#F26430"),
-                                           fluidRow(12, h2(strong("BUFFALO, NY - SNOWSTORM"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                                           fluidRow(12, h2(strong("BUFFALO, NY - SNOWSTORM - Nov 2014"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                                           fluidRow(""),
+                                           fluidRow(column(10,
+                                                           h2(strong(""), style="color:#F26430;font-size:16px;padding:15px;background-color:white")),
+                                                    column(2,)),
                                            fluidRow(column(10,
                                                            h4(" - Despite the severity of the snowstorm, this disaster did not affect real estate values as all average metrics continued to increase on average."),style="color:#FFD166;font-weight:bold;text-align:justify",
                                                            h4(" - Single family home prices continue to rise even with the snowstorm, so do the HPI and rolling HPI % change."),style="color:#FFD166;font-weight:bold;text-align:justify",
@@ -148,7 +167,11 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                                          
                                          tabPanel(
                                            h6(strong("Grand Isle, LA"), style = "color:#F26430"),
-                                           fluidRow(12, h2(strong("GRAND ISLE, LA - BP OIL SPILL"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                                           fluidRow(12, h2(strong("GRAND ISLE, LA - BP OIL SPILL - Apr 2010"), style = "padding:15px;color:#FFD166;background-color:#36393B")),
+                                           fluidRow(""),
+                                           fluidRow(column(10,
+                                                           h2(strong(""), style="color:#F26430;font-size:16px;padding:15px;background-color:white")),
+                                                    column(2,)),
                                            fluidRow(column(8, h4(" - After the infamous BP Oil Spill in Apr 2010, Grand Isle's single family (vacation) homes' values steadily declined."),style="color:#FFD166;font-weight:bold;text-align:justify",
                                                            h4(" - While home values' rolling 12 months' change had rallied into positive growth the year before the spill, the incident led to a firm decline shortly afterward."),style="color:#FFD166;font-weight:bold;text-align:justify",
                                                            h4(" - Home prices only improved in 2016, likely when a significant portion of the oil had been cleaned."), style="color:#FFD166;font-weight:bold;text-align:justify",
@@ -357,7 +380,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
 
                   "))),
            
-           h1(strong("Explore the Data"), style = "color:#FFD166"),
+           h1(strong("EXPLORE THE DATA"), style = "color:#FFD166"),
            dataTableOutput("my_data_table")
            ))
                                 
