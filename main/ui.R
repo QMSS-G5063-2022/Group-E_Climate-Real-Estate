@@ -44,7 +44,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                     tabsetPanel(id = "inside",
                                 type = "tabs",
                                 
-                                tabPanel(h6(strong("Project Purpose"), style = "color:#F26430;"),
+                                tabPanel(h6(strong("PROJECT PURPOSE"), style = "color:#F26430;"),
                                         
                                          column(7,
                                          span(h4("As climate change and ongoing human events intensify both the scale and frequency of severe environmental
@@ -62,12 +62,12 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                              
                              column(7,
                              h4("Each subsequent tab in this app spotlights a unique disaster:"),
-                    h4(" - Use the month/year slider to see how these real estate valus change over time before/after the disaster."),
-                    h4(" - Toggle between real estate metrics like home price index (HPI), mean single family home value, and % annual HPI change."),
-                    h4(" - Hover over the interactive map to explore zip codes' real estates "),
-                    h4(" - Click on the zip code to see the home value impact of immediately before and after the disaster for that specific zip code"),
-                    h4(" - View the complementary plots to understand how the disaster changed real estate values 12 months before and after its consequences."),
-                    h4(" - Read through the Insights tab to see our notable trends from our data.")),
+                    h4(" - Use the month/year slider to see how these real estate valus change over time before/after the disaster.", style = "color:white;text-align:justify"),
+                    h4(" - Toggle between real estate metrics like home price index (HPI), mean single family home value, and % annual HPI change.", style = "color:white;text-align:justify"),
+                    h4(" - Hover over the interactive map to explore zip codes' real estates ", style = "color:white;text-align:justify"),
+                    h4(" - Click on the zip code to see the home value impact of immediately before and after the disaster for that specific zip code", style = "color:white;text-align:justify"),
+                    h4(" - View the complementary plots to understand how the disaster changed real estate values 12 months before and after its consequences.", style = "color:white;text-align:justify"),
+                    h4(" - Read through the Insights tab to see our notable trends from our data.", style = "color:white;text-align:justify")),
                     column(5, " ")),
                     
                     tabPanel(h6(strong("DEFINITIONS"), style = "color:#F26430"),
@@ -84,7 +84,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                     ),
                     tabPanel(h6(strong("MAP OF ALL DISASTERS"), style = "color:#F26430"),
                              fluidRow(column(4,),
-                                      column(4,img(id = "usmapdatavis", src = "usmapdatavis.png", align = "center", height = "120%", width = "120%"))),
+                                      column(4,img(id = "usmapdatavis", src = "usmapdatavis.png", align = "center", height = "140%", width = "140%"))),
                              column(4,))
                     
                     )),
@@ -175,7 +175,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
          absolutePanel(id = "controls",
                        class = "panel panel-default", fixed = TRUE,
                 draggable = TRUE, top = 100, left = 20, right = "auto", bottom = "auto",
-                width = 330, height = "auto",
+                width = 380, height = "auto",
                 
                 h5(strong("HURRICANE")),
                 h5(strong("Aug 2005")),
@@ -190,9 +190,9 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                 
                 selectInput("choose_metric_neworleans", "Choose Real Estate Metric", vars, selected = "annual_change"),
  
-        plotly::plotlyOutput("line_chart_neworleans", height = 250),
+        plotly::plotlyOutput("line_chart_neworleans", height = 320),
         br(),
-        plotly::plotlyOutput("bar_chart_neworleans", height = 250)),
+        plotly::plotlyOutput("bar_chart_neworleans", height = 320)),
          
          tags$div(id="cite",
                   'Data compiled from FHFA and Zillow')
@@ -210,7 +210,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
       absolutePanel(id = "controls2",
                     class = "panel panel-default", fixed = TRUE,
                     draggable = TRUE, top = 100, left = 20, right = "auto", bottom = "auto",
-                    width = 330, height = "auto",
+                    width = 380, height = "auto",
                     
                     h5(strong("SNELL WILDFIRE")),
                     h5(strong("Sep 2018")),
@@ -225,9 +225,9 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                     
                     selectInput("choose_metric_coffeypark", "Choose Real Estate Metric", vars, selected = "annual_change"),
                     
-                    plotly::plotlyOutput("line_chart_coffeypark", height = 250),
+                    plotly::plotlyOutput("line_chart_coffeypark", height = 320),
                     br(),
-                    plotly::plotlyOutput("bar_chart_coffeypark", height = 250)),
+                    plotly::plotlyOutput("bar_chart_coffeypark", height = 320)),
                     
                     tags$div(id="cite2",
                              'Data compiled from FHFA and Zillow')
@@ -246,7 +246,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            
            absolutePanel(id = "controls3", class = "panel panel-default", fixed = TRUE,
                          draggable = TRUE, top = 100, left = 20, right = "auto", bottom = "auto",
-                         width = 330, height = "auto",
+                         width = 380, height = "auto",
                          
                         h5(strong("TORNADO")),
                         h5(strong("Disaster Date: May 2013")),
@@ -261,9 +261,9 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
            
            selectInput("choose_metric_moore", "Choose Real Estate Metric", vars, selected = "annual_change"),
            
-           plotly::plotlyOutput("line_chart_moore", height = 250),
+           plotly::plotlyOutput("line_chart_moore", height = 320),
            br(),
-           plotly::plotlyOutput("bar_chart_moore", height = 250),
+           plotly::plotlyOutput("bar_chart_moore", height = 320),
            
            tags$div(id="cite3",
                     'Data compiled from FHFA and Zillow')
@@ -279,7 +279,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                
                absolutePanel(id = "controls4", class = "panel panel-default", fixed = TRUE,
                              draggable = TRUE, top = 100, left = 20, right = "auto", bottom = "auto",
-                             width = 330, height = "auto",
+                             width = 380, height = "auto",
                              
                              h5(strong("SNOWSTORM")),
                              h5(strong("Nov 2014")),
@@ -294,9 +294,9 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                              
                              selectInput("choose_metric_buffalo", "Choose Real Estate Metric", vars, selected = "annual_change"),
                              
-                             plotly::plotlyOutput("line_chart_buffalo", height = 250),
+                             plotly::plotlyOutput("line_chart_buffalo", height = 320),
                              br(),
-                            plotly::plotlyOutput("bar_chart_buffalo", height = 250)),
+                            plotly::plotlyOutput("bar_chart_buffalo", height = 320)),
                
                tags$div(id="cite4",
                         'Data compiled from FHFA and Zillow')
@@ -312,7 +312,7 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                
                absolutePanel(id = "controls5", class = "panel panel-default", fixed = TRUE,
                              draggable = TRUE, top = 100, left = 20, right = "auto", bottom = "auto",
-                             width = 330, height = "auto",
+                             width = 380, height = "auto",
                              
                              h5(strong("BP OIL SPILL")),
                              h5(strong("Apr 2010")),
@@ -327,9 +327,9 @@ navbarPage(h4(strong("THE REAL ESTATE EFFECTS OF MAJOR DISASTERS")),
                              
                              selectInput("choose_metric_grandisle", "Choose Real Estate Metric", vars_special, selected = "annual_change"),
                              
-                             plotly::plotlyOutput("line_chart_grandisle", height = 250),
+                             plotly::plotlyOutput("line_chart_grandisle", height = 320),
                              br(),
-                             plotly::plotlyOutput("bar_chart_grandisle", height = 250)),
+                             plotly::plotlyOutput("bar_chart_grandisle", height = 320)),
                              
                              tags$div(id="cite5",
                                       'Data compiled from FHFA and Zillow')
