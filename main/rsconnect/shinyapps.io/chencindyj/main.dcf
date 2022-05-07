@@ -5,7 +5,9 @@ account: chencindyj
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6252026
-bundleId: 5879995
+bundleId: 5880102
 url: https://chencindyj.shinyapps.io/main/
-when: 1651886582.77381
-lastSyncTime: 1651886582.77381
+when: 1651890449.72358
+lastSyncTime: 1651890449.72358
+asMultiple: FALSE
+asStatic: FALSE
