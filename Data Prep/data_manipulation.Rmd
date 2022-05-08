@@ -1,0 +1,341 @@
+---
+title: "Data Manipulation"
+author: "Rory Butler"
+date: "4/14/2022"
+output: 
+  html_document:
+    keep_md: true
+    toc: true
+---
+
+```{r global options, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(include=TRUE, warning=FALSE, message=FALSE, echo=FALSE)
+```
+```{r libraries and csvs}
+library(tidyverse)
+library(sf)
+library(rgdal)
+library(spdplyr)
+
+cali_rent <- read.csv("../data/coffey_park.csv")
+cali_shape <- readOGR("../data/shape files", "California_Zip_Codes")
+
+cali_rent <- cali_rent %>%
+  select(region_id, date, value)
+
+colnames(cali_rent) <- c("zip_code", "date", "median_sale_price")
+
+cali_rent
+
+cali_shape <- cali_shape[,-c(1,4,5,6,7,8,9)]
+
+cali_shape <- cali_shape %>%
+  rename(zip_code = ZIP_CODE, po_name = PO_NAME)
+
+head(cali_shape)
+
+new_cali_shape <- spTransform(cali_shape, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+
+cali_data <- merge(new_cali_shape, cali_rent, by = "zip_code", duplicateGeoms = T)
+```
+```{r test}
+library(leaflet)
+
+
+cali_data <- cali_data %>%
+  filter(zip_code %in% c(95401, 95402, 95403, 95404, 95405, 95406, 95407, 95409))
+
+
+#new_cali_data <- spTransform(cali_data, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+
+new_cali_data_2 <- st_as_sf(cali_data)
+
+new_cali_data_2
+
+leaflet(new_cali_data_2) %>%
+  addTiles() %>%
+  addPolygons(color="blue")
+```
+```{r data verification}
+cali_data_sep_2016 <- new_cali_data_2 %>%
+  filter(date == '2016-09-30')
+
+cali_data_sep_2016
+```
+```{r choropleth map}
+library(htmltools)
+bins <-c(100000, 200000, 300000, 400000, 500000)
+pal <-colorBin("YlOrRd", domain=cali_data_sep_2016$median_sale_price, bins=bins)
+
+labels <- sprintf(
+  "<strong>%s</strong><br/>Mean Rent: %g",
+  cali_data_sep_2016$zip_code, cali_data_sep_2016$median_sale_price
+) %>% lapply(htmltools::HTML)
+
+
+leaflet(cali_data_sep_2016) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~pal(median_sale_price),
+    weight = 2,
+    opacity = 1,
+    color = "gray",
+    fillOpacity = 0.8,
+    highlightOptions = highlightOptions(
+    weight = 5,
+    color = "#666",
+    fillOpacity = 0.8),
+    label = labels,
+    labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                          textsize = "15px",
+                                          direction = "auto")) %>%
+  addLegend(pal=pal, values = ~median_sale_price, opacity = 0.8, title = "Mean Rent")
+```
+
+```{r grand isle}
+grand_isle_rent <- read.csv("data/grand_isle.csv")
+grand_isle_shape <- readOGR("./data/shape files", "Grand_Isla_LA")
+
+grand_isle_rent <- grand_isle_rent %>%
+  select(region_id, date, value)
+
+colnames(grand_isle_rent) <- c("zip_code", "date", "median_sale_price")
+
+grand_isle_rent
+
+grand_isle_shape <- grand_isle_shape[,-c(2,3,4,5,6,7,8,9)]
+
+grand_isle_shape <- grand_isle_shape %>%
+  rename(zip_code = ZCTA5CE10)
+
+head(grand_isle_shape)
+
+new_grand_isle_shape <- spTransform(grand_isle_shape, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+
+grand_isle_data <- merge(new_grand_isle_shape, grand_isle_rent, by = "zip_code", duplicateGeoms = T)
+```
+```{r vis grand isle}
+library(leaflet)
+new_grand_isle_data <- st_as_sf(grand_isle_data)
+
+new_grand_isle_data
+
+leaflet(new_grand_isle_data) %>%
+  addTiles() %>%
+  addPolygons(color="blue")
+```
+```{r buffalo}
+buffalo_homes <- read.csv("data/buffalo.csv")
+buffalo_shape <- readOGR("./data/shape files", "Buffalo")
+
+buffalo_homes <- buffalo_homes %>%
+  select(region_id, date, value)
+
+colnames(buffalo_homes) <- c("zip_code", "date", "median_sale_price")
+
+buffalo_homes
+
+buffalo_shape <- buffalo_shape[,-c(2,3,4,5,6,7,8,9)]
+
+buffalo_shape <- buffalo_shape %>%
+  rename(zip_code = ZCTA5CE10)
+
+head(buffalo_shape)
+
+new_buffalo_shape <- spTransform(buffalo_shape, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+```
+```{r buffalo viz}
+buffalo_data <- merge(new_buffalo_shape, buffalo_homes, by = "zip_code", duplicateGeoms = T)
+
+new_buffalo_data <- st_as_sf(buffalo_data)
+
+new_buffalo_data
+
+leaflet(new_buffalo_data) %>%
+  addTiles() %>%
+  addPolygons(color="blue")
+```
+```{r NO}
+new_orleans_homes <- read.csv("data/new_orleans.csv")
+new_orleans_shape <- readOGR("./data/shape files", "New_Orleans")
+
+new_orleans_homes <- new_orleans_homes %>%
+  select(region_id, date, value)
+
+colnames(new_orleans_homes) <- c("zip_code", "date", "median_sale_price")
+
+new_orleans_homes
+
+new_orleans_shape <- new_orleans_shape[,-c(2,3,4,5,6,7,8,9)]
+
+new_orleans_shape <- new_orleans_shape %>%
+  rename(zip_code = ZCTA5CE10)
+
+head(new_orleans_shape)
+
+new_new_orleans_shape <- spTransform(new_orleans_shape, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+
+```
+```{r new orleans viz}
+new_orleans_data <- merge(new_new_orleans_shape, new_orleans_homes, by = "zip_code", duplicateGeoms = T)
+
+new_orleans_data
+
+new_orleans_data2 <- st_as_sf(new_orleans_data)
+
+new_orleans_data2
+
+leaflet(new_orleans_data2) %>%
+  addTiles() %>%
+  addPolygons(color="blue")
+
+```
+```{r HPI Data}
+library(tidyverse)
+library(dplyr)
+HPI = read.csv('data/HPI_data.csv')
+
+ZCTA_list <- c('70112',
+'70113',
+'70114',
+'70115',
+'70116',
+'70117',
+'70118',
+'70119',
+'70121',
+'70122',
+'70123',
+'70124',
+'70125',
+'70126',
+'70127',
+'70128',
+'70129',
+'70130',
+'70131',
+'70139',
+'70163',
+'95401',
+'95403',
+'95404',
+'95405',
+'95407',
+'95409',
+'14201',
+'14202',
+'14203',
+'14204',
+'14206',
+'14207',
+'14208',
+'14209',
+'14210',
+'14211',
+'14212',
+'14213',
+'14214',
+'14215',
+'14216',
+'14217',
+'14218',
+'14219',
+'14220',
+'14221',
+'14222',
+'14223',
+'14224',
+'14225',
+'14226',
+'14227',
+'14228',
+'14261',
+'73160',
+'73165',
+'73170',
+'70358')
+
+
+HPI <- HPI %>%
+  filter(zip_code %in% ZCTA_list) %>%
+  filter(year > 2002)
+```
+```{r HPI dates}
+months = expand.grid(year = unique(HPI$year), month = c("01","02","03","04","05","06","07", "08", "09", "10", "11", "12"))
+months
+
+HPI_updated <- left_join(HPI, months, by = "year")
+HPI_updated 
+```
+```{r all csv combine}
+library(zoo)
+sfhome <- read.csv('data/single_family_homes_time_series.csv')
+sfhome <- sfhome %>%
+  select(region_id, date, value)
+
+colnames(sfhome) <- c("zip_code", "date", "single_family_home_price")
+
+rent <- read.csv('data/rental_prices.csv')
+rent <- rent %>%
+  select(region_id, date, value)
+
+colnames(rent) <- c("zip_code", "date", "rental_price")
+
+sale_price <- read.csv('data/median_sale_prices.csv')
+sale_price <- sale_price %>%
+  select(region_id, date, value)
+
+colnames(sale_price) <- c("zip_code", "date", "median_sale_price")
+
+base <- merge(x=sfhome, y=sale_price, by=c("zip_code", "date"), all.x=TRUE)
+
+base2 <- merge(x=base, y=rent, by=c("zip_code", "date"), all.x=TRUE)
+
+base2 <- separate(base2, "date", c("year", "month", "day"), sep='-')
+
+base_real_estate <- merge(x=HPI_updated, y=base2, by=c("zip_code", "year", "month"), all.x=TRUE)
+```
+
+```{r more testing}
+base_real_estate$date <- zoo::as.yearmon(paste(base_real_estate$year, base_real_estate$month), "%Y %m")
+
+base_real_estate <- transform(base_real_estate, date2 = as.Date(date, frac = 1))
+
+
+base_real_estate <- base_real_estate %>%
+  select(zip_code, date2, year, month, annual_change, HPI, HPI_1990, HPI_2000, single_family_home_price, median_sale_price, rental_price)
+```
+```{r specific disaster files}
+library(sf)
+library(rgdal)
+library(spdplyr)
+
+moore_ok <- base_real_estate %>%
+  filter(zip_code %in% c(73160, 73165, 73170),  year %in% c(2011, 2012, 2013, 2014, 2015))
+
+moore_ok
+
+moore_ok_shape <- readOGR(dsn="./data/shape files", layer="Moore_OK")
+
+moore_ok_shape <- moore_ok_shape[,-c(2,3,4,5,6,7,8,9)]
+
+moore_ok_shape <- moore_ok_shape %>%
+  rename(zip_code = ZCTA5CE10)
+
+head(moore_ok_shape)
+
+moore_ok_shape2 <- spTransform(moore_ok_shape, CRS("+proj=longlat +datum=WGS84 +no_defs"))
+
+moore_ok_data <- merge(moore_ok_shape2, moore_ok, by = "zip_code", duplicateGeoms = T)
+```
+```{r location testing}
+list.files('./data/shape files')
+```
+```{r vis moore_ok}
+library(leaflet)
+moore_ok_data2 <- st_as_sf(moore_ok_data)
+
+moore_ok_data2
+
+st_write(moore_ok_data2, './data/shape files/Moore_Tornado.shp')
+```
