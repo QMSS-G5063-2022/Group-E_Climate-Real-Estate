@@ -4,4 +4,4 @@ As climate change and ongoing human events intensify both the scale and frequenc
 
 This Shiny app explores monthly real estate metrics for five cities before and after a major disaster.  Users can customize visualizations by time period as well as the metric type using interactive maps and charts.
 
-Shiny Visualization Website: [(https://chencindyj.shinyapps.io/main/)](CLICK HERE)
+Shiny Visualization Website: [https://chencindyj.shinyapps.io/main/]
